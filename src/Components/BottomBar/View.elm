@@ -49,6 +49,15 @@ musicInfo model =
         ]
     ]
 
+soundControl : Model -> Html Msg
+soundControl model =
+  div [ class [ CssClasses.SoundControl ] ]
+    [ div [ class [ CssClasses.ControlButtons ] ]
+        [ controlIcon
+        , controlIcon
+        ]
+    , progressBar 10 ]
+
 
 controls : Model -> Html Msg
 controls model =
@@ -66,4 +75,5 @@ render model =
   div [ class [ CssClasses.BottomBar ] ]
       [ musicInfo model
       , controls model
+      , soundControl model
       ]

@@ -21,3 +21,4 @@ type Classes
   | AlbumCover
   | MusicTitle
   | MusicInfo
+  | SoundControl

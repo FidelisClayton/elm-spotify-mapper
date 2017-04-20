@@ -91,7 +91,6 @@ css =
         [ backgroundColor <| hex "00F"
         , width <| px 32
         , height <| px 32
-        , margin2 zero (px 10)
         ]
 
     , class CssClasses.ControlButtons
@@ -99,6 +98,13 @@ css =
         , flexDirection row
         , height <| px 50
         , justifyContent center
+        , alignItems center
+        ]
+
+    , class CssClasses.SoundControl
+        [ displayFlex
+        , flex <| int 1
+        , maxWidth <| px 200
         , alignItems center
         ]
   ]
