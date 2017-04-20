@@ -17,3 +17,6 @@ update msg model =
 
     Msgs.ToggleSidebar ->
       ({ model | showMenu = not model.showMenu }, Cmd.none)
+
+    Msgs.SearchArtistSuccess response ->
+      ({ model | artists = response }, Cmd.none)

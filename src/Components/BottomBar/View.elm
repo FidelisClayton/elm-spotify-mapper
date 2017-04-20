@@ -3,8 +3,9 @@ module Components.BottomBar.View exposing (..)
 import Html exposing (Html, div, text, span, img, i)
 import Html.Attributes exposing (src)
 import Html.CssHelpers
+import RemoteData
 
-import Models exposing (Model)
+import Models exposing (Model, Artist, ArtistsData, SearchArtistData)
 import Msgs exposing (Msg)
 
 import CssClasses
@@ -68,10 +69,27 @@ controls model =
       , progress model
       ]
 
+maybeArtists : RemoteData.WebData SearchArtistData -> Html Msg
+maybeArtists response =
+  case response of
+    RemoteData.NotAsked ->
+      text "Not Asked"
+
+    RemoteData.Loading ->
+      text "Loading..."
+
+    RemoteData.Success data ->
+      text <| toString (data)
+
+    RemoteData.Failure error ->
+      text (toString "Error")
+
+
 render : Model -> Html Msg
 render model =
   div [ class [ CssClasses.BottomBar ] ]
       [ musicInfo model
       , controls model
       , soundControl model
+      , maybeArtists model.artists
       ]

@@ -10,13 +10,14 @@ import Msgs exposing (Msg)
 import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
+import Commands exposing (fetchArtist)
 
 { class } =
   Html.CssHelpers.withNamespace ""
 
 init : ( Models.Model, Cmd Msg )
 init =
-  ( Models.initialModel, Cmd.none )
+  ( Models.initialModel, fetchArtist "met" )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
