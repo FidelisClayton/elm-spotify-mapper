@@ -61,7 +61,7 @@ css =
 
   , class CssClasses.ProgressBar
       [ backgroundColor <| hex "404040"
-      , width <| pct 70
+      , width <| pct 50
       , height <| px 4
       , borderRadius <| px 10
       , displayFlex

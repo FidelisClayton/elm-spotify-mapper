@@ -14,6 +14,7 @@ type Classes
   | ProgressBar
   | Progress
   | FontSmall
+  | FontMedium
   | Controls
   | ControlIcon
   | ControlButtons
@@ -22,3 +23,7 @@ type Classes
   | MusicTitle
   | MusicInfo
   | SoundControl
+  | UserProfile
+  | UserImage
+  | RoundedImage
+  | ArtistSongs

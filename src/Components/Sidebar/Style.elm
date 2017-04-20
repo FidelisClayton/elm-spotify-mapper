@@ -28,4 +28,29 @@ css =
 
   , class CssClasses.Logo
       [ color <| hex "FFF" ]
+
+  , class CssClasses.RoundedImage
+      [ borderRadius <| pct 50 ]
+
+  , class CssClasses.UserProfile
+      [ displayFlex
+      , alignItems center
+      ]
+
+  , class CssClasses.UserImage
+      [ width <| px 28
+      , height <| px 28
+      , marginRight <| px 10
+      ]
+
+  , class CssClasses.ArtistSongs
+      [ displayFlex
+      , flex <| int 1
+      ]
+
+  , class CssClasses.FontMedium
+      [ fontSize <| px 16
+      , lineHeight <| px 16
+      , color <| hex "FFF"
+      ]
   ]
