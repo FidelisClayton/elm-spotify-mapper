@@ -7,3 +7,13 @@ type Classes
   | Container
   | MenuToggler
   | SidebarActive
+  | SearchInput
+  | NavGroup
+  | Logo
+  | ProgressGroup
+  | ProgressBar
+  | Progress
+  | FontSmall
+  | Controls
+  | ControlIcon
+  | ControlButtons

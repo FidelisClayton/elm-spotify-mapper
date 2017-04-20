@@ -1,4 +1,5 @@
-var path = require('path');
+const path = require('path');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -33,8 +34,13 @@ module.exports = {
         ]
       }
     ],
-
   },
+
+  plugins: [
+    new CopyWebpackPlugin([
+      { from: 'src/style.css', to: 'dist/style.css' }
+    ])
+  ],
 
   devServer: {
     inline: true,

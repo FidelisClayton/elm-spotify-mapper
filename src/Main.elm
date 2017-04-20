@@ -3,7 +3,6 @@ module Main exposing (..)
 import Html exposing (Html, text, div)
 import Html.CssHelpers
 
-import Components.Navbar.View as Navbar
 import Components.BottomBar.View as BottomBar
 import Components.Sidebar.View as Sidebar
 
@@ -26,8 +25,7 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
   div [ class [ CssClasses.Container ]]
-      [ Navbar.render model
-      , Sidebar.render model
+      [ Sidebar.render model
       , BottomBar.render model
       ]
 

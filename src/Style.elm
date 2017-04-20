@@ -28,4 +28,17 @@ css =
       , outline none
       , border zero
       ]
+
+  , class CssClasses.SearchInput
+      [ height <| px 22
+      , outline none
+      , backgroundColor <| rgba 0 0 0 0
+      , border zero
+      , color <| hex "FFF"
+      , padding2 (px 3) zero
+      , margin2 (px 3) zero
+      , fontSize <| px 16
+      , lineHeight <| px 16
+      , fontWeight bold
+      ]
   ]
