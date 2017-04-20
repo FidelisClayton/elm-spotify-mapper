@@ -1,0 +1,34 @@
+{
+  "name": "spotify-mapper-elm",
+  "version": "1.0.0",
+  "description": "An app built with Elm to explore new artists using the Spotify api.",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --port=3000",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FidelisClayton/elm-spotify-mapper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FidelisClayton/elm-spotify-mapper/issues"
+  },
+  "homepage": "https://github.com/FidelisClayton/elm-spotify-mapper#readme",
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "elm-css-webpack-loader": "^3.1.0",
+    "elm-hot-loader": "^0.5.4",
+    "elm-webpack-loader": "^4.3.0",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.2"
+  },
+  "dependencies": {
+    "css-loader": "^0.28.0",
+    "file-loader": "^0.11.1",
+    "style-loader": "^0.16.1"
+  }
+}
