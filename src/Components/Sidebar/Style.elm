@@ -1,6 +1,7 @@
 module Components.Sidebar.Style exposing (..)
 
 import Css exposing (..)
+import Css.Elements exposing (img, button)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers exposing (withNamespace)
 
@@ -27,7 +28,9 @@ css =
       ]
 
   , class CssClasses.Logo
-      [ color <| hex "FFF" ]
+      [ color <| hex "FFF"
+      , fontSize <| px 40
+      ]
 
   , class CssClasses.RoundedImage
       [ borderRadius <| pct 50 ]
@@ -43,9 +46,67 @@ css =
       , marginRight <| px 10
       ]
 
-  , class CssClasses.ArtistSongs
+  , class CssClasses.Songs
       [ displayFlex
       , flex <| int 1
+      , flexDirection column
+      ]
+
+  , class CssClasses.SongItem
+      [ height <| px 35
+      , displayFlex
+      , padding <| px 5
+      , margin <| px 5
+      , alignItems center
+      ]
+
+  , class CssClasses.SongDescription
+      [ displayFlex
+      , flexDirection column
+      ]
+
+  , class CssClasses.SongTitle
+      [ fontSize <| px 14
+      , color <| hex "dcdcdc"
+      , lineHeight <| px 20
+      ]
+
+  , class CssClasses.SongAlbumTitle
+      [ fontSize <| px 10
+      , color <| hex "dcdcdc"
+      ]
+
+  , class CssClasses.IsPlaying
+      [ color <| hex "FFF"
+      , marginLeft <| px 20
+      ]
+
+  , class CssClasses.SongCover
+      [ width <| px 32
+      , height <| px 32
+      , marginRight <| px 10
+      , position relative
+
+      , children
+          [ each [ img, button ]
+              [ width <| pct 100
+              , height <| pct 100
+              ]
+          , button
+              [ position absolute
+              , opacity <| int 0
+              , border zero
+              , backgroundColor <| rgba 0 0 0 0.5
+              , color <| hex "FFF"
+              , property "transition" "0.4s ease all"
+              , outline none
+
+              , hover
+                  [ opacity <| int 1
+                  , cursor pointer
+                  ]
+              ]
+          ]
       ]
 
   , class CssClasses.FontMedium

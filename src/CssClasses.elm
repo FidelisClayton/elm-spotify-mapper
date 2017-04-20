@@ -26,5 +26,11 @@ type Classes
   | UserProfile
   | UserImage
   | RoundedImage
-  | ArtistSongs
   | Icon
+  | Songs
+  | SongItem
+  | SongTitle
+  | SongAlbumTitle
+  | SongCover
+  | SongDescription
+  | IsPlaying
