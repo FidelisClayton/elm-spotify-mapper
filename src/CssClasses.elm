@@ -17,3 +17,7 @@ type Classes
   | Controls
   | ControlIcon
   | ControlButtons
+  | NowPlaying
+  | AlbumCover
+  | MusicTitle
+  | MusicInfo

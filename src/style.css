@@ -4,11 +4,12 @@ body {
   background: -webkit-linear-gradient(top, #a90329 0%,#8f0222 36%,#000000 86%);
   background: linear-gradient(to bottom, #a90329 0%,#8f0222 36%,#000000 86%);
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#000000',GradientType=0 );
+  font-family: Helvetica Neue;
 }
 
 .SearchInput::-webkit-input-placeholder {
   color: rgba(183, 183, 183, 0.42);
-  font-family:Helvetica Neue;
+  font-family: Helvetica Neue;
 }
 
 .SearchInput::-webkit-input-placeholder:hover {

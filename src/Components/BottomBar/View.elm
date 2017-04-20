@@ -1,6 +1,7 @@
 module Components.BottomBar.View exposing (..)
 
-import Html exposing (Html, div, text, span)
+import Html exposing (Html, div, text, span, img)
+import Html.Attributes exposing (src)
 import Html.CssHelpers
 
 import Models exposing (Model)
@@ -33,6 +34,22 @@ progress model =
           [ text "2:00" ]
       ]
 
+musicInfo : Model -> Html Msg
+musicInfo model =
+  div [ class [ CssClasses.NowPlaying] ]
+    [ img
+        [ src "https://upload.wikimedia.org/wikipedia/en/b/b2/Metallica_-_Master_of_Puppets_cover.jpg"
+        , class [ CssClasses.AlbumCover ]
+        ] []
+    , div [ class [ CssClasses.MusicInfo ] ]
+        [ span [ class [ CssClasses.MusicTitle ] ]
+            [ text "One" ]
+        , span [ class [ CssClasses.FontSmall ] ]
+            [ text "Metallica" ]
+        ]
+    ]
+
+
 controls : Model -> Html Msg
 controls model =
   div [ class [ CssClasses.Controls ] ]
@@ -47,4 +64,6 @@ controls model =
 render : Model -> Html Msg
 render model =
   div [ class [ CssClasses.BottomBar ] ]
-      [ controls model ]
+      [ musicInfo model
+      , controls model
+      ]
