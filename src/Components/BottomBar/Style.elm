@@ -88,9 +88,16 @@ css =
         ]
 
     , class CssClasses.ControlIcon
-        [ backgroundColor <| hex "00F"
-        , width <| px 32
+        [ width <| px 32
         , height <| px 32
+        , textAlign center
+
+        , children
+            [ class CssClasses.Icon
+              [ lineHeight <| px 32
+              , fontSize <| px 18
+              ]
+            ]
         ]
 
     , class CssClasses.ControlButtons

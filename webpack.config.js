@@ -38,7 +38,8 @@ module.exports = {
 
   plugins: [
     new CopyWebpackPlugin([
-      { from: 'src/style.css', to: 'dist/style.css' }
+      { from: 'src/style.css', to: 'dist/style.css' },
+      { from: 'vendor/', to: 'dist/vendor/'}
     ])
   ],
 

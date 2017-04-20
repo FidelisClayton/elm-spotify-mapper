@@ -27,3 +27,4 @@ type Classes
   | UserImage
   | RoundedImage
   | ArtistSongs
+  | Icon

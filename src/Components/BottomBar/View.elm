@@ -1,6 +1,6 @@
 module Components.BottomBar.View exposing (..)
 
-import Html exposing (Html, div, text, span, img)
+import Html exposing (Html, div, text, span, img, i)
 import Html.Attributes exposing (src)
 import Html.CssHelpers
 
@@ -12,10 +12,10 @@ import CssClasses
 { class } =
   Html.CssHelpers.withNamespace ""
 
-controlIcon : Html Msg
-controlIcon =
-  div [ class [ CssClasses.ControlIcon] ]
-      []
+controlIcon : String -> Html Msg
+controlIcon icon =
+  div [ class [ CssClasses.ControlIcon ] ]
+      [ i [ class [ CssClasses.Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
 progressBar : Float -> Html Msg
 progressBar progress =
@@ -53,9 +53,7 @@ soundControl : Model -> Html Msg
 soundControl model =
   div [ class [ CssClasses.SoundControl ] ]
     [ div [ class [ CssClasses.ControlButtons ] ]
-        [ controlIcon
-        , controlIcon
-        ]
+        [ controlIcon "volume-down" ]
     , progressBar 10 ]
 
 
@@ -63,9 +61,9 @@ controls : Model -> Html Msg
 controls model =
   div [ class [ CssClasses.Controls ] ]
       [ div [ class [ CssClasses.ControlButtons ] ]
-          [ controlIcon
-          , controlIcon
-          , controlIcon
+          [ controlIcon "step-backward"
+          , controlIcon "play"
+          , controlIcon "step-forward"
           ]
       , progress model
       ]
