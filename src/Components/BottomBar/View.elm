@@ -91,5 +91,4 @@ render model =
       [ musicInfo model
       , controls model
       , soundControl model
-      , maybeArtists model.artists
       ]

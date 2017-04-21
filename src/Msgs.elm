@@ -8,4 +8,5 @@ type Msg
   | Play
   | Pause
   | ToggleSidebar
+  | StartSearch
   | SearchArtistSuccess (WebData SearchArtistData)

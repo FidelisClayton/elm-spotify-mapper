@@ -2,6 +2,7 @@ module Components.Sidebar.View exposing (..)
 
 import Html exposing (Html, div, text, input, span, img, i, button)
 import Html.Attributes exposing (type_, placeholder, src)
+import Html.Events exposing (onClick)
 import Html.CssHelpers
 
 import Models exposing (Model)
@@ -57,6 +58,11 @@ userProfile model =
         ]
     ]
 
+bigSearch : Model -> Html Msg
+bigSearch model =
+  div [ class [ CssClasses.BigSearch ] ]
+    [ input [ type_ "text" ] [] ]
+
 render : Model -> Html Msg
 render model =
   div [ class [ CssClasses.Sidebar ] ]
@@ -69,6 +75,7 @@ render model =
               [ type_ "text"
               , class [ CssClasses.SearchInput ]
               , placeholder "Search"
+              , onClick Msgs.StartSearch
               ]
               []
           ]

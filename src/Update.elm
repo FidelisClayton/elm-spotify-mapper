@@ -20,3 +20,6 @@ update msg model =
 
     Msgs.SearchArtistSuccess response ->
       ({ model | artists = response }, Cmd.none)
+
+    Msgs.StartSearch ->
+      ({ model | searching = True }, Cmd.none)

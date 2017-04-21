@@ -8,12 +8,14 @@ import RemoteData exposing (WebData)
 type alias Model =
   { showMenu : Bool
   , artists : WebData SearchArtistData
+  , searching : Bool
   }
 
 initialModel : Model
 initialModel =
   { showMenu = True
   , artists = RemoteData.Loading
+  , searching = False
   }
 
 type alias ExternalUrl =
