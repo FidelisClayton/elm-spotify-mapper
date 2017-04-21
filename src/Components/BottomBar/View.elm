@@ -5,8 +5,9 @@ import Html.Attributes exposing (src)
 import Html.CssHelpers
 import RemoteData
 
-import Models exposing (Model, Artist, ArtistsData, SearchArtistData)
+import Models exposing (Model, Artist, SearchArtistData, Track)
 import Msgs exposing (Msg)
+import Helpers
 
 import CssClasses
 
@@ -35,20 +36,29 @@ progress model =
           [ text "2:00" ]
       ]
 
-musicInfo : Model -> Html Msg
-musicInfo model =
-  div [ class [ CssClasses.NowPlaying] ]
-    [ img
-        [ src "https://upload.wikimedia.org/wikipedia/en/b/b2/Metallica_-_Master_of_Puppets_cover.jpg"
-        , class [ CssClasses.AlbumCover ]
-        ] []
-    , div [ class [ CssClasses.MusicInfo ] ]
-        [ span [ class [ CssClasses.MusicTitle ] ]
-            [ text "One" ]
-        , span [ class [ CssClasses.FontSmall ] ]
-            [ text "Metallica" ]
-        ]
-    ]
+musicInfo : Maybe Track -> Html Msg
+musicInfo selectedTrack =
+  let
+    content =
+      case selectedTrack of
+        Just track ->
+          [ img
+              [ src <| Helpers.firstImageUrl track.album.images
+              , class [ CssClasses.AlbumCover ]
+              ] []
+          , div [ class [ CssClasses.MusicInfo ] ]
+              [ span [ class [ CssClasses.MusicTitle ] ]
+                  [ text track.name ]
+              , span [ class [ CssClasses.FontSmall ] ]
+                  [ text <| Helpers.firstArtistName track.artists ]
+              ]
+          ]
+
+        Nothing ->
+          []
+  in
+    div [ class [ CssClasses.NowPlaying] ]
+      content
 
 soundControl : Model -> Html Msg
 soundControl model =
@@ -88,7 +98,7 @@ maybeArtists response =
 render : Model -> Html Msg
 render model =
   div [ class [ CssClasses.BottomBar ] ]
-      [ musicInfo model
+      [ musicInfo model.selectedTrack
       , controls model
       , soundControl model
       ]

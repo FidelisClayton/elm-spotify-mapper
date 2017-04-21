@@ -1,6 +1,6 @@
 module Msgs exposing (..)
 
-import Models exposing (Artist, ArtistsData, SearchArtistData)
+import Models exposing (Artist, SearchArtistData, TopTracks, Track)
 import RemoteData exposing (WebData)
 
 type Msg
@@ -10,3 +10,6 @@ type Msg
   | ToggleSidebar
   | StartSearch
   | SearchArtistSuccess (WebData SearchArtistData)
+  | TopTracksSuccess (WebData TopTracks)
+  | SelectArtist Artist
+  | SelectTrack Track

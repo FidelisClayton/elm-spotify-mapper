@@ -2,7 +2,7 @@ module Update exposing (..)
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
-import Commands exposing (fetchArtist)
+import Commands exposing (fetchArtist, fetchTopTracks)
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -31,3 +31,12 @@ update msg model =
 
     Msgs.StartSearch ->
       ({ model | searching = True }, Cmd.none)
+
+    Msgs.TopTracksSuccess response ->
+      ({ model | topTracks = response}, Cmd.none)
+
+    Msgs.SelectArtist artist ->
+      ({ model | selectedArtist = Maybe.Just artist }, fetchTopTracks artist.id)
+
+    Msgs.SelectTrack track ->
+      ({ model | selectedTrack = Maybe.Just track }, Cmd.none)
