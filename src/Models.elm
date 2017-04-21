@@ -4,18 +4,19 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, requiredAt)
 import RemoteData exposing (WebData)
 
-
 type alias Model =
   { showMenu : Bool
   , artists : WebData SearchArtistData
   , searching : Bool
+  , searchTerm : String
   }
 
 initialModel : Model
 initialModel =
   { showMenu = True
-  , artists = RemoteData.Loading
+  , artists = RemoteData.NotAsked
   , searching = False
+  , searchTerm = ""
   }
 
 type alias ExternalUrl =

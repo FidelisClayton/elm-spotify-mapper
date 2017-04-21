@@ -52,7 +52,7 @@ css =
       , flex <| int 1
       , backgroundColor <| hex "181818"
       , flexWrap wrap
-      , justifyContent center
+      , justifyContent flexStart
       ]
 
   , class CssClasses.ArtistResult
@@ -61,6 +61,7 @@ css =
       , alignItems center
       , margin <| px 15
       , position relative
+      , width <| px 180
 
       , children
           [ class CssClasses.ImageWrapper

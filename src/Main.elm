@@ -18,7 +18,7 @@ import Commands exposing (fetchArtist)
 
 init : ( Models.Model, Cmd Msg )
 init =
-  ( Models.initialModel, fetchArtist "met" )
+  ( Models.initialModel, Cmd.none )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

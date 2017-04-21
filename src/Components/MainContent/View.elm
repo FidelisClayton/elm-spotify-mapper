@@ -2,6 +2,7 @@ module Components.MainContent.View exposing (..)
 
 import Html exposing (Html, div, text, input, label, img, i)
 import Html.Attributes exposing (type_, placeholder, src)
+import Html.Events exposing (onInput)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
 import Array
@@ -17,7 +18,11 @@ bigSearch : Model -> Html Msg
 bigSearch model =
   div [ class [ CssClasses.BigSearch ] ]
     [ label [] [ text "Search for an artist" ]
-    , input [ type_ "text" ] [] ]
+    , input
+        [ type_ "text"
+        , onInput Msgs.Search ]
+        []
+    ]
 
 searchResult : Artist -> Html Msg
 searchResult artist =
@@ -54,7 +59,7 @@ searchResults response =
           List.map searchResult data.items
 
         RemoteData.Failure error ->
-          [ text <| toString error ]
+          [ text "" ]
   in
     div [ class [ CssClasses.SearchResults ] ]
       html
