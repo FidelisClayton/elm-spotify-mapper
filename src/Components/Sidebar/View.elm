@@ -4,8 +4,9 @@ import Html exposing (Html, div, text, input, span, img, i, button)
 import Html.Attributes exposing (type_, placeholder, src)
 import Html.Events exposing (onClick)
 import Html.CssHelpers
+import RemoteData exposing (WebData)
 
-import Models exposing (Model)
+import Models exposing (Model, TopTracks, Track)
 import Msgs exposing (Msg)
 
 import CssClasses
@@ -18,32 +19,44 @@ navItem childrens =
   div [ class [ CssClasses.NavGroup ] ]
       childrens
 
-artistSongs : Model -> Html Msg
-artistSongs model =
-  div [ class [ CssClasses.NavGroup, CssClasses.Songs ] ]
-      [ songItem
-      , songItem
-      , songItem
-      ]
+artistSongs : WebData TopTracks -> Html Msg
+artistSongs response =
+  let
+    html =
+      case response of
+        RemoteData.Success topTracks ->
+          List.map songItem topTracks.tracks
 
-songItem : Html Msg
-songItem =
-  div [ class [ CssClasses.SongItem ] ]
-    [ div [ class [ CssClasses.SongCover ] ]
-        [ button []
-            [ i [ Html.Attributes.class "fa fa-play"] []]
-        , img
-            [ src "https://upload.wikimedia.org/wikipedia/en/b/b2/Metallica_-_Master_of_Puppets_cover.jpg"]
-            []
-        ]
-    , div [ class [ CssClasses.SongDescription ] ]
-        [ span [ class [ CssClasses.SongTitle ] ] [ text "Titulo Musica" ]
-        , span [ class [ CssClasses.SongAlbumTitle ] ] [ text "Album" ]
-        ]
-    , i [ class [ CssClasses.IsPlaying ]
-        , Html.Attributes.class "fa fa-volume-up"
-        ] []
-    ]
+        _ ->
+          []
+  in
+    div [ class [ CssClasses.NavGroup, CssClasses.Songs ] ]
+      html
+
+songItem : Track -> Html Msg
+songItem track =
+  let
+    image =
+      case List.head track.album.images of
+        Just image ->
+          image.url
+
+        Nothing ->
+          ""
+  in
+    div [ class [ CssClasses.SongItem ] ]
+      [ div [ class [ CssClasses.SongCover ], onClick (Msgs.SelectTrack track) ]
+          [ button []
+              [ i [ Html.Attributes.class "fa fa-play"] []]
+          , img
+              [ src image ]
+              []
+          ]
+      , div [ class [ CssClasses.SongDescription ] ]
+          [ span [ class [ CssClasses.SongTitle ] ] [ text track.name ]
+          , span [ class [ CssClasses.SongAlbumTitle ] ] [ text track.album.name ]
+          ]
+      ]
 
 userProfile : Model -> Html Msg
 userProfile model =
@@ -79,6 +92,6 @@ render model =
               ]
               []
           ]
-      , artistSongs model
+      , artistSongs model.topTracks
       , userProfile model
       ]

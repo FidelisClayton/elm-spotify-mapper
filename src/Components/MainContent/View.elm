@@ -2,7 +2,7 @@ module Components.MainContent.View exposing (..)
 
 import Html exposing (Html, div, text, input, label, img, i)
 import Html.Attributes exposing (type_, placeholder, src)
-import Html.Events exposing (onInput)
+import Html.Events exposing (onInput, onClick)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
 
@@ -34,7 +34,7 @@ searchResult artist =
         Nothing ->
           "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
   in
-  div [ class [ CssClasses.ArtistResult ] ]
+  div [ class [ CssClasses.ArtistResult ], onClick (Msgs.SelectArtist artist) ]
     [ div [ class [ CssClasses.ImageWrapper ] ]
           [ div []
               [ i [ Html.Attributes.class "fa fa-play" ] [] ]

@@ -46,28 +46,36 @@ css =
       ]
 
   , class CssClasses.Songs
-      [ displayFlex
+      [ property "overflow" "overlay"
       , flex <| int 1
-      , flexDirection column
       ]
 
   , class CssClasses.SongItem
-      [ height <| px 35
+      [ height <| px 45
       , displayFlex
-      , padding <| px 5
-      , margin <| px 5
       , alignItems center
       ]
 
   , class CssClasses.SongDescription
       [ displayFlex
       , flexDirection column
+      , width <| px 130
+      , whiteSpace noWrap
+      , textOverflow ellipsis
+      , display block
+      , overflow hidden
+      , cursor default
       ]
 
   , class CssClasses.SongTitle
       [ fontSize <| px 14
       , color <| hex "dcdcdc"
       , lineHeight <| px 20
+      , width <| px 130
+      , whiteSpace noWrap
+      , textOverflow ellipsis
+      , display block
+      , overflow hidden
       ]
 
   , class CssClasses.SongAlbumTitle

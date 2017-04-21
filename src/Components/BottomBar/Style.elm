@@ -36,12 +36,17 @@ css =
             , paddingLeft <| px 10
             , height <| pct 100
             , justifyContent center
-            ]
 
-        , class CssClasses.MusicTitle
-            [ fontSize <| px 14
-            , lineHeight <| px 24
-            , paddingBottom <| px 10
+            , children
+                [ class CssClasses.MusicTitle
+                    [ fontSize <| px 14
+                    , lineHeight <| px 24
+                    , maxWidth <| px 150
+                    , overflow hidden
+                    , textOverflow ellipsis
+                    , whiteSpace noWrap
+                    ]
+                ]
             ]
         ]
       ]
