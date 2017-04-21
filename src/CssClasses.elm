@@ -34,3 +34,9 @@ type Classes
   | SongCover
   | SongDescription
   | IsPlaying
+  | BigSearch
+  | Content
+  | Main
+  | SearchResults
+  | ArtistResult
+  | ImageWrapper

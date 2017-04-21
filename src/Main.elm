@@ -5,11 +5,13 @@ import Html.CssHelpers
 
 import Components.BottomBar.View as BottomBar
 import Components.Sidebar.View as Sidebar
+import Components.MainContent.View as MainContent
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
+import Commands exposing (fetchArtist)
 
 { class } =
   Html.CssHelpers.withNamespace ""
@@ -25,7 +27,10 @@ subscriptions model =
 view : Model -> Html Msg
 view model =
   div [ class [ CssClasses.Container ]]
-      [ Sidebar.render model
+      [ div [ class [ CssClasses.Content ] ]
+          [ Sidebar.render model
+          , MainContent.render model
+          ]
       , BottomBar.render model
       ]
 

@@ -11,7 +11,6 @@ css =
   (stylesheet << namespace "")
   [ class CssClasses.Sidebar
       [ width <| px 200
-      , height <| pct 100
       , transform <| translateX <| px 0
       , property "transition" "0.3s ease all"
       , displayFlex
