@@ -5,7 +5,6 @@ import Html.Attributes exposing (type_, placeholder, src)
 import Html.Events exposing (onInput)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
-import Array
 
 import Models exposing (Model, Artist, SearchArtistData)
 import Msgs exposing (Msg)
