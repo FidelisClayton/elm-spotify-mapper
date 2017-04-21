@@ -38,3 +38,5 @@ type Classes
   | Content
   | Main
   | SearchResults
+  | ArtistResult
+  | ImageWrapper

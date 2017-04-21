@@ -1,10 +1,10 @@
 module Components.MainContent.View exposing (..)
 
-import Html exposing (Html, div, text, input, label)
+import Html exposing (Html, div, text, input, label, img, i)
 import Html.Attributes exposing (type_, placeholder, src)
 import Html.CssHelpers
 
-import Models exposing (Model)
+import Models exposing (Model, Artist)
 import Msgs exposing (Msg)
 import CssClasses
 
@@ -17,10 +17,36 @@ bigSearch model =
     [ label [] [ text "Search for an artist" ]
     , input [ type_ "text" ] [] ]
 
+searchResult : Artist -> Html Msg
+searchResult artist =
+  div [ class [ CssClasses.ArtistResult ] ]
+    [ div [ class [ CssClasses.ImageWrapper ] ]
+          [ div []
+              [ i [ Html.Attributes.class "fa fa-play" ] [] ]
+          , img [ src "https://pbs.twimg.com/profile_images/766360293953802240/kt0hiSmv.jpg" ] []
+          ]
+    , label [] [ text <| .name artist ]
+    ]
+
 searchResults : Model -> Html Msg
 searchResults model =
   div [ class [ CssClasses.SearchResults ] ]
-    [ text "Results" ]
+    [ searchResult metallica
+    , searchResult metallica
+    , searchResult metallica
+    , searchResult metallica
+    ]
+
+metallica : Artist
+metallica =
+  { genres = [ "Metal" ]
+  , href = ""
+  , id = ""
+  , name = "Metallica"
+  , popularity = 1000
+  , type_ = "Test"
+  , uri = "test"
+  }
 
 render : Model -> Html Msg
 render model =

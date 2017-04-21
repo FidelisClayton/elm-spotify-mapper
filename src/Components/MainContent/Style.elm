@@ -1,7 +1,7 @@
 module Components.MainContent.Style exposing (..)
 
 import Css exposing (..)
-import Css.Elements exposing (input, label)
+import Css.Elements exposing (input, label, img, div, i)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers exposing (withNamespace)
 
@@ -18,6 +18,8 @@ css =
       [ width <| pct 100
       , displayFlex
       , flexDirection column
+      , property "overflow-y" "overlay"
+      , overflowX hidden
       ]
 
   , class CssClasses.BigSearch
@@ -49,5 +51,59 @@ css =
       [ displayFlex
       , flex <| int 1
       , backgroundColor <| hex "181818"
+      , flexWrap wrap
+      , justifyContent center
+      ]
+
+  , class CssClasses.ArtistResult
+      [ displayFlex
+      , flexDirection column
+      , alignItems center
+      , margin <| px 15
+      , position relative
+
+      , children
+          [ class CssClasses.ImageWrapper
+              [ width <| px 180
+              , height <| px 180
+              , position relative
+
+              , children
+                  [ each [ img, div ]
+                      [ width <| pct 100
+                      , height <| pct 100
+                      , borderRadius <| pct 50
+                      ]
+
+                  , div
+                      [ backgroundColor <| rgba 0 0 0 0.5
+                      , position absolute
+                      , displayFlex
+                      , alignItems center
+                      , justifyContent center
+                      , opacity <| int 0
+                      , property "transition" "0.3s ease all"
+
+                      , hover
+                          [ opacity <| int 1
+                          , cursor pointer
+                          ]
+
+                      , children [
+                          i
+                            [ color <| hex "FFF"
+                            , fontSize <| px 22
+                            ]
+                        ]
+                      ]
+
+                  ]
+              ]
+
+          , label
+              [ color <| hex "FFF"
+              , padding2 (px 10) zero
+              ]
+          ]
       ]
   ]
