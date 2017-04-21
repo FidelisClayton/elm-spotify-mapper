@@ -4,7 +4,7 @@ import Http
 import RemoteData
 import Json.Decode as Decode
 
-import Models exposing (Artist, artistsDataDecoder, searchArtistDecoder)
+import Models exposing (Artist, searchArtistDecoder)
 import Msgs exposing (Msg)
 
 fetchArtistUrl : String -> String

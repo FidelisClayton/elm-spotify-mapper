@@ -1,7 +1,7 @@
 module Models exposing (..)
 
 import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (decode, required)
+import Json.Decode.Pipeline exposing (decode, required, requiredAt)
 import RemoteData exposing (WebData)
 
 
@@ -43,24 +43,27 @@ type alias Artist =
   , popularity : Int
   , type_ : String
   , uri : String
+  , images : List ImageObject
   }
 
 type alias SearchArtistData =
-  { artists : ArtistsData }
+  { items : List Artist }
 
 type alias ArtistsData =
   { items : List Artist
   }
 
+imageDecoder : Decode.Decoder ImageObject
+imageDecoder =
+  decode ImageObject
+    |> required "height" Decode.int
+    |> required "url" Decode.string
+    |> required "width" Decode.int
+
 searchArtistDecoder : Decode.Decoder SearchArtistData
 searchArtistDecoder =
   decode SearchArtistData
-    |> required "artists" artistsDataDecoder
-
-artistsDataDecoder : Decode.Decoder ArtistsData
-artistsDataDecoder =
-  decode ArtistsData
-    |> required "items" (Decode.list artistDecoder)
+    |> requiredAt ["artists", "items"] (Decode.list artistDecoder)
 
 artistDecoder : Decode.Decoder Artist
 artistDecoder =
@@ -72,3 +75,4 @@ artistDecoder =
     |> required "popularity" Decode.int
     |> required "type" Decode.string
     |> required "uri" Decode.string
+    |> required "images" (Decode.list imageDecoder)

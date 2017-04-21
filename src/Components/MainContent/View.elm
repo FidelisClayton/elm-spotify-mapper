@@ -3,8 +3,10 @@ module Components.MainContent.View exposing (..)
 import Html exposing (Html, div, text, input, label, img, i)
 import Html.Attributes exposing (type_, placeholder, src)
 import Html.CssHelpers
+import RemoteData exposing (WebData)
+import Array
 
-import Models exposing (Model, Artist)
+import Models exposing (Model, Artist, SearchArtistData)
 import Msgs exposing (Msg)
 import CssClasses
 
@@ -19,38 +21,48 @@ bigSearch model =
 
 searchResult : Artist -> Html Msg
 searchResult artist =
+  let
+    image =
+      case (List.head artist.images) of
+        Just image ->
+          image.url
+
+        Nothing ->
+          "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
+  in
   div [ class [ CssClasses.ArtistResult ] ]
     [ div [ class [ CssClasses.ImageWrapper ] ]
           [ div []
               [ i [ Html.Attributes.class "fa fa-play" ] [] ]
-          , img [ src "https://pbs.twimg.com/profile_images/766360293953802240/kt0hiSmv.jpg" ] []
+          , img [ src image ] []
           ]
-    , label [] [ text <| .name artist ]
+    , label [] [ text artist.name ]
     ]
 
-searchResults : Model -> Html Msg
-searchResults model =
-  div [ class [ CssClasses.SearchResults ] ]
-    [ searchResult metallica
-    , searchResult metallica
-    , searchResult metallica
-    , searchResult metallica
-    ]
+searchResults : WebData SearchArtistData -> Html Msg
+searchResults response =
+  let
+    html =
+      case response of
+        RemoteData.NotAsked ->
+          [ text "" ]
 
-metallica : Artist
-metallica =
-  { genres = [ "Metal" ]
-  , href = ""
-  , id = ""
-  , name = "Metallica"
-  , popularity = 1000
-  , type_ = "Test"
-  , uri = "test"
-  }
+        RemoteData.Loading ->
+          [ text "Loading" ]
+
+        RemoteData.Success data ->
+          List.map searchResult data.items
+
+        RemoteData.Failure error ->
+          [ text <| toString error ]
+  in
+    div [ class [ CssClasses.SearchResults ] ]
+      html
+
 
 render : Model -> Html Msg
 render model =
   div [ class [ CssClasses.Main ] ]
     [ bigSearch model
-    , searchResults model
+    , searchResults model.artists
     ]
