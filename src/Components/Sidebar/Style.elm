@@ -16,6 +16,7 @@ css =
       , displayFlex
       , flexDirection column
       , padding <| px 20
+      , backgroundColor <| rgba 0 0 0 0.5
 
       , withClass CssClasses.SidebarActive
           [ transform <| translateX <| px -200 ]
