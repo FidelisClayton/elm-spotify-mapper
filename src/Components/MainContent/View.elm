@@ -1,72 +1,48 @@
 module Components.MainContent.View exposing (..)
 
-import Html exposing (Html, div, text, input, label, img, i)
-import Html.Attributes exposing (type_, placeholder, src)
-import Html.Events exposing (onInput, onClick)
+import Html exposing (Html, div)
+import Html.Attributes
 import Html.CssHelpers
-import RemoteData exposing (WebData)
 
-import Models exposing (Model, Artist, SearchArtistData)
+import Models exposing (Model)
 import Msgs exposing (Msg)
 import CssClasses
+import Css exposing (property)
+
+import Search.View as Search
+import Explore.View as Explore
 
 { class } =
   Html.CssHelpers.withNamespace ""
 
-bigSearch : Model -> Html Msg
-bigSearch model =
-  div [ class [ CssClasses.BigSearch ] ]
-    [ label [] [ text "Search for an artist" ]
-    , input
-        [ type_ "text"
-        , onInput Msgs.Search ]
-        []
-    ]
+styles : List Css.Mixin -> Html.Attribute msg
+styles =
+  Css.asPairs >> Html.Attributes.style
 
-searchResult : Artist -> Html Msg
-searchResult artist =
-  let
-    image =
-      case (List.head artist.images) of
-        Just image ->
-          image.url
+page : Model -> List (Html Msg)
+page model =
+  case model.route of
+    Models.SearchRoute ->
+      Search.render model
 
-        Nothing ->
-          "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
-  in
-  div [ class [ CssClasses.ArtistResult ], onClick (Msgs.SelectArtist artist) ]
-    [ div [ class [ CssClasses.ImageWrapper ] ]
-          [ div []
-              [ i [ Html.Attributes.class "fa fa-play" ] [] ]
-          , img [ src image ] []
-          ]
-    , label [] [ text artist.name ]
-    ]
+    Models.ExploreRoute ->
+      Explore.render model
 
-searchResults : WebData SearchArtistData -> Html Msg
-searchResults response =
-  let
-    html =
-      case response of
-        RemoteData.NotAsked ->
-          [ text "" ]
-
-        RemoteData.Loading ->
-          [ text "Loading" ]
-
-        RemoteData.Success data ->
-          List.map searchResult data.items
-
-        RemoteData.Failure error ->
-          [ text "" ]
-  in
-    div [ class [ CssClasses.SearchResults ] ]
-      html
+    Models.NotFoundRoute ->
+      Search.render model
 
 
 render : Model -> Html Msg
 render model =
-  div [ class [ CssClasses.Main ] ]
-    [ bigSearch model
-    , searchResults model.artists
-    ]
+  let
+    backgroundStyle =
+      if model.route == Models.SearchRoute then
+        [ property "background-color" "#181818" ]
+      else
+        [ property "background-color" "transparent" ]
+  in
+    div
+      [ class [ CssClasses.Main ]
+      , styles backgroundStyle
+      ]
+      (page model)

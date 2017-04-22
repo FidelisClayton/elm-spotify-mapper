@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Html exposing (Html, text, div)
 import Html.CssHelpers
+import Navigation exposing (Location) 
 
 import Components.BottomBar.View as BottomBar
 import Components.Sidebar.View as Sidebar
@@ -11,14 +12,18 @@ import Msgs exposing (Msg)
 import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
+import Routing
 import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus)
 
 { class } =
   Html.CssHelpers.withNamespace ""
 
-init : ( Models.Model, Cmd Msg )
-init =
-  ( Models.initialModel, Cmd.none )
+init : Location -> ( Models.Model, Cmd Msg )
+init location =
+  let
+    currentRoute = Routing.parseLocation location
+  in
+    ( Models.initialModel currentRoute, Cmd.none )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -40,7 +45,7 @@ view model =
 
 main : Program Never Model Msg
 main =
-  Html.program
+  Navigation.program Msgs.OnLocationChange
     { init = init
     , view = view
     , subscriptions = subscriptions

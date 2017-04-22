@@ -5,6 +5,7 @@ import Html.Attributes exposing (type_, placeholder, src)
 import Html.Events exposing (onClick)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
+import Css exposing (property)
 
 import Models exposing (Model, TopTracks, Track)
 import Msgs exposing (Msg)
@@ -13,6 +14,10 @@ import CssClasses
 
 { class } =
   Html.CssHelpers.withNamespace ""
+
+styles : List Css.Mixin -> Html.Attribute msg
+styles =
+  Css.asPairs >> Html.Attributes.style
 
 navItem : List (Html Msg) -> Html Msg
 navItem childrens =
@@ -78,20 +83,30 @@ bigSearch model =
 
 render : Model -> Html Msg
 render model =
-  div [ class [ CssClasses.Sidebar ] ]
-      [ navItem
-          [ span [ class [ CssClasses.Logo] ]
-              [ i [ Html.Attributes.class "fa fa-spotify" ] [] ]
-          ]
-      , navItem
-          [ input
-              [ type_ "text"
-              , class [ CssClasses.SearchInput ]
-              , placeholder "Search"
-              , onClick Msgs.StartSearch
-              ]
-              []
-          ]
-      , artistSongs model.topTracks
-      , userProfile model
-      ]
+  let
+    backgroundStyle =
+      if model.route == Models.SearchRoute then
+        [ property "background" "black" ]
+      else
+        []
+  in
+  div
+    [ class [ CssClasses.Sidebar ]
+    , styles backgroundStyle
+    ]
+    [ navItem
+        [ span [ class [ CssClasses.Logo] ]
+            [ i [ Html.Attributes.class "fa fa-spotify" ] [] ]
+        ]
+    , navItem
+        [ input
+            [ type_ "text"
+            , class [ CssClasses.SearchInput ]
+            , placeholder "Search"
+            , onClick Msgs.StartSearch
+            ]
+            []
+        ]
+    , artistSongs model.topTracks
+    , userProfile model
+    ]

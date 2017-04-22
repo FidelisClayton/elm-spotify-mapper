@@ -5,6 +5,7 @@ import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume)
 import RemoteData
+import Routing exposing (parseLocation)
 
 import Helpers
 import ModelHelpers
@@ -78,3 +79,9 @@ update msg model =
         ({ model
         | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
         , updateVolume newVolume)
+
+    Msgs.OnLocationChange location ->
+      let
+        newRoute = parseLocation location
+      in
+        ({ model | route = newRoute }, Cmd.none)
