@@ -30,3 +30,7 @@ paddValue value =
 getPct : Float -> Float -> Float
 getPct current max =
   (current * 100) / max
+
+pctToValue : Float -> Float -> Float
+pctToValue current max =
+  (current * max) / 100

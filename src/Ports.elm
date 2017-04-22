@@ -7,6 +7,8 @@ port pauseAudio : String -> Cmd msg
 port provideTracks : TopTracks -> Cmd msg
 port nextTrack : String -> Cmd msg
 port previousTrack : String -> Cmd msg
+port updateCurrentTime : Float -> Cmd msg
+port updateVolume : Float -> Cmd msg
 
 port audioEnded : (String -> msg) -> Sub msg
 port updateCurrentTrack : (Track -> msg) -> Sub msg

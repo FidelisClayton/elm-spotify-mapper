@@ -5,11 +5,10 @@ module.exports = function(app) {
   let currentIndex = 0
 
   audio.onended = function() {
-    currentIndex++
+    next()
     const currentTrack = topTracks[currentIndex]
 
     if (currentTrack !== undefined) {
-      play(currentTrack.preview_url)
       app.ports.updateCurrentTrack.send(currentTrack)
     } else {
       app.ports.audioEnded.send("")
@@ -22,11 +21,13 @@ module.exports = function(app) {
 
   setInterval(() => {
     if (!audio.paused) {
-      app.ports.updateAudioStatus.send({
+      const audioStatus = {
         currentTime: Math.floor(audio.currentTime) + 1,
-        duration: Math.floor(audio.duration),
-        volume: audio.volume ? audio.volume : 0
-      })
+        duration: !isNaN(Math.floor(audio.duration)) ? Math.floor(audio.duration) : 30 ,
+        volume: !isNaN(audio.volume) ? audio.volume : 1
+      }
+
+      app.ports.updateAudioStatus.send(audioStatus)
     }
   }, 1000)
 
@@ -89,9 +90,19 @@ module.exports = function(app) {
     return topTracks.indexOf(item)
   }
 
+  function updateCurrentTime(time) {
+    audio.currentTime = time
+  }
+
+  function updateVolume(volume) {
+    audio.volume = volume
+  }
+
   app.ports.playAudio.subscribe(play)
   app.ports.pauseAudio.subscribe(pause)
   app.ports.provideTracks.subscribe(setTopTracks)
   app.ports.nextTrack.subscribe(next)
   app.ports.previousTrack.subscribe(previous)
+  app.ports.updateCurrentTime.subscribe(updateCurrentTime)
+  app.ports.updateVolume.subscribe(updateVolume)
 }

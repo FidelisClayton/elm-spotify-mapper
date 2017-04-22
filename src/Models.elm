@@ -26,7 +26,7 @@ initialModel =
   , selectedArtist = Maybe.Nothing
   , selectedTrack = Maybe.Nothing
   , isPlaying = False
-  , audioStatus = AudioStatus 0 0 0
+  , audioStatus = AudioStatus 0 30 1
   }
 
 type alias ImageObject =

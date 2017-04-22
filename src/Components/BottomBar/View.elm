@@ -1,8 +1,8 @@
 module Components.BottomBar.View exposing (..)
 
-import Html exposing (Html, div, text, span, img, i)
-import Html.Attributes exposing (src)
-import Html.Events exposing (onClick)
+import Html exposing (Html, div, text, span, img, i, input)
+import Html.Attributes exposing (src, type_, step, value)
+import Html.Events exposing (onClick, onInput)
 import Html.CssHelpers
 import RemoteData
 import Css exposing (property)
@@ -25,31 +25,32 @@ controlIcon icon =
   div [ class [ CssClasses.ControlIcon ] ]
       [ i [ class [ CssClasses.Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
-progressBar : Float -> Html Msg
-progressBar progress =
-  let
-    animate =
-      if progress < 3.5 then
-        "0"
-      else
-        "1"
-  in
-    div [ class [ CssClasses.ProgressBar ] ]
-        [ div [ class [ CssClasses.Progress ]
-        , styles
-            [ property "width" (toString progress ++ "%")
-            , property "transition" (animate ++ "s linear width")
-            ]
-        ]
-            []
-        ]
+progressBar : Float -> (String -> Msg) -> Html Msg
+progressBar progress msg =
+  div [ class [ CssClasses.ProgressBar ] ]
+      [ div
+          [ class [ CssClasses.Progress ]
+          , styles
+              [ property "width" (toString (floor progress) ++ "%") ]
+          ] []
+      , input
+          [ type_ "range"
+          , class []
+          , Html.Attributes.max "100"
+          , Html.Attributes.min "0"
+          , step "1"
+          , onInput msg
+          , value <| toString <| floor progress
+      ]
+          []
+      ]
 
 progress : Model -> Html Msg
 progress model =
   div [ class [ CssClasses.ProgressGroup ] ]
       [ span [ class [ CssClasses.FontSmall ] ]
           [ text <| "00:" ++ (Helpers.paddValue model.audioStatus.currentTime) ]
-      , progressBar (Helpers.getPct model.audioStatus.currentTime model.audioStatus.duration)
+      , progressBar (Helpers.getPct model.audioStatus.currentTime model.audioStatus.duration) Msgs.UpdateCurrentTime
       , span [ class [ CssClasses.FontSmall ] ]
           [ text <| "00:" ++ (Helpers.paddValue  model.audioStatus.duration) ]
       ]
@@ -80,10 +81,19 @@ musicInfo selectedTrack =
 
 soundControl : Model -> Html Msg
 soundControl model =
-  div [ class [ CssClasses.SoundControl ] ]
-    [ div [ class [ CssClasses.ControlButtons ] ]
-        [ controlIcon "volume-down" ]
-    , progressBar 10 ]
+  let
+    icon =
+      if model.audioStatus.volume > 0.6 then
+        controlIcon "volume-up"
+      else if model.audioStatus.volume > 0 then
+        controlIcon "volume-down"
+      else
+        controlIcon "volume-off"
+  in
+    div [ class [ CssClasses.SoundControl ] ]
+      [ div [ class [ CssClasses.ControlButtons ] ]
+          [ icon ]
+      , progressBar (model.audioStatus.volume * 100) Msgs.UpdateVolume ]
 
 
 controls : Model -> Html Msg

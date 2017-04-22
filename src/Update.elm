@@ -3,8 +3,11 @@ module Update exposing (..)
 import Msgs exposing (Msg)
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks)
-import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack)
+import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume)
 import RemoteData
+
+import Helpers
+import ModelHelpers
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msg model =
@@ -59,3 +62,19 @@ update msg model =
 
     Msgs.UpdateAudioStatus audioStatus ->
       ({ model | audioStatus = audioStatus}, Cmd.none)
+
+    Msgs.UpdateCurrentTime time ->
+      let
+        currentTime = Helpers.pctToValue (Result.withDefault model.audioStatus.currentTime (String.toFloat time)) model.audioStatus.duration
+      in
+        ({ model
+        | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
+        , updateCurrentTime currentTime)
+
+    Msgs.UpdateVolume volume ->
+      let
+        newVolume = (Result.withDefault model.audioStatus.volume (String.toFloat volume)) / 100
+      in
+        ({ model
+        | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
+        , updateVolume newVolume)

@@ -1,6 +1,7 @@
 module Components.BottomBar.Style exposing (..)
 
 import Css exposing (..)
+import Css.Elements exposing (input)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers exposing (withNamespace)
 
@@ -23,6 +24,8 @@ css =
       [ displayFlex
       , alignItems center
       , height <| px 56
+      , width <| px 225
+      , overflow hidden
 
       , children
         [ class CssClasses.AlbumCover
@@ -71,19 +74,24 @@ css =
       , borderRadius <| px 10
       , displayFlex
       , margin2 zero <| px 10
+      , position relative
 
-      , children [
-          class CssClasses.Progress
-            [ backgroundColor <| hex "a0a0a0"
-            , width <| pct 0.3
-            , height <| pct 100
-            , borderRadius <| px 10
-            , property "transition" "1s linear width"
+      , children
+          [ input
+              [ width <| pct 100
+              , height <| pct 100
+              , marginTop zero
+              , zIndex <| int 2
+              ]
 
-            , hover
-                [ backgroundColor <| hex "1db954"]
-            ]
-        ]
+          , class CssClasses.Progress
+              [ backgroundColor <| hex "a0a0a0"
+              , width <| pct 0
+              , height <| pct 100
+              , borderRadius <| px 10
+              , position absolute
+              ]
+          ]
       ]
 
     , class CssClasses.FontSmall

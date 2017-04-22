@@ -17,3 +17,5 @@ type Msg
   | SelectArtist Artist
   | SelectTrack Track
   | UpdateAudioStatus AudioStatus
+  | UpdateCurrentTime String
+  | UpdateVolume String
