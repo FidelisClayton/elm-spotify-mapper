@@ -2,6 +2,7 @@ module Msgs exposing (..)
 
 import Models exposing (Artist, SearchArtistData, TopTracks, Track, AudioStatus)
 import RemoteData exposing (WebData)
+import Navigation exposing (Location)
 
 type Msg
   = Search String
@@ -19,3 +20,10 @@ type Msg
   | UpdateAudioStatus AudioStatus
   | UpdateCurrentTime String
   | UpdateVolume String
+  | OnLocationChange Location
+
+type Route
+  = SearchRoute
+  | ExploreRoute
+  | NotFoundRoute
+

@@ -2,10 +2,10 @@
 
 body {
   background: #a90329;
-  background: -moz-linear-gradient(top, #a90329 0%, #8f0222 36%, #000000 86%);
-  background: -webkit-linear-gradient(top, #a90329 0%,#8f0222 36%,#000000 86%);
-  background: linear-gradient(to bottom, #a90329 0%,#8f0222 36%,#000000 86%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a90329', endColorstr='#000000',GradientType=0 );
+  background: -moz-linear-gradient(rgb(134, 18, 32), rgb(13, 1, 3) 85%);
+  background: -webkit-linear-gradient(rgb(134, 18, 32), rgb(13, 1, 3) 85%);
+  background: linear-gradient(rgb(134, 18, 32), rgb(13, 1, 3) 85%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='rgb(134, 18, 32)', endColorstr='rgb(13, 1, 3)',GradientType=0 );
   font-family: 'Roboto', sans-serif;
 }
 
@@ -16,13 +16,6 @@ body {
 
 .SearchInput::-webkit-input-placeholder:hover {
   color: #FFF;
-}
-
-.Sidebar {
-  background: -moz-linear-gradient(left,  rgba(0,0,0,0.3) 0%, rgba(0,0,0,0.3) 1%, rgba(0,0,0,0.6) 77%, rgba(0,0,0,0.6) 100%);
-  background: -webkit-linear-gradient(left,  rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 1%,rgba(0,0,0,0.6) 77%,rgba(0,0,0,0.6) 100%);
-  background: linear-gradient(to right,  rgba(0,0,0,0.3) 0%,rgba(0,0,0,0.3) 1%,rgba(0,0,0,0.6) 77%,rgba(0,0,0,0.6) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4d000000', endColorstr='#99000000',GradientType=1 );
 }
 
 input[type=range] {

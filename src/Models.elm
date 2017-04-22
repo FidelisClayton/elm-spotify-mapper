@@ -14,10 +14,11 @@ type alias Model =
   , selectedTrack : Maybe Track
   , isPlaying : Bool
   , audioStatus : AudioStatus
+  , route : Route
   }
 
-initialModel : Model
-initialModel =
+initialModel : Route -> Model
+initialModel route =
   { showMenu = True
   , artists = RemoteData.NotAsked
   , searching = False
@@ -27,7 +28,13 @@ initialModel =
   , selectedTrack = Maybe.Nothing
   , isPlaying = False
   , audioStatus = AudioStatus 0 30 1
+  , route = route
   }
+
+type Route
+  = SearchRoute
+  | ExploreRoute
+  | NotFoundRoute
 
 type alias ImageObject =
   { height : Int

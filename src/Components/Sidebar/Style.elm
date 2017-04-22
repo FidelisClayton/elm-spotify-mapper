@@ -16,6 +16,7 @@ css =
       , displayFlex
       , flexDirection column
       , padding <| px 20
+      , backgroundColor <| rgba 0 0 0 0.5
 
       , withClass CssClasses.SidebarActive
           [ transform <| translateX <| px -200 ]
@@ -24,6 +25,22 @@ css =
   , class CssClasses.NavGroup
       [ padding2 (px 10) zero
       , borderBottom3 (px 1) solid (rgba 183 183 183 0.42)
+      ]
+
+  , class CssClasses.SidebarLink
+      [ color <| hex "a0a0a0"
+      , fontWeight bold
+      , textDecoration none
+      , fontSize <| px 16
+      , letterSpacing <| px 0.5
+      , display block
+      , padding2 (px 10) zero
+
+      , withClass CssClasses.Active
+          [ color <| hex "1db954"]
+
+      , hover
+          [ color <| hex "FFF"]
       ]
 
   , class CssClasses.Logo

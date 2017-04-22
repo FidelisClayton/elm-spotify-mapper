@@ -1,10 +1,11 @@
 module Components.Sidebar.View exposing (..)
 
-import Html exposing (Html, div, text, input, span, img, i, button)
-import Html.Attributes exposing (type_, placeholder, src)
+import Html exposing (Html, div, text, input, span, img, i, button, a)
+import Html.Attributes exposing (type_, placeholder, src, href)
 import Html.Events exposing (onClick)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
+import Css exposing (property)
 
 import Models exposing (Model, TopTracks, Track)
 import Msgs exposing (Msg)
@@ -13,6 +14,10 @@ import CssClasses
 
 { class } =
   Html.CssHelpers.withNamespace ""
+
+styles : List Css.Mixin -> Html.Attribute msg
+styles =
+  Css.asPairs >> Html.Attributes.style
 
 navItem : List (Html Msg) -> Html Msg
 navItem childrens =
@@ -78,19 +83,44 @@ bigSearch model =
 
 render : Model -> Html Msg
 render model =
-  div [ class [ CssClasses.Sidebar ] ]
+  let
+    backgroundStyle =
+      if model.route == Models.SearchRoute then
+        [ property "background" "black" ]
+      else
+        []
+
+    searchClasses =
+      if model.route == Models.SearchRoute then
+        [ CssClasses.SidebarLink, CssClasses.Active ]
+      else
+        [ CssClasses.SidebarLink ]
+
+    exploreClasses =
+      if model.route == Models.ExploreRoute then
+        [ CssClasses.SidebarLink, CssClasses.Active ]
+      else
+        [ CssClasses.SidebarLink ]
+  in
+    div
+      [ class [ CssClasses.Sidebar ]
+      , styles backgroundStyle
+      ]
       [ navItem
           [ span [ class [ CssClasses.Logo] ]
               [ i [ Html.Attributes.class "fa fa-spotify" ] [] ]
           ]
       , navItem
-          [ input
-              [ type_ "text"
-              , class [ CssClasses.SearchInput ]
-              , placeholder "Search"
-              , onClick Msgs.StartSearch
+          [ a
+              [ class searchClasses
+              , href "#/search"
               ]
-              []
+              [ text "Search" ]
+          , a
+              [ class exploreClasses
+              , href "#/explore"
+              ]
+              [ text "Explore" ]
           ]
       , artistSongs model.topTracks
       , userProfile model

@@ -5,6 +5,7 @@ import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume)
 import RemoteData
+import Routing exposing (parseLocation)
 
 import Helpers
 import ModelHelpers
@@ -55,7 +56,14 @@ update msg model =
           ({ model | topTracks = response}, Cmd.none)
 
     Msgs.SelectArtist artist ->
-      ({ model | selectedArtist = Maybe.Just artist }, fetchTopTracks artist.id)
+      let
+        newModel =
+          { model
+          | selectedArtist = Maybe.Just artist
+          , route = Models.ExploreRoute
+          }
+      in
+        (newModel, fetchTopTracks artist.id)
 
     Msgs.SelectTrack track ->
       ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
@@ -65,7 +73,10 @@ update msg model =
 
     Msgs.UpdateCurrentTime time ->
       let
-        currentTime = Helpers.pctToValue (Result.withDefault model.audioStatus.currentTime (String.toFloat time)) model.audioStatus.duration
+        currentTime =
+          Helpers.pctToValue
+            (Result.withDefault model.audioStatus.currentTime (String.toFloat time))
+            model.audioStatus.duration
       in
         ({ model
         | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
@@ -78,3 +89,9 @@ update msg model =
         ({ model
         | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
         , updateVolume newVolume)
+
+    Msgs.OnLocationChange location ->
+      let
+        newRoute = parseLocation location
+      in
+        ({ model | route = newRoute }, Cmd.none)
