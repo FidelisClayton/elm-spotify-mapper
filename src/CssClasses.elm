@@ -40,3 +40,5 @@ type Classes
   | SearchResults
   | ArtistResult
   | ImageWrapper
+  | SidebarLink
+  | Active
