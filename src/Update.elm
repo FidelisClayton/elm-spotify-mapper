@@ -56,10 +56,14 @@ update msg model =
           ({ model | topTracks = response}, Cmd.none)
 
     Msgs.SelectArtist artist ->
-      ({ model
-        | selectedArtist = Maybe.Just artist
-        , route = Models.ExploreRoute
-      }, fetchTopTracks artist.id)
+      let
+        newModel =
+          { model
+          | selectedArtist = Maybe.Just artist
+          , route = Models.ExploreRoute
+          }
+      in
+        (newModel, fetchTopTracks artist.id)
 
     Msgs.SelectTrack track ->
       ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
@@ -69,7 +73,10 @@ update msg model =
 
     Msgs.UpdateCurrentTime time ->
       let
-        currentTime = Helpers.pctToValue (Result.withDefault model.audioStatus.currentTime (String.toFloat time)) model.audioStatus.duration
+        currentTime =
+          Helpers.pctToValue
+            (Result.withDefault model.audioStatus.currentTime (String.toFloat time))
+            model.audioStatus.duration
       in
         ({ model
         | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
