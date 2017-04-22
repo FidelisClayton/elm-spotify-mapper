@@ -12,6 +12,8 @@ type alias Model =
   , topTracks : WebData TopTracks
   , selectedArtist : Maybe Artist
   , selectedTrack : Maybe Track
+  , isPlaying : Bool
+  , audioStatus : AudioStatus
   }
 
 initialModel : Model
@@ -23,6 +25,8 @@ initialModel =
   , topTracks = RemoteData.NotAsked
   , selectedArtist = Maybe.Nothing
   , selectedTrack = Maybe.Nothing
+  , isPlaying = False
+  , audioStatus = AudioStatus 0 30 1
   }
 
 type alias ImageObject =
@@ -61,6 +65,12 @@ type alias SearchArtistData =
 
 type alias TopTracks =
   { tracks : List Track }
+
+type alias AudioStatus =
+  { currentTime : Float
+  , duration : Float
+  , volume : Float
+  }
 
 searchArtistDecoder : Decode.Decoder SearchArtistData
 searchArtistDecoder =
