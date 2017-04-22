@@ -1,9 +1,13 @@
 "use strict"
 
+const audioPorts = require("./Native/audio")
+
 require("./index.html")
 require("./Stylesheets.elm")
 
-var Elm = require("./Main.elm")
-var mountNode = document.getElementById("main")
+const Elm = require("./Main.elm")
+const mountNode = document.getElementById("main")
 
-var app = Elm.Main.embed(mountNode)
+const app = Elm.Main.embed(mountNode)
+
+audioPorts(app)

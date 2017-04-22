@@ -75,9 +75,10 @@ css =
       , children [
           class CssClasses.Progress
             [ backgroundColor <| hex "a0a0a0"
-            , width <| pct 85
+            , width <| pct 0.3
             , height <| pct 100
             , borderRadius <| px 10
+            , property "transition" "1s linear width"
 
             , hover
                 [ backgroundColor <| hex "1db954"]

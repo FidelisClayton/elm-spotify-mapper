@@ -11,6 +11,7 @@ import Msgs exposing (Msg)
 import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
+import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus)
 
 { class } =
   Html.CssHelpers.withNamespace ""
@@ -21,7 +22,11 @@ init =
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
-  Sub.none
+  Sub.batch
+    [ audioEnded Msgs.Stop
+    , updateCurrentTrack Msgs.SelectTrack
+    , updateAudioStatus Msgs.UpdateAudioStatus
+    ]
 
 view : Model -> Html Msg
 view model =

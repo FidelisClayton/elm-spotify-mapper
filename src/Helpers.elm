@@ -19,3 +19,14 @@ firstArtistName artists =
 
     Nothing ->
       ""
+
+paddValue : Float -> String
+paddValue value =
+  if value < 10 then
+    "0" ++ (toString value)
+  else
+    toString value
+
+getPct : Float -> Float -> Float
+getPct current max =
+  (current * 100) / max
