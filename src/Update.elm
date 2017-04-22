@@ -56,7 +56,10 @@ update msg model =
           ({ model | topTracks = response}, Cmd.none)
 
     Msgs.SelectArtist artist ->
-      ({ model | selectedArtist = Maybe.Just artist }, fetchTopTracks artist.id)
+      ({ model
+        | selectedArtist = Maybe.Just artist
+        , route = Models.ExploreRoute
+      }, fetchTopTracks artist.id)
 
     Msgs.SelectTrack track ->
       ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
