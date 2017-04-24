@@ -21,9 +21,4 @@ type Msg
   | UpdateCurrentTime String
   | UpdateVolume String
   | OnLocationChange Location
-
-type Route
-  = SearchRoute
-  | ExploreRoute
-  | NotFoundRoute
-
+  | GetVisStatus Bool

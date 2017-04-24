@@ -42,3 +42,6 @@ type Classes
   | ImageWrapper
   | SidebarLink
   | Active
+
+type Ids
+  = VisContainer

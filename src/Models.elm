@@ -79,6 +79,19 @@ type alias AudioStatus =
   , volume : Float
   }
 
+type alias VisNode =
+  { id : String
+  , label : String
+  , value : Int
+  , shape : String
+  , image : String
+  }
+
+type alias VisEdge =
+  { from : String
+  , to : String
+  }
+
 searchArtistDecoder : Decode.Decoder SearchArtistData
 searchArtistDecoder =
   decode SearchArtistData

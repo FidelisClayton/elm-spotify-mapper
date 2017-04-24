@@ -20,6 +20,7 @@ css =
       , flexDirection column
       , property "overflow-y" "overlay"
       , overflowX hidden
+      , position relative
       ]
 
   , class CssClasses.BigSearch

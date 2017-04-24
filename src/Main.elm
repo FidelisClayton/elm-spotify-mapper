@@ -2,7 +2,7 @@ module Main exposing (..)
 
 import Html exposing (Html, text, div)
 import Html.CssHelpers
-import Navigation exposing (Location) 
+import Navigation exposing (Location)
 
 import Components.BottomBar.View as BottomBar
 import Components.Sidebar.View as Sidebar
@@ -13,7 +13,7 @@ import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
 import Routing
-import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus)
+import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, getVisStatus)
 
 { class } =
   Html.CssHelpers.withNamespace ""
@@ -31,6 +31,7 @@ subscriptions model =
     [ audioEnded Msgs.Stop
     , updateCurrentTrack Msgs.SelectTrack
     , updateAudioStatus Msgs.UpdateAudioStatus
+    , getVisStatus Msgs.GetVisStatus
     ]
 
 view : Model -> Html Msg

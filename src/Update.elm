@@ -3,7 +3,7 @@ module Update exposing (..)
 import Msgs exposing (Msg)
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks)
-import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume)
+import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis)
 import RemoteData
 import Routing exposing (parseLocation)
 
@@ -94,4 +94,26 @@ update msg model =
       let
         newRoute = parseLocation location
       in
-        ({ model | route = newRoute }, Cmd.none)
+        case newRoute of
+          Models.ExploreRoute ->
+            case model.selectedArtist of
+              Just artist ->
+                ({ model | route = newRoute }, initVis artist)
+
+              Nothing ->
+                ({ model | route = newRoute }, Cmd.none)
+
+          _ ->
+            ({ model | route = newRoute }, destroyVis "")
+
+    Msgs.GetVisStatus value ->
+      if value == True then
+        case model.selectedArtist of
+          Just artist ->
+            (model, initVis artist)
+
+          Nothing ->
+            (model, Cmd.none)
+      else
+        (model, Cmd.none)
+
