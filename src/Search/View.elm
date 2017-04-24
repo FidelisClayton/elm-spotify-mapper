@@ -1,7 +1,7 @@
 module Search.View exposing (..)
 
-import Html exposing (Html, div, text, input, label, img, i)
-import Html.Attributes exposing (type_, placeholder, src)
+import Html exposing (Html, div, text, input, label, img, i, a)
+import Html.Attributes exposing (type_, placeholder, src, href)
 import Html.Events exposing (onInput, onClick)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
@@ -34,14 +34,14 @@ searchResult artist =
         Nothing ->
           "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
   in
-  div [ class [ CssClasses.ArtistResult ], onClick (Msgs.SelectArtist artist) ]
-    [ div [ class [ CssClasses.ImageWrapper ] ]
-          [ div []
-              [ i [ Html.Attributes.class "fa fa-play" ] [] ]
-          , img [ src image ] []
-          ]
-    , label [] [ text artist.name ]
-    ]
+    a [ class [ CssClasses.ArtistResult ], onClick (Msgs.SelectArtist artist), href "#/explore" ]
+      [ div [ class [ CssClasses.ImageWrapper ] ]
+            [ div []
+                [ i [ Html.Attributes.class "fa fa-play" ] [] ]
+            , img [ src image ] []
+            ]
+      , label [] [ text artist.name ]
+      ]
 
 searchResults : WebData SearchArtistData -> Html Msg
 searchResults response =

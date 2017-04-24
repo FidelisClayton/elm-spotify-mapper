@@ -21,4 +21,4 @@ type Msg
   | UpdateCurrentTime String
   | UpdateVolume String
   | OnLocationChange Location
-  | GetVisStatus Bool
+  | OnVisNodeClick String

@@ -15,6 +15,7 @@ type alias Model =
   , isPlaying : Bool
   , audioStatus : AudioStatus
   , route : Route
+  , network : VisNetwork
   }
 
 initialModel : Route -> Model
@@ -29,6 +30,7 @@ initialModel route =
   , isPlaying = False
   , audioStatus = AudioStatus 0 30 1
   , route = route
+  , network = VisNetwork [] []
   }
 
 type Route
@@ -92,6 +94,11 @@ type alias VisEdge =
   , to : String
   }
 
+type alias VisNetwork =
+  { nodes : List VisNode
+  , edges : List VisEdge
+  }
+
 searchArtistDecoder : Decode.Decoder SearchArtistData
 searchArtistDecoder =
   decode SearchArtistData
@@ -135,4 +142,4 @@ trackDecoder =
     |> required "artists" (Decode.list artistDecoder)
     |> required "id" Decode.string
     |> required "name" Decode.string
-    |> required "preview_url" Decode.string
+    |> optional "preview_url" Decode.string ""

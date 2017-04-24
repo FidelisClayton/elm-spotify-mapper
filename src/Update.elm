@@ -96,24 +96,25 @@ update msg model =
       in
         case newRoute of
           Models.ExploreRoute ->
-            case model.selectedArtist of
-              Just artist ->
-                ({ model | route = newRoute }, initVis artist)
+            let
+              previousNetwork = model.network
 
-              Nothing ->
-                ({ model | route = newRoute }, Cmd.none)
+              newNetwork =
+                case model.selectedArtist of
+                  Just artist ->
+                    let
+                      node = Helpers.artistToNode artist
+                    in
+                      { previousNetwork | nodes = [ node ]}
+
+                  Nothing ->
+                    previousNetwork
+            in
+              ({ model | route = newRoute, network = newNetwork }, initVis newNetwork)
 
           _ ->
             ({ model | route = newRoute }, destroyVis "")
 
-    Msgs.GetVisStatus value ->
-      if value == True then
-        case model.selectedArtist of
-          Just artist ->
-            (model, initVis artist)
-
-          Nothing ->
-            (model, Cmd.none)
-      else
-        (model, Cmd.none)
+    Msgs.OnVisNodeClick artistId ->
+      (model, Cmd.none)
 

@@ -63,6 +63,7 @@ css =
       , margin <| px 15
       , position relative
       , width <| px 180
+      , textDecoration none
 
       , children
           [ class CssClasses.ImageWrapper

@@ -1,6 +1,6 @@
 module Helpers exposing (..)
 
-import Models exposing (ImageObject, Artist)
+import Models exposing (ImageObject, Artist, VisNode)
 
 firstImageUrl : List ImageObject -> String
 firstImageUrl images =
@@ -34,3 +34,33 @@ getPct current max =
 pctToValue : Float -> Float -> Float
 pctToValue current max =
   (current * max) / 100
+
+getByIndex : Int -> List a -> Maybe a
+getByIndex index items =
+  List.take index items
+    |> List.reverse
+    |> List.head
+
+getLastItem : List a -> Maybe a
+getLastItem items =
+  List.reverse items
+    |> List.head
+
+artistToNode : Artist -> VisNode
+artistToNode artist =
+  let
+    image =
+      case (getLastItem artist.images) of
+        Just image ->
+          image.url
+
+        Nothing ->
+          ""
+  in
+    { id = artist.id
+    , label = artist.name
+    , value = artist.popularity
+    , shape = "circularImage"
+    , image = image
+    }
+

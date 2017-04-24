@@ -50,16 +50,17 @@ const defaultOptions =
 module.exports = function(app) {
   let network;
 
-  function init(artist) {
+  function init(data) {
     setTimeout(() => {
       const container = document.getElementById("VisContainer")
-      const node = { id: "aslkdja", label: "Test", value: 20 }
-      const data = { nodes: new vis.DataSet([node]), edges: new vis.DataSet([]) }
+      console.log(data)
+
       try {
-        network = new vis.Network(container, data, defaultOptions)
+        network = new vis.Network(container, data, {})
 
         app.ports.getVisStatus.send(true)
       } catch (err) {
+        console.log(err)
         app.ports.getVisStatus.send(false)
       }
 
