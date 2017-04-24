@@ -16,6 +16,7 @@ type alias Model =
   , audioStatus : AudioStatus
   , route : Route
   , network : VisNetwork
+  , relatedArtists : WebData RelatedArtists
   }
 
 initialModel : Route -> Model
@@ -31,6 +32,7 @@ initialModel route =
   , audioStatus = AudioStatus 0 30 1
   , route = route
   , network = VisNetwork [] []
+  , relatedArtists = RemoteData.NotAsked
   }
 
 type Route
@@ -75,6 +77,9 @@ type alias SearchArtistData =
 type alias TopTracks =
   { tracks : List Track }
 
+type alias RelatedArtists =
+  { artists : List Artist }
+
 type alias AudioStatus =
   { currentTime : Float
   , duration : Float
@@ -108,6 +113,11 @@ topTracksDecoder : Decode.Decoder TopTracks
 topTracksDecoder =
   decode TopTracks
     |> required "tracks" (Decode.list trackDecoder)
+
+relatedArtistsDecoder : Decode.Decoder RelatedArtists
+relatedArtistsDecoder =
+  decode RelatedArtists
+    |> required "artists" (Decode.list artistDecoder)
 
 artistDecoder : Decode.Decoder Artist
 artistDecoder =

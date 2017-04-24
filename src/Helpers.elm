@@ -1,6 +1,6 @@
 module Helpers exposing (..)
 
-import Models exposing (ImageObject, Artist, VisNode)
+import Models exposing (ImageObject, Artist, VisNode, VisEdge)
 
 firstImageUrl : List ImageObject -> String
 firstImageUrl images =
@@ -64,3 +64,8 @@ artistToNode artist =
     , image = image
     }
 
+artistsToEdge : String -> List Artist -> List VisEdge
+artistsToEdge fromId artists =
+  List.map (\artist ->
+    VisEdge fromId artist.id
+  ) artists

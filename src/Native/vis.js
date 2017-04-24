@@ -48,21 +48,30 @@ const defaultOptions =
 }
 
 module.exports = function(app) {
-  let network;
+  let network
+  let edges
+  let nodes
 
   function init(data) {
+    console.log(data)
     setTimeout(() => {
       const container = document.getElementById("VisContainer")
-      console.log(data)
+      edges = new vis.DataSet(data.edges),
+      nodes = new vis.DataSet(data.nodes)
 
-      try {
-        network = new vis.Network(container, data, {})
+      const visData = {edges, nodes}
 
-        app.ports.getVisStatus.send(true)
-      } catch (err) {
-        console.log(err)
-        app.ports.getVisStatus.send(false)
-      }
+      network = new vis.Network(container, visData, {})
+
+      network.on("click", function (params) {
+        if(params.nodes[0] != undefined){
+          app.ports.onNodeClick.send(params.nodes[0])
+        }
+      });
+
+      // network.on("doubleClick", function (params) {
+      //   $scope.playTopTrack(params.nodes[0]);
+      // });
 
     }, 100)
   }
@@ -72,10 +81,14 @@ module.exports = function(app) {
       network.destroy()
   }
 
-  function addSimilar() {
-    // verificar se o artista já existe
+  function addSimilar(data) {
+    data[0].forEach(node => nodes.add(node))
+    data[1].forEach(edge => edges.add(edge))
+
+    app.ports.updateNetwork.send(data)
   }
 
   app.ports.initVis.subscribe(init)
   app.ports.destroyVis.subscribe(destroy)
+  app.ports.addSimilar.subscribe(addSimilar)
 }

@@ -2,8 +2,8 @@ module Update exposing (..)
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
-import Commands exposing (fetchArtist, fetchTopTracks)
-import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis)
+import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists)
+import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
 import RemoteData
 import Routing exposing (parseLocation)
 
@@ -55,6 +55,37 @@ update msg model =
         _ ->
           ({ model | topTracks = response}, Cmd.none)
 
+    Msgs.RelatedArtistsSuccess response ->
+      case response of
+        RemoteData.Success data ->
+          let
+            nodes =
+              List.map Helpers.artistToNode (List.take 5 data.artists)
+
+            edges =
+              case model.selectedArtist of
+                Just artist ->
+                  Helpers.artistsToEdge artist.id data.artists
+
+                Nothing ->
+                  []
+
+            newNodes =
+              List.append model.network.nodes nodes
+
+            newEdges =
+              List.append model.network.edges edges
+
+            previousNetwork = model.network
+
+            newNetwork =
+              { previousNetwork | nodes = newNodes, edges = newEdges }
+          in
+            ({ model | relatedArtists = response, network = newNetwork }, addSimilar (nodes, edges))
+
+        _ ->
+          ({ model | relatedArtists = response }, Cmd.none)
+
     Msgs.SelectArtist artist ->
       let
         newModel =
@@ -98,17 +129,27 @@ update msg model =
           Models.ExploreRoute ->
             let
               previousNetwork = model.network
+              firstNetworkNode =
+                List.head previousNetwork.nodes
 
-              newNetwork =
+              selectedArtistNode =
                 case model.selectedArtist of
                   Just artist ->
-                    let
-                      node = Helpers.artistToNode artist
-                    in
-                      { previousNetwork | nodes = [ node ]}
+                    Helpers.artistToNode artist
 
                   Nothing ->
-                    previousNetwork
+                    Models.VisNode "" "" 0 "" ""
+
+              newNetwork =
+                case firstNetworkNode of
+                  Just node ->
+                    if selectedArtistNode.id == node.id then
+                      previousNetwork
+                    else
+                      { previousNetwork | nodes = [ selectedArtistNode ]}
+
+                  Nothing ->
+                    { previousNetwork | nodes = [ selectedArtistNode ]}
             in
               ({ model | route = newRoute, network = newNetwork }, initVis newNetwork)
 
@@ -116,5 +157,13 @@ update msg model =
             ({ model | route = newRoute }, destroyVis "")
 
     Msgs.OnVisNodeClick artistId ->
-      (model, Cmd.none)
+      (model, fetchRelatedArtists artistId)
 
+    Msgs.UpdateNetwork data ->
+      let
+        previousNetwork = model.network
+
+        newNetwork =
+          { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
+      in
+        ({ model | network = newNetwork }, Cmd.none)
