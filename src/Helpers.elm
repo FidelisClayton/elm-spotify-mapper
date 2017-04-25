@@ -69,3 +69,14 @@ artistsToEdge fromId artists =
   List.map (\artist ->
     VisEdge fromId artist.id
   ) artists
+
+filterNewArtists : List Artist -> List VisNode -> List Artist
+filterNewArtists artists nodes =
+  List.filter (\artist ->
+    let
+      repeatedNodes = List.filter (\node ->
+        node.id == artist.id
+      ) nodes
+    in
+      not ((List.length repeatedNodes) > 0)
+  ) artists

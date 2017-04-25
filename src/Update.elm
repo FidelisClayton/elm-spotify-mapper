@@ -60,7 +60,8 @@ update msg model =
         RemoteData.Success data ->
           let
             nodes =
-              List.map Helpers.artistToNode (List.take 5 data.artists)
+              List.map Helpers.artistToNode
+                (List.take 5 (Helpers.filterNewArtists data.artists model.network.nodes))
 
             edges =
               case model.selectedArtist of
