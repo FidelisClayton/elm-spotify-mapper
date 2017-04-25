@@ -60,10 +60,12 @@ update msg model =
       case response of
         RemoteData.Success data ->
           let
-            nodes =
+            newArtists =
                 Helpers.filterNewArtists data.artists model.network.nodes
                 |> List.take maxRelatedArtists
-                |> List.map Helpers.artistToNode
+
+            nodes =
+              List.map Helpers.artistToNode newArtists
 
             edges =
               case model.selectedArtist of
@@ -85,8 +87,18 @@ update msg model =
 
             newNetwork =
               { previousNetwork | nodes = newNodes, edges = newEdges }
+
+            newPlaylistArtists =
+              List.append model.playlistArtists newArtists
+
+            newModel =
+              { model
+              | relatedArtists = response
+              , network = newNetwork
+              , playlistArtists = newPlaylistArtists
+              }
           in
-            ({ model | relatedArtists = response, network = newNetwork }, addSimilar (nodes, edges))
+            (newModel, addSimilar (nodes, edges))
 
         _ ->
           ({ model | relatedArtists = response }, Cmd.none)
