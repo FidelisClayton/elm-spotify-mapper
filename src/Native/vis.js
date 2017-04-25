@@ -9,16 +9,8 @@ const defaultOptions =
     scaling: {
       min: 20,
       max: 30,
-      label: { 
-        min: 14, 
-        max: 30, 
-        drawThreshold: 9, 
-        maxVisible: 20 }
-      },
-    font: {
-      size: 12, 
-      face: 'Arial'
     },
+    font: "14px arial #FFF",
     borderWidth: 3,
     color: {
       border: "#1ed760",
@@ -40,11 +32,16 @@ const defaultOptions =
   },
   edges: {
     color: {
-      color: "rgba(31,33,32,1)",
+      color: "rgba(255, 255, 255, 0.5)",
       highlight: "#1ed760",
       inherit: false
     }
   },
+  layout: {
+    hierarchical: {
+      direction: 'UD'
+    }
+  }
 }
 
 module.exports = function(app) {
@@ -53,15 +50,14 @@ module.exports = function(app) {
   let nodes
 
   function init(data) {
-    console.log(data)
     setTimeout(() => {
       const container = document.getElementById("VisContainer")
-      edges = new vis.DataSet(data.edges),
+      edges = new vis.DataSet(data.edges)
       nodes = new vis.DataSet(data.nodes)
 
       const visData = {edges, nodes}
 
-      network = new vis.Network(container, visData, {})
+      network = new vis.Network(container, visData, defaultOptions)
 
       network.on("click", function (params) {
         if(params.nodes[0] != undefined){

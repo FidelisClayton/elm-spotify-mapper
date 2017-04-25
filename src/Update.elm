@@ -2,10 +2,11 @@ module Update exposing (..)
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
-import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists)
+import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
 import RemoteData
 import Routing exposing (parseLocation)
+import Constants exposing (maxRelatedArtists)
 
 import Helpers
 import ModelHelpers
@@ -60,13 +61,16 @@ update msg model =
         RemoteData.Success data ->
           let
             nodes =
-              List.map Helpers.artistToNode
-                (List.take 5 (Helpers.filterNewArtists data.artists model.network.nodes))
+                Helpers.filterNewArtists data.artists model.network.nodes
+                |> List.take maxRelatedArtists
+                |> List.map Helpers.artistToNode
 
             edges =
               case model.selectedArtist of
                 Just artist ->
-                  Helpers.artistsToEdge artist.id data.artists
+                  Helpers.filterNewArtists data.artists model.network.nodes
+                  |> List.take maxRelatedArtists
+                  |> Helpers.artistsToEdge artist.id
 
                 Nothing ->
                   []
@@ -158,7 +162,15 @@ update msg model =
             ({ model | route = newRoute }, destroyVis "")
 
     Msgs.OnVisNodeClick artistId ->
-      (model, fetchRelatedArtists artistId)
+      (model, fetchArtistById artistId)
+
+    Msgs.ArtistByIdSuccess response ->
+      case response of
+        RemoteData.Success artist ->
+          ({ model | selectedArtist = Just artist }, Cmd.batch[fetchRelatedArtists artist.id, fetchTopTracks artist.id])
+
+        _ ->
+          (model, Cmd.none)
 
     Msgs.UpdateNetwork data ->
       let

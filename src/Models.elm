@@ -17,6 +17,7 @@ type alias Model =
   , route : Route
   , network : VisNetwork
   , relatedArtists : WebData RelatedArtists
+  , playlistArtists : List Artist
   }
 
 initialModel : Route -> Model
@@ -33,6 +34,7 @@ initialModel route =
   , route = route
   , network = VisNetwork [] []
   , relatedArtists = RemoteData.NotAsked
+  , playlistArtists = []
   }
 
 type Route

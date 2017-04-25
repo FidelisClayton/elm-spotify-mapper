@@ -24,3 +24,4 @@ type Msg
   | OnLocationChange Location
   | OnVisNodeClick String
   | UpdateNetwork (List VisNode, List VisEdge)
+  | ArtistByIdSuccess (WebData Artist)

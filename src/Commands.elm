@@ -4,7 +4,7 @@ import Http
 import RemoteData
 import Json.Decode as Decode
 
-import Models exposing (Artist, searchArtistDecoder, topTracksDecoder, relatedArtistsDecoder)
+import Models exposing (Artist, searchArtistDecoder, topTracksDecoder, relatedArtistsDecoder, artistDecoder)
 import Msgs exposing (Msg)
 
 fetchArtistUrl : String -> String
@@ -18,6 +18,10 @@ fetchTopTracksUrl artistId =
 fetchRelatedArtistsUrl : String -> String
 fetchRelatedArtistsUrl artistId =
   "https://api.spotify.com/v1/artists/" ++ artistId ++ "/related-artists"
+
+fetchArtistByIdUrl : String -> String
+fetchArtistByIdUrl artistId =
+  "https://api.spotify.com/v1/artists/" ++ artistId
 
 fetchArtist : String -> Cmd Msg
 fetchArtist name =
@@ -36,3 +40,9 @@ fetchRelatedArtists artistId =
   Http.get (fetchRelatedArtistsUrl artistId) relatedArtistsDecoder
     |> RemoteData.sendRequest
     |> Cmd.map Msgs.RelatedArtistsSuccess
+
+fetchArtistById : String -> Cmd Msg
+fetchArtistById artistId =
+  Http.get (fetchArtistByIdUrl artistId) artistDecoder
+    |> RemoteData.sendRequest
+    |> Cmd.map Msgs.ArtistByIdSuccess
