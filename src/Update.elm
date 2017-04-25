@@ -2,10 +2,11 @@ module Update exposing (..)
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
-import Commands exposing (fetchArtist, fetchTopTracks)
-import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume)
+import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
+import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
 import RemoteData
 import Routing exposing (parseLocation)
+import Constants exposing (maxRelatedArtists)
 
 import Helpers
 import ModelHelpers
@@ -55,6 +56,41 @@ update msg model =
         _ ->
           ({ model | topTracks = response}, Cmd.none)
 
+    Msgs.RelatedArtistsSuccess response ->
+      case response of
+        RemoteData.Success data ->
+          let
+            nodes =
+                Helpers.filterNewArtists data.artists model.network.nodes
+                |> List.take maxRelatedArtists
+                |> List.map Helpers.artistToNode
+
+            edges =
+              case model.selectedArtist of
+                Just artist ->
+                  Helpers.filterNewArtists data.artists model.network.nodes
+                  |> List.take maxRelatedArtists
+                  |> Helpers.artistsToEdge artist.id
+
+                Nothing ->
+                  []
+
+            newNodes =
+              List.append model.network.nodes nodes
+
+            newEdges =
+              List.append model.network.edges edges
+
+            previousNetwork = model.network
+
+            newNetwork =
+              { previousNetwork | nodes = newNodes, edges = newEdges }
+          in
+            ({ model | relatedArtists = response, network = newNetwork }, addSimilar (nodes, edges))
+
+        _ ->
+          ({ model | relatedArtists = response }, Cmd.none)
+
     Msgs.SelectArtist artist ->
       let
         newModel =
@@ -94,4 +130,53 @@ update msg model =
       let
         newRoute = parseLocation location
       in
-        ({ model | route = newRoute }, Cmd.none)
+        case newRoute of
+          Models.ExploreRoute ->
+            let
+              previousNetwork = model.network
+              firstNetworkNode =
+                List.head previousNetwork.nodes
+
+              selectedArtistNode =
+                case model.selectedArtist of
+                  Just artist ->
+                    Helpers.artistToNode artist
+
+                  Nothing ->
+                    Models.VisNode "" "" 0 "" ""
+
+              newNetwork =
+                case firstNetworkNode of
+                  Just node ->
+                    if selectedArtistNode.id == node.id then
+                      previousNetwork
+                    else
+                      { previousNetwork | nodes = [ selectedArtistNode ]}
+
+                  Nothing ->
+                    { previousNetwork | nodes = [ selectedArtistNode ]}
+            in
+              ({ model | route = newRoute, network = newNetwork }, initVis newNetwork)
+
+          _ ->
+            ({ model | route = newRoute }, destroyVis "")
+
+    Msgs.OnVisNodeClick artistId ->
+      (model, fetchArtistById artistId)
+
+    Msgs.ArtistByIdSuccess response ->
+      case response of
+        RemoteData.Success artist ->
+          ({ model | selectedArtist = Just artist }, Cmd.batch[fetchRelatedArtists artist.id, fetchTopTracks artist.id])
+
+        _ ->
+          (model, Cmd.none)
+
+    Msgs.UpdateNetwork data ->
+      let
+        previousNetwork = model.network
+
+        newNetwork =
+          { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
+      in
+        ({ model | network = newNetwork }, Cmd.none)

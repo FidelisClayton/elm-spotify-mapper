@@ -20,6 +20,7 @@ css =
       , flexDirection column
       , property "overflow-y" "overlay"
       , overflowX hidden
+      , position relative
       ]
 
   , class CssClasses.BigSearch
@@ -62,6 +63,7 @@ css =
       , margin <| px 15
       , position relative
       , width <| px 180
+      , textDecoration none
 
       , children
           [ class CssClasses.ImageWrapper

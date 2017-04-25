@@ -1,6 +1,6 @@
 port module Ports exposing (..)
 
-import Models exposing (TopTracks, Track, AudioStatus)
+import Models exposing (TopTracks, Track, AudioStatus, Artist, VisNetwork, VisNode, VisEdge)
 
 port playAudio : String -> Cmd msg
 port pauseAudio : String -> Cmd msg
@@ -13,3 +13,11 @@ port updateVolume : Float -> Cmd msg
 port audioEnded : (String -> msg) -> Sub msg
 port updateCurrentTrack : (Track -> msg) -> Sub msg
 port updateAudioStatus : (AudioStatus -> msg) -> Sub msg
+
+port initVis : VisNetwork -> Cmd msg
+port destroyVis : String -> Cmd msg
+port addSimilar : (List VisNode, List VisEdge) -> Cmd msg
+
+port getVisStatus : (Bool -> msg) -> Sub msg
+port onNodeClick : (String -> msg) -> Sub msg
+port updateNetwork : ((List VisNode, List VisEdge) -> msg) -> Sub msg

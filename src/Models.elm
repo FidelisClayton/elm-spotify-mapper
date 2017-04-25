@@ -15,6 +15,9 @@ type alias Model =
   , isPlaying : Bool
   , audioStatus : AudioStatus
   , route : Route
+  , network : VisNetwork
+  , relatedArtists : WebData RelatedArtists
+  , playlistArtists : List Artist
   }
 
 initialModel : Route -> Model
@@ -29,6 +32,9 @@ initialModel route =
   , isPlaying = False
   , audioStatus = AudioStatus 0 30 1
   , route = route
+  , network = VisNetwork [] []
+  , relatedArtists = RemoteData.NotAsked
+  , playlistArtists = []
   }
 
 type Route
@@ -73,10 +79,31 @@ type alias SearchArtistData =
 type alias TopTracks =
   { tracks : List Track }
 
+type alias RelatedArtists =
+  { artists : List Artist }
+
 type alias AudioStatus =
   { currentTime : Float
   , duration : Float
   , volume : Float
+  }
+
+type alias VisNode =
+  { id : String
+  , label : String
+  , value : Int
+  , shape : String
+  , image : String
+  }
+
+type alias VisEdge =
+  { from : String
+  , to : String
+  }
+
+type alias VisNetwork =
+  { nodes : List VisNode
+  , edges : List VisEdge
   }
 
 searchArtistDecoder : Decode.Decoder SearchArtistData
@@ -88,6 +115,11 @@ topTracksDecoder : Decode.Decoder TopTracks
 topTracksDecoder =
   decode TopTracks
     |> required "tracks" (Decode.list trackDecoder)
+
+relatedArtistsDecoder : Decode.Decoder RelatedArtists
+relatedArtistsDecoder =
+  decode RelatedArtists
+    |> required "artists" (Decode.list artistDecoder)
 
 artistDecoder : Decode.Decoder Artist
 artistDecoder =
@@ -122,4 +154,4 @@ trackDecoder =
     |> required "artists" (Decode.list artistDecoder)
     |> required "id" Decode.string
     |> required "name" Decode.string
-    |> required "preview_url" Decode.string
+    |> optional "preview_url" Decode.string ""

@@ -1,6 +1,6 @@
 module Msgs exposing (..)
 
-import Models exposing (Artist, SearchArtistData, TopTracks, Track, AudioStatus)
+import Models exposing (Artist, SearchArtistData, TopTracks, Track, AudioStatus, RelatedArtists, VisNode, VisEdge)
 import RemoteData exposing (WebData)
 import Navigation exposing (Location)
 
@@ -15,15 +15,13 @@ type Msg
   | StartSearch
   | SearchArtistSuccess (WebData SearchArtistData)
   | TopTracksSuccess (WebData TopTracks)
+  | RelatedArtistsSuccess (WebData RelatedArtists)
   | SelectArtist Artist
   | SelectTrack Track
   | UpdateAudioStatus AudioStatus
   | UpdateCurrentTime String
   | UpdateVolume String
   | OnLocationChange Location
-
-type Route
-  = SearchRoute
-  | ExploreRoute
-  | NotFoundRoute
-
+  | OnVisNodeClick String
+  | UpdateNetwork (List VisNode, List VisEdge)
+  | ArtistByIdSuccess (WebData Artist)
