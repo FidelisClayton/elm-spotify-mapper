@@ -18,6 +18,7 @@ type alias Model =
   , network : VisNetwork
   , relatedArtists : WebData RelatedArtists
   , playlistArtists : List Artist
+  , waitingToPlay : Bool
   }
 
 initialModel : Route -> Model
@@ -35,6 +36,7 @@ initialModel route =
   , network = VisNetwork [] []
   , relatedArtists = RemoteData.NotAsked
   , playlistArtists = []
+  , waitingToPlay = False
   }
 
 type Route

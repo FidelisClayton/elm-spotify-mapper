@@ -63,11 +63,11 @@ module.exports = function(app) {
         if(params.nodes[0] != undefined){
           app.ports.onNodeClick.send(params.nodes[0])
         }
-      });
+      })
 
-      // network.on("doubleClick", function (params) {
-      //   $scope.playTopTrack(params.nodes[0]);
-      // });
+      network.on("doubleClick", function (params) {
+        app.ports.onDoubleClick.send(params.nodes[0])
+      })
 
     }, 100)
   }

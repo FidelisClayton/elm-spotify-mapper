@@ -25,3 +25,4 @@ type Msg
   | OnVisNodeClick String
   | UpdateNetwork (List VisNode, List VisEdge)
   | ArtistByIdSuccess (WebData Artist)
+  | OnDoubleClick String
