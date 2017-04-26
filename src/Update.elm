@@ -60,10 +60,12 @@ update msg model =
       case response of
         RemoteData.Success data ->
           let
-            nodes =
+            newArtists =
                 Helpers.filterNewArtists data.artists model.network.nodes
                 |> List.take maxRelatedArtists
-                |> List.map Helpers.artistToNode
+
+            nodes =
+              List.map Helpers.artistToNode newArtists
 
             edges =
               case model.selectedArtist of
@@ -85,8 +87,18 @@ update msg model =
 
             newNetwork =
               { previousNetwork | nodes = newNodes, edges = newEdges }
+
+            newPlaylistArtists =
+              List.append model.playlistArtists newArtists
+
+            newModel =
+              { model
+              | relatedArtists = response
+              , network = newNetwork
+              , playlistArtists = newPlaylistArtists
+              }
           in
-            ({ model | relatedArtists = response, network = newNetwork }, addSimilar (nodes, edges))
+            (newModel, addSimilar (nodes, edges))
 
         _ ->
           ({ model | relatedArtists = response }, Cmd.none)
@@ -167,7 +179,31 @@ update msg model =
     Msgs.ArtistByIdSuccess response ->
       case response of
         RemoteData.Success artist ->
-          ({ model | selectedArtist = Just artist }, Cmd.batch[fetchRelatedArtists artist.id, fetchTopTracks artist.id])
+          let
+            commands = Cmd.batch
+              [ fetchRelatedArtists artist.id
+              , fetchTopTracks artist.id
+              ]
+
+            newModel =
+              if (List.length <| Helpers.filterArtistsWithRelated artist.id model.playlistArtists) > 0 then
+                ({ model
+                | selectedArtist = Just artist
+                }
+                , fetchTopTracks artist.id
+                )
+              else
+                let
+                  newArtist = { artist | hasRelated = True }
+                in
+                  ({ model
+                  | selectedArtist = Just newArtist
+                  , playlistArtists = newArtist :: model.playlistArtists
+                  }
+                  , commands
+                  )
+          in
+            newModel
 
         _ ->
           (model, Cmd.none)

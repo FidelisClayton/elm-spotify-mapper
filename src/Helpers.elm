@@ -80,3 +80,10 @@ filterNewArtists artists nodes =
     in
       not ((List.length repeatedNodes) > 0)
   ) artists
+
+filterArtistsWithRelated : String -> List Artist -> List Artist
+filterArtistsWithRelated id artists =
+  List.filter
+    (\artist ->
+      artist.id == id && artist.hasRelated
+    ) artists
