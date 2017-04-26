@@ -173,18 +173,21 @@ update msg model =
                   Nothing ->
                     Models.VisNode "" "" 0 "" ""
 
-              newNetwork =
+              newData =
                 case firstNetworkNode of
                   Just node ->
                     if selectedArtistNode.id == node.id then
-                      previousNetwork
+                      (model, previousNetwork)
                     else
-                      { previousNetwork | nodes = [ selectedArtistNode ]}
+                      ({ model | playlistArtists = [] }, { previousNetwork | nodes = [ selectedArtistNode ], edges = []})
 
                   Nothing ->
-                    { previousNetwork | nodes = [ selectedArtistNode ]}
+                    ({ model | playlistArtists = [] }, { previousNetwork | nodes = [ selectedArtistNode ], edges = []})
+
+              newModel = Tuple.first newData
+              newNetwork = Tuple.second newData
             in
-              ({ model | route = newRoute, network = newNetwork }, initVis newNetwork)
+              ({ newModel | route = newRoute, network = newNetwork }, initVis newNetwork)
 
           _ ->
             ({ model | route = newRoute }, destroyVis "")
