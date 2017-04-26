@@ -179,7 +179,31 @@ update msg model =
     Msgs.ArtistByIdSuccess response ->
       case response of
         RemoteData.Success artist ->
-          ({ model | selectedArtist = Just artist }, Cmd.batch[fetchRelatedArtists artist.id, fetchTopTracks artist.id])
+          let
+            commands = Cmd.batch
+              [ fetchRelatedArtists artist.id
+              , fetchTopTracks artist.id
+              ]
+
+            newModel =
+              if (List.length <| Helpers.filterArtistsWithRelated artist.id model.playlistArtists) > 0 then
+                ({ model
+                | selectedArtist = Just artist
+                }
+                , fetchTopTracks artist.id
+                )
+              else
+                let
+                  newArtist = { artist | hasRelated = True }
+                in
+                  ({ model
+                  | selectedArtist = Just newArtist
+                  , playlistArtists = newArtist :: model.playlistArtists
+                  }
+                  , commands
+                  )
+          in
+            newModel
 
         _ ->
           (model, Cmd.none)

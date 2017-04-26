@@ -1,7 +1,7 @@
 module Models exposing (..)
 
 import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional)
+import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, hardcoded)
 import RemoteData exposing (WebData)
 
 type alias Model =
@@ -56,6 +56,7 @@ type alias Artist =
   , popularity : Int
   , uri : String
   , images : List ImageObject
+  , hasRelated : Bool
   }
 
 type alias Album =
@@ -131,6 +132,7 @@ artistDecoder =
     |> optional "popularity" Decode.int 0
     |> required "uri" Decode.string
     |> optional "images" (Decode.list imageDecoder) []
+    |> hardcoded False
 
 imageDecoder : Decode.Decoder ImageObject
 imageDecoder =
