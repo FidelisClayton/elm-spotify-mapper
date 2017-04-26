@@ -32,6 +32,9 @@ artistSongs response =
         RemoteData.Success topTracks ->
           List.map songItem topTracks.tracks
 
+        RemoteData.Loading ->
+          [text "Loading"]
+
         _ ->
           []
   in

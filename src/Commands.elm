@@ -13,7 +13,7 @@ fetchArtistUrl artist =
 
 fetchTopTracksUrl : String -> String
 fetchTopTracksUrl artistId =
-  "https://api.spotify.com/v1/artists/" ++ artistId ++ "/top-tracks?country=BR"
+  "https://api.spotify.com/v1/artists/" ++ artistId ++ "/top-tracks?country=US"
 
 fetchRelatedArtistsUrl : String -> String
 fetchRelatedArtistsUrl artistId =

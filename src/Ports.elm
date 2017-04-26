@@ -20,4 +20,5 @@ port addSimilar : (List VisNode, List VisEdge) -> Cmd msg
 
 port getVisStatus : (Bool -> msg) -> Sub msg
 port onNodeClick : (String -> msg) -> Sub msg
+port onDoubleClick : (String -> msg) -> Sub msg
 port updateNetwork : ((List VisNode, List VisEdge) -> msg) -> Sub msg

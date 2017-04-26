@@ -83,7 +83,9 @@ filterNewArtists artists nodes =
 
 filterArtistsWithRelated : String -> List Artist -> List Artist
 filterArtistsWithRelated id artists =
-  List.filter
-    (\artist ->
-      artist.id == id && artist.hasRelated
-    ) artists
+  filterArtistById id artists
+    |> List.filter (\artist -> artist.hasRelated)
+
+filterArtistById : String -> List Artist -> List Artist
+filterArtistById id artists =
+  List.filter (\artist -> artist.id == id) artists

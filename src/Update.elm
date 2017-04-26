@@ -51,7 +51,23 @@ update msg model =
     Msgs.TopTracksSuccess response ->
       case response of
         RemoteData.Success tracks ->
-          ({ model | topTracks = response}, provideTracks tracks)
+          if model.waitingToPlay then
+            case List.head tracks.tracks of
+              Just track ->
+                let
+                  newModel =
+                    { model
+                    | topTracks = response
+                    , selectedTrack = Just track
+                    , waitingToPlay = False
+                    }
+                in
+                  (newModel, Cmd.batch [provideTracks tracks, playAudio track.preview_url])
+
+              Nothing ->
+                ({ model | topTracks = response, waitingToPlay = False }, provideTracks tracks)
+          else
+            ({ model | topTracks = response}, provideTracks tracks)
 
         _ ->
           ({ model | topTracks = response}, Cmd.none)
@@ -174,7 +190,7 @@ update msg model =
             ({ model | route = newRoute }, destroyVis "")
 
     Msgs.OnVisNodeClick artistId ->
-      (model, fetchArtistById artistId)
+      ({ model | topTracks = RemoteData.Loading }, fetchArtistById artistId)
 
     Msgs.ArtistByIdSuccess response ->
       case response of
@@ -216,3 +232,6 @@ update msg model =
           { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
       in
         ({ model | network = newNetwork }, Cmd.none)
+
+    Msgs.OnDoubleClick artistId ->
+      ({ model | waitingToPlay = True }, Cmd.none)

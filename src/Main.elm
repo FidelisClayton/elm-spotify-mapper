@@ -13,7 +13,7 @@ import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
 import Routing
-import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork)
+import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick)
 
 { class } =
   Html.CssHelpers.withNamespace ""
@@ -33,6 +33,7 @@ subscriptions model =
     , updateAudioStatus Msgs.UpdateAudioStatus
     , onNodeClick Msgs.OnVisNodeClick
     , updateNetwork Msgs.UpdateNetwork
+    , onDoubleClick Msgs.OnDoubleClick
     ]
 
 view : Model -> Html Msg
