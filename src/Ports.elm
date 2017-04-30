@@ -22,3 +22,5 @@ port getVisStatus : (Bool -> msg) -> Sub msg
 port onNodeClick : (String -> msg) -> Sub msg
 port onDoubleClick : (String -> msg) -> Sub msg
 port updateNetwork : ((List VisNode, List VisEdge) -> msg) -> Sub msg
+
+port changeBgColor : String -> Cmd msg

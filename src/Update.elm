@@ -3,7 +3,7 @@ module Update exposing (..)
 import Msgs exposing (Msg)
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
-import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
+import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar, changeBgColor)
 import RemoteData
 import Routing exposing (parseLocation)
 import Constants exposing (maxRelatedArtists)
@@ -199,9 +199,18 @@ update msg model =
       case response of
         RemoteData.Success artist ->
           let
+            image =
+              case (Helpers.getByIndex 2 artist.images) of
+                Just image ->
+                  image.url
+
+                Nothing ->
+                  ""
+
             commands = Cmd.batch
               [ fetchRelatedArtists artist.id
               , fetchTopTracks artist.id
+              , changeBgColor image
               ]
 
             newModel =
@@ -209,7 +218,7 @@ update msg model =
                 ({ model
                 | selectedArtist = Just artist
                 }
-                , fetchTopTracks artist.id
+                , Cmd.batch [fetchTopTracks artist.id, changeBgColor image]
                 )
               else
                 let

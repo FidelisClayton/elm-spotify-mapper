@@ -29,6 +29,7 @@
   "dependencies": {
     "css-loader": "^0.28.0",
     "file-loader": "^0.11.1",
+    "node-vibrant": "^3.0.0-alpha.2",
     "style-loader": "^0.16.1",
     "vis": "^4.19.1"
   }
