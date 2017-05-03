@@ -4,25 +4,36 @@ import Models exposing (Artist, SearchArtistData, TopTracks, Track, AudioStatus,
 import RemoteData exposing (WebData)
 import Navigation exposing (Location)
 
-type Msg
-  = Search String
-  | Play String
+type PlayerMsg
+  = Play String
   | Pause
   | Stop String
   | Next
   | Previous
-  | ToggleSidebar
-  | StartSearch
-  | SearchArtistSuccess (WebData SearchArtistData)
-  | TopTracksSuccess (WebData TopTracks)
-  | RelatedArtistsSuccess (WebData RelatedArtists)
-  | SelectArtist Artist
-  | SelectTrack Track
   | UpdateAudioStatus AudioStatus
   | UpdateCurrentTime String
   | UpdateVolume String
-  | OnLocationChange Location
-  | OnVisNodeClick String
+
+type SidebarMsg
+  = ToggleSidebar
+  | SelectTrack Track
+  | TopTracksSuccess (WebData TopTracks)
+
+type ExploreMsg
+  = OnVisNodeClick String
   | UpdateNetwork (List VisNode, List VisEdge)
   | ArtistByIdSuccess (WebData Artist)
   | OnDoubleClick String
+  | RelatedArtistsSuccess (WebData RelatedArtists)
+
+type SearchMsg
+  = StartSearch
+  | Search String
+  | SearchArtistSuccess (WebData SearchArtistData)
+  | SelectArtist Artist
+
+type Msg
+  = MsgForPlayer PlayerMsg
+  | MsgForSidebar SidebarMsg
+  | MsgForExplore ExploreMsg
+  | OnLocationChange Location
