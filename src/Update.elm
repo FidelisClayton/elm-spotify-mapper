@@ -9,6 +9,7 @@ import Search.Msgs as Search exposing (SearchMsg)
 import BottomBar.Update exposing (updatePlayer)
 import Explore.Update exposing (updateExplore)
 import Sidebar.Update exposing (updateSidebar)
+import Search.Update exposing (updateSearch)
 
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
@@ -19,37 +20,6 @@ import Constants exposing (maxRelatedArtists)
 
 import Helpers
 import ModelHelpers
-
-
-
-updateSearch : SearchMsg -> Model -> (Model, Cmd Msg)
-updateSearch msg model =
-  case msg of
-    Search.Search term ->
-      let
-        cmd =
-          if String.length term > 1 then
-            Cmd.map Msgs.MsgForSearch (fetchArtist term)
-          else
-            Cmd.none
-      in
-        ({ model | searchTerm = term } , cmd)
-
-    Search.SearchArtistSuccess response ->
-      ({ model | artists = response }, Cmd.none)
-
-    Search.StartSearch ->
-      ({ model | searching = True }, Cmd.none)
-
-    Search.SelectArtist artist ->
-      let
-        newModel =
-          { model
-          | selectedArtist = Maybe.Just artist
-          , route = Models.ExploreRoute
-          }
-      in
-        (newModel, Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id))
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
