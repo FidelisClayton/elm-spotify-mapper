@@ -1,12 +1,13 @@
 module Update exposing (..)
 
-import Msgs exposing (Msg)
+import Msgs exposing (Msg, SidebarMsg, PlayerMsg, ExploreMsg, SearchMsg, RouterMsg)
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
 import RemoteData
 import Routing exposing (parseLocation)
 import Constants exposing (maxRelatedArtists)
+import Task
 
 import Helpers
 import ModelHelpers
@@ -15,19 +16,19 @@ updatePlayer : PlayerMsg -> Model -> (Model, Cmd Msg)
 updatePlayer msg model =
   case msg of
     Msgs.Play previewUrl ->
-      ({ model | isPlaying = True }, playAudio previewUrl)
+      ({ model | isPlaying = True }, Cmd.map Msgs.MsgForPlayer (playAudio previewUrl))
 
     Msgs.Pause ->
-      ({ model | isPlaying = False }, pauseAudio "")
+      ({ model | isPlaying = False }, Cmd.map Msgs.MsgForPlayer (pauseAudio ""))
 
     Msgs.Stop value ->
       ({ model | isPlaying = False}, Cmd.none)
 
     Msgs.Next ->
-      (model, nextTrack "")
+      (model, Cmd.map Msgs.MsgForPlayer (nextTrack ""))
 
     Msgs.Previous ->
-      (model, previousTrack "")
+      (model, Cmd.map Msgs.MsgForPlayer (previousTrack ""))
 
     Msgs.UpdateAudioStatus audioStatus ->
       ({ model | audioStatus = audioStatus}, Cmd.none)
@@ -41,7 +42,7 @@ updatePlayer msg model =
       in
         ({ model
         | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
-        , updateCurrentTime currentTime)
+        , Cmd.map Msgs.MsgForPlayer (updateCurrentTime currentTime))
 
     Msgs.UpdateVolume volume ->
       let
@@ -49,7 +50,7 @@ updatePlayer msg model =
       in
         ({ model
         | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
-        , updateVolume newVolume)
+        , Cmd.map Msgs.MsgForPlayer (updateVolume newVolume))
 
 updateSidebar : SidebarMsg -> Model -> (Model, Cmd Msg)
 updateSidebar msg model =
@@ -88,15 +89,15 @@ updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
   case msg of
     Msgs.OnVisNodeClick artistId ->
-      ({ model | topTracks = RemoteData.Loading }, fetchArtistById artistId)
+      ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId))
 
     Msgs.ArtistByIdSuccess response ->
       case response of
         RemoteData.Success artist ->
           let
             commands = Cmd.batch
-              [ fetchRelatedArtists artist.id
-              , fetchTopTracks artist.id
+              [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id)
+              , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id)
               ]
 
             newModel =
@@ -104,7 +105,7 @@ updateExplore msg model =
                 ({ model
                 | selectedArtist = Just artist
                 }
-                , fetchTopTracks artist.id
+                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id)
                 )
               else
                 let
@@ -188,7 +189,7 @@ updateSearch msg model =
       let
         cmd =
           if String.length term > 1 then
-            fetchArtist term
+            Cmd.map Msgs.MsgForSearch (fetchArtist term)
           else
             Cmd.none
       in
@@ -200,8 +201,6 @@ updateSearch msg model =
     Msgs.StartSearch ->
       ({ model | searching = True }, Cmd.none)
 
-
-
     Msgs.SelectArtist artist ->
       let
         newModel =
@@ -210,23 +209,11 @@ updateSearch msg model =
           , route = Models.ExploreRoute
           }
       in
-        (newModel, fetchTopTracks artist.id)
+        (newModel, Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id))
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msgFor model =
-  case msgFor of
-    Msgs.MsgForPlayer msgFor ->
-      updatePlayer msgFor model
-
-    Msgs.MsgForSidebar msgFor ->
-      updateSidebar msgFor model
-
-    Msgs.MsgForExplore msgFor ->
-      updateExplore msgFor model
-
-    Msgs.MsgForSearch msgFor ->
-      updateSearch msgFor model
-
+updateRoute : RouterMsg -> Model -> (Model, Cmd Msg)
+updateRoute msg model =
+  case msg of
     Msgs.OnLocationChange location ->
       let
         newRoute = parseLocation location
@@ -260,7 +247,25 @@ update msgFor model =
               newModel = Tuple.first newData
               newNetwork = Tuple.second newData
             in
-              ({ newModel | route = newRoute, network = newNetwork }, initVis newNetwork)
+              ({ newModel | route = newRoute, network = newNetwork }, Cmd.map Msgs.MsgForExplore (initVis newNetwork))
 
           _ ->
-            ({ model | route = newRoute }, destroyVis "")
+            ({ model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis ""))
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msgFor model =
+  case msgFor of
+    Msgs.MsgForPlayer msgFor ->
+      updatePlayer msgFor model
+
+    Msgs.MsgForSidebar msgFor ->
+      updateSidebar msgFor model
+
+    Msgs.MsgForExplore msgFor ->
+      updateExplore msgFor model
+
+    Msgs.MsgForSearch msgFor ->
+      updateSearch msgFor model
+
+    Msgs.MsgForRouter msgFor ->
+      updateRoute msgFor model
