@@ -84,37 +84,55 @@ updateSidebar msg model =
         _ ->
           ({ model | topTracks = response}, Cmd.none)
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msgFor model =
-  case msgFor of
-    Msgs.MsgForPlayer msgFor ->
-      updatePlayer msgFor model
-
-    Msgs.MsgForSidebar msgFor ->
-      updateSidebar msgFor model
-
-    Msgs.MsgForExplore msgFor ->
-      updateExplore msgFor model
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
+updateExplore msg model =
   case msg of
-    Msgs.Search term ->
+    Msgs.OnVisNodeClick artistId ->
+      ({ model | topTracks = RemoteData.Loading }, fetchArtistById artistId)
+
+    Msgs.ArtistByIdSuccess response ->
+      case response of
+        RemoteData.Success artist ->
+          let
+            commands = Cmd.batch
+              [ fetchRelatedArtists artist.id
+              , fetchTopTracks artist.id
+              ]
+
+            newModel =
+              if (List.length <| Helpers.filterArtistsWithRelated artist.id model.playlistArtists) > 0 then
+                ({ model
+                | selectedArtist = Just artist
+                }
+                , fetchTopTracks artist.id
+                )
+              else
+                let
+                  newArtist = { artist | hasRelated = True }
+                in
+                  ({ model
+                  | selectedArtist = Just newArtist
+                  , playlistArtists = newArtist :: model.playlistArtists
+                  }
+                  , commands
+                  )
+          in
+            newModel
+
+        _ ->
+          (model, Cmd.none)
+
+    Msgs.UpdateNetwork data ->
       let
-        cmd =
-          if String.length term > 1 then
-            fetchArtist term
-          else
-            Cmd.none
+        previousNetwork = model.network
+
+        newNetwork =
+          { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
       in
-        ({ model | searchTerm = term } , cmd)
+        ({ model | network = newNetwork }, Cmd.none)
 
-    Msgs.SearchArtistSuccess response ->
-      ({ model | artists = response }, Cmd.none)
-
-    Msgs.StartSearch ->
-      ({ model | searching = True }, Cmd.none)
-
+    Msgs.OnDoubleClick artistId ->
+      ({ model | waitingToPlay = True }, Cmd.none)
 
     Msgs.RelatedArtistsSuccess response ->
       case response of
@@ -162,6 +180,42 @@ update msg model =
 
         _ ->
           ({ model | relatedArtists = response }, Cmd.none)
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msgFor model =
+  case msgFor of
+    Msgs.MsgForPlayer msgFor ->
+      updatePlayer msgFor model
+
+    Msgs.MsgForSidebar msgFor ->
+      updateSidebar msgFor model
+
+    Msgs.MsgForExplore msgFor ->
+      updateExplore msgFor model
+
+    Msgs.MsgForSearch msgFor ->
+      updateSearch msgFor model
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of
+    Msgs.Search term ->
+      let
+        cmd =
+          if String.length term > 1 then
+            fetchArtist term
+          else
+            Cmd.none
+      in
+        ({ model | searchTerm = term } , cmd)
+
+    Msgs.SearchArtistSuccess response ->
+      ({ model | artists = response }, Cmd.none)
+
+    Msgs.StartSearch ->
+      ({ model | searching = True }, Cmd.none)
+
+
 
     Msgs.SelectArtist artist ->
       let
@@ -213,49 +267,5 @@ update msg model =
           _ ->
             ({ model | route = newRoute }, destroyVis "")
 
-    Msgs.OnVisNodeClick artistId ->
-      ({ model | topTracks = RemoteData.Loading }, fetchArtistById artistId)
 
-    Msgs.ArtistByIdSuccess response ->
-      case response of
-        RemoteData.Success artist ->
-          let
-            commands = Cmd.batch
-              [ fetchRelatedArtists artist.id
-              , fetchTopTracks artist.id
-              ]
 
-            newModel =
-              if (List.length <| Helpers.filterArtistsWithRelated artist.id model.playlistArtists) > 0 then
-                ({ model
-                | selectedArtist = Just artist
-                }
-                , fetchTopTracks artist.id
-                )
-              else
-                let
-                  newArtist = { artist | hasRelated = True }
-                in
-                  ({ model
-                  | selectedArtist = Just newArtist
-                  , playlistArtists = newArtist :: model.playlistArtists
-                  }
-                  , commands
-                  )
-          in
-            newModel
-
-        _ ->
-          (model, Cmd.none)
-
-    Msgs.UpdateNetwork data ->
-      let
-        previousNetwork = model.network
-
-        newNetwork =
-          { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
-      in
-        ({ model | network = newNetwork }, Cmd.none)
-
-    Msgs.OnDoubleClick artistId ->
-      ({ model | waitingToPlay = True }, Cmd.none)
