@@ -1,4 +1,4 @@
-module Components.Sidebar.View exposing (..)
+module Sidebar.View exposing (..)
 
 import Html exposing (Html, div, text, input, span, img, i, button, a)
 import Html.Attributes exposing (type_, placeholder, src, href)

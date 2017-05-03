@@ -1,4 +1,4 @@
-module Components.BottomBar.Style exposing (..)
+module BottomBar.Style exposing (..)
 
 import Css exposing (..)
 import Css.Elements exposing (input)

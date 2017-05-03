@@ -1,4 +1,4 @@
-module Components.BottomBar.View exposing (..)
+module BottomBar.View exposing (..)
 
 import Html exposing (Html, div, text, span, img, i, input)
 import Html.Attributes exposing (src, type_, step, value)

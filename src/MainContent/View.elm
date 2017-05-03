@@ -1,4 +1,4 @@
-module Components.MainContent.View exposing (..)
+module MainContent.View exposing (..)
 
 import Html exposing (Html, div)
 import Html.Attributes

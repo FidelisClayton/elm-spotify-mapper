@@ -4,9 +4,9 @@ import Html exposing (Html, text, div)
 import Html.CssHelpers
 import Navigation exposing (Location)
 
-import Components.BottomBar.View as BottomBar
-import Components.Sidebar.View as Sidebar
-import Components.MainContent.View as MainContent
+import BottomBar.View as BottomBar
+import Sidebar.View as Sidebar
+import MainContent.View as MainContent
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
