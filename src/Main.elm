@@ -28,12 +28,12 @@ init location =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ audioEnded Msgs.Stop
-    , updateCurrentTrack Msgs.SelectTrack
-    , updateAudioStatus Msgs.UpdateAudioStatus
-    , onNodeClick Msgs.OnVisNodeClick
-    , updateNetwork Msgs.UpdateNetwork
-    , onDoubleClick Msgs.OnDoubleClick
+    [ Sub.map Msgs.MsgForPlayer (audioEnded Msgs.Stop)
+    , Sub.map Msgs.MsgForSidebar (updateCurrentTrack Msgs.SelectTrack)
+    , Sub.map Msgs.MsgForPlayer (updateAudioStatus Msgs.UpdateAudioStatus)
+    , Sub.map Msgs.MsgForExplore (onNodeClick Msgs.OnVisNodeClick)
+    , Sub.map Msgs.MsgForExplore (updateNetwork Msgs.UpdateNetwork)
+    , Sub.map Msgs.MsgForExplore (onDoubleClick Msgs.OnDoubleClick)
     ]
 
 view : Model -> Html Msg
