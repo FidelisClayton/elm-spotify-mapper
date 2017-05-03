@@ -1,13 +1,12 @@
 module Update exposing (..)
 
-import Msgs exposing (Msg, SidebarMsg, PlayerMsg, ExploreMsg, SearchMsg, RouterMsg)
+import Msgs exposing (Msg, SidebarMsg, PlayerMsg, ExploreMsg, SearchMsg)
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
 import RemoteData
 import Routing exposing (parseLocation)
 import Constants exposing (maxRelatedArtists)
-import Task
 
 import Helpers
 import ModelHelpers
@@ -211,9 +210,21 @@ updateSearch msg model =
       in
         (newModel, Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id))
 
-updateRoute : RouterMsg -> Model -> (Model, Cmd Msg)
-updateRoute msg model =
-  case msg of
+update : Msg -> Model -> (Model, Cmd Msg)
+update msgFor model =
+  case msgFor of
+    Msgs.MsgForPlayer msgFor ->
+      updatePlayer msgFor model
+
+    Msgs.MsgForSidebar msgFor ->
+      updateSidebar msgFor model
+
+    Msgs.MsgForExplore msgFor ->
+      updateExplore msgFor model
+
+    Msgs.MsgForSearch msgFor ->
+      updateSearch msgFor model
+
     Msgs.OnLocationChange location ->
       let
         newRoute = parseLocation location
@@ -251,21 +262,3 @@ updateRoute msg model =
 
           _ ->
             ({ model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis ""))
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msgFor model =
-  case msgFor of
-    Msgs.MsgForPlayer msgFor ->
-      updatePlayer msgFor model
-
-    Msgs.MsgForSidebar msgFor ->
-      updateSidebar msgFor model
-
-    Msgs.MsgForExplore msgFor ->
-      updateExplore msgFor model
-
-    Msgs.MsgForSearch msgFor ->
-      updateSearch msgFor model
-
-    Msgs.MsgForRouter msgFor ->
-      updateRoute msgFor model

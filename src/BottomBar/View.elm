@@ -2,13 +2,14 @@ module BottomBar.View exposing (..)
 
 import Html exposing (Html, div, text, span, img, i, input)
 import Html.Attributes exposing (src, type_, step, value)
-import Html.Events exposing (onClick, onInput)
+import Html.Events exposing (onClick, onInput, targetValue, on)
 import Html.CssHelpers
 import RemoteData
 import Css exposing (property)
+import Json.Decode as Json
 
 import Models exposing (Model, Artist, SearchArtistData, Track)
-import Msgs exposing (PlayerMsg)
+import Msgs exposing (Msg, PlayerMsg)
 import Helpers
 
 import CssClasses
@@ -20,12 +21,12 @@ styles : List Css.Mixin -> Html.Attribute msg
 styles =
   Css.asPairs >> Html.Attributes.style
 
-controlIcon : String -> Html PlayerMsg
+controlIcon : String -> Html Msg
 controlIcon icon =
   div [ class [ CssClasses.ControlIcon ] ]
       [ i [ class [ CssClasses.Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
-progressBar : Float -> (String -> PlayerMsg) -> Html PlayerMsg
+progressBar : Float -> (String -> PlayerMsg) -> Html Msg
 progressBar progress msg =
   div [ class [ CssClasses.ProgressBar ] ]
       [ div
@@ -39,13 +40,14 @@ progressBar progress msg =
           , Html.Attributes.max "100"
           , Html.Attributes.min "0"
           , step "1"
-          , onInput msg
+          , on "input" (Json.map (Msgs.MsgForPlayer << msg) targetValue)
+          -- , onInput targetValue (\str -> Msgs.MsgForPlayer << msg
           , value <| toString <| floor progress
       ]
           []
       ]
 
-progress : Model -> Html PlayerMsg
+progress : Model -> Html Msg
 progress model =
   div [ class [ CssClasses.ProgressGroup ] ]
       [ span [ class [ CssClasses.FontSmall ] ]
@@ -55,7 +57,7 @@ progress model =
           [ text <| "00:" ++ (Helpers.paddValue  model.audioStatus.duration) ]
       ]
 
-musicInfo : Maybe Track -> Html PlayerMsg
+musicInfo : Maybe Track -> Html Msg
 musicInfo selectedTrack =
   let
     content =
@@ -79,7 +81,7 @@ musicInfo selectedTrack =
     div [ class [ CssClasses.NowPlaying] ]
       content
 
-soundControl : Model -> Html PlayerMsg
+soundControl : Model -> Html Msg
 soundControl model =
   let
     icon =
@@ -96,7 +98,7 @@ soundControl model =
       , progressBar (model.audioStatus.volume * 100) Msgs.UpdateVolume ]
 
 
-controls : Model -> Html PlayerMsg
+controls : Model -> Html Msg
 controls model =
   let
     preview =
@@ -109,21 +111,21 @@ controls model =
 
     playOrPause =
       if model.isPlaying then
-        div [ onClick Msgs.Pause ] [ controlIcon "pause" ]
+        div [ onClick (Msgs.MsgForPlayer Msgs.Pause) ] [ controlIcon "pause" ]
       else
-        div [ onClick (Msgs.Play preview) ] [ controlIcon "play" ]
+        div [ onClick (Msgs.MsgForPlayer (Msgs.Play preview)) ] [ controlIcon "play" ]
 
   in
     div [ class [ CssClasses.Controls ] ]
         [ div [ class [ CssClasses.ControlButtons ] ]
-            [ div [ onClick Msgs.Previous ] [ controlIcon "step-backward" ]
+            [ div [ onClick (Msgs.MsgForPlayer Msgs.Previous) ] [ controlIcon "step-backward" ]
             , playOrPause
-            , div [ onClick Msgs.Next ] [ controlIcon "step-forward" ]
+            , div [ onClick (Msgs.MsgForPlayer Msgs.Next) ] [ controlIcon "step-forward" ]
             ]
         , progress model
         ]
 
-maybeArtists : RemoteData.WebData SearchArtistData -> Html PlayerMsg
+maybeArtists : RemoteData.WebData SearchArtistData -> Html Msg
 maybeArtists response =
   case response of
     RemoteData.NotAsked ->
@@ -139,7 +141,7 @@ maybeArtists response =
       text (toString "Error")
 
 
-render : Model -> Html PlayerMsg
+render : Model -> Html Msg
 render model =
   div [ class [ CssClasses.BottomBar ] ]
       [ musicInfo model.selectedTrack

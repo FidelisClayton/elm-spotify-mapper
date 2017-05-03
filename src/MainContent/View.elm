@@ -31,7 +31,6 @@ page model =
     Models.NotFoundRoute ->
       Search.render model
 
-
 render : Model -> Html Msg
 render model =
   let

@@ -32,12 +32,9 @@ type SearchMsg
   | SearchArtistSuccess (WebData SearchArtistData)
   | SelectArtist Artist
 
-type RouterMsg
-  = OnLocationChange Location
-
 type Msg
   = MsgForPlayer PlayerMsg
   | MsgForSidebar SidebarMsg
   | MsgForExplore ExploreMsg
   | MsgForSearch SearchMsg
-  | MsgForRouter RouterMsg
+  | OnLocationChange Location
