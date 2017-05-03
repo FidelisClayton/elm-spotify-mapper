@@ -11,21 +11,11 @@ import Constants exposing (maxRelatedArtists)
 import Helpers
 import ModelHelpers
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+updatePlayer : PlayerMsg -> Model -> (Model, Cmd Msg)
+updatePlayer msg model =
   case msg of
-    Msgs.Search term ->
-      let
-        cmd =
-          if String.length term > 1 then
-            fetchArtist term
-          else
-            Cmd.none
-      in
-        ({ model | searchTerm = term } , cmd)
-
     Msgs.Play previewUrl ->
-      ({ model | isPlaying = True}, playAudio previewUrl)
+      ({ model | isPlaying = True }, playAudio previewUrl)
 
     Msgs.Pause ->
       ({ model | isPlaying = False }, pauseAudio "")
@@ -38,6 +28,53 @@ update msg model =
 
     Msgs.Previous ->
       (model, previousTrack "")
+
+    Msgs.UpdateAudioStatus audioStatus ->
+      ({ model | audioStatus = audioStatus}, Cmd.none)
+
+    Msgs.UpdateCurrentTime time ->
+      let
+        currentTime =
+          Helpers.pctToValue
+            (Result.withDefault model.audioStatus.currentTime (String.toFloat time))
+            model.audioStatus.duration
+      in
+        ({ model
+        | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
+        , updateCurrentTime currentTime)
+
+    Msgs.UpdateVolume volume ->
+      let
+        newVolume = (Result.withDefault model.audioStatus.volume (String.toFloat volume)) / 100
+      in
+        ({ model
+        | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
+        , updateVolume newVolume)
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msgFor model =
+  case msgFor of
+    Msgs.MsgForPlayer msgFor ->
+      updatePlayer msgFor model
+
+    Msgs.MsgForSidebar msgFor ->
+      updateSidebar msgFor model
+
+    Msgs.MsgForExplore msgFor ->
+      updateExplore msgFor model
+
+update : Msg -> Model -> (Model, Cmd Msg)
+update msg model =
+  case msg of
+    Msgs.Search term ->
+      let
+        cmd =
+          if String.length term > 1 then
+            fetchArtist term
+          else
+            Cmd.none
+      in
+        ({ model | searchTerm = term } , cmd)
 
     Msgs.ToggleSidebar ->
       ({ model | showMenu = not model.showMenu }, Cmd.none)
@@ -132,27 +169,6 @@ update msg model =
     Msgs.SelectTrack track ->
       ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
 
-    Msgs.UpdateAudioStatus audioStatus ->
-      ({ model | audioStatus = audioStatus}, Cmd.none)
-
-    Msgs.UpdateCurrentTime time ->
-      let
-        currentTime =
-          Helpers.pctToValue
-            (Result.withDefault model.audioStatus.currentTime (String.toFloat time))
-            model.audioStatus.duration
-      in
-        ({ model
-        | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
-        , updateCurrentTime currentTime)
-
-    Msgs.UpdateVolume volume ->
-      let
-        newVolume = (Result.withDefault model.audioStatus.volume (String.toFloat volume)) / 100
-      in
-        ({ model
-        | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
-        , updateVolume newVolume)
 
     Msgs.OnLocationChange location ->
       let
