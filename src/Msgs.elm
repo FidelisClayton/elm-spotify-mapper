@@ -36,4 +36,5 @@ type Msg
   = MsgForPlayer PlayerMsg
   | MsgForSidebar SidebarMsg
   | MsgForExplore ExploreMsg
+  | MsgForSearch SearchMsg
   | OnLocationChange Location

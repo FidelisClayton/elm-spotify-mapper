@@ -181,23 +181,8 @@ updateExplore msg model =
         _ ->
           ({ model | relatedArtists = response }, Cmd.none)
 
-update : Msg -> Model -> (Model, Cmd Msg)
-update msgFor model =
-  case msgFor of
-    Msgs.MsgForPlayer msgFor ->
-      updatePlayer msgFor model
-
-    Msgs.MsgForSidebar msgFor ->
-      updateSidebar msgFor model
-
-    Msgs.MsgForExplore msgFor ->
-      updateExplore msgFor model
-
-    Msgs.MsgForSearch msgFor ->
-      updateSearch msgFor model
-
-update : Msg -> Model -> (Model, Cmd Msg)
-update msg model =
+updateSearch : SearchMsg -> Model -> (Model, Cmd Msg)
+updateSearch msg model =
   case msg of
     Msgs.Search term ->
       let
@@ -227,7 +212,20 @@ update msg model =
       in
         (newModel, fetchTopTracks artist.id)
 
+update : Msg -> Model -> (Model, Cmd Msg)
+update msgFor model =
+  case msgFor of
+    Msgs.MsgForPlayer msgFor ->
+      updatePlayer msgFor model
 
+    Msgs.MsgForSidebar msgFor ->
+      updateSidebar msgFor model
+
+    Msgs.MsgForExplore msgFor ->
+      updateExplore msgFor model
+
+    Msgs.MsgForSearch msgFor ->
+      updateSearch msgFor model
 
     Msgs.OnLocationChange location ->
       let
@@ -266,6 +264,3 @@ update msg model =
 
           _ ->
             ({ model | route = newRoute }, destroyVis "")
-
-
-
