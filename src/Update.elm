@@ -1,10 +1,6 @@
 module Update exposing (..)
 
 import Msgs exposing (Msg)
-import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
-import BottomBar.Msgs as Player exposing (PlayerMsg)
-import Explore.Msgs as Explore exposing (ExploreMsg)
-import Search.Msgs as Search exposing (SearchMsg)
 
 import BottomBar.Update exposing (updatePlayer)
 import Explore.Update exposing (updateExplore)
@@ -12,14 +8,10 @@ import Sidebar.Update exposing (updateSidebar)
 import Search.Update exposing (updateSearch)
 
 import Models exposing (Model)
-import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
-import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
-import RemoteData
+import Ports exposing (initVis, destroyVis)
 import Routing exposing (parseLocation)
-import Constants exposing (maxRelatedArtists)
 
 import Helpers
-import ModelHelpers
 
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
