@@ -6,6 +6,8 @@ import BottomBar.Msgs as Player exposing (PlayerMsg)
 import Explore.Msgs as Explore exposing (ExploreMsg)
 import Search.Msgs as Search exposing (SearchMsg)
 
+import BottomBar.Update exposing (updatePlayer)
+
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
@@ -15,46 +17,6 @@ import Constants exposing (maxRelatedArtists)
 
 import Helpers
 import ModelHelpers
-
-updatePlayer : PlayerMsg -> Model -> (Model, Cmd Msg)
-updatePlayer msg model =
-  case msg of
-    Player.Play previewUrl ->
-      ({ model | isPlaying = True }, Cmd.map Msgs.MsgForPlayer (playAudio previewUrl))
-
-    Player.Pause ->
-      ({ model | isPlaying = False }, Cmd.map Msgs.MsgForPlayer (pauseAudio ""))
-
-    Player.Stop value ->
-      ({ model | isPlaying = False}, Cmd.none)
-
-    Player.Next ->
-      (model, Cmd.map Msgs.MsgForPlayer (nextTrack ""))
-
-    Player.Previous ->
-      (model, Cmd.map Msgs.MsgForPlayer (previousTrack ""))
-
-    Player.UpdateAudioStatus audioStatus ->
-      ({ model | audioStatus = audioStatus}, Cmd.none)
-
-    Player.UpdateCurrentTime time ->
-      let
-        currentTime =
-          Helpers.pctToValue
-            (Result.withDefault model.audioStatus.currentTime (String.toFloat time))
-            model.audioStatus.duration
-      in
-        ({ model
-        | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
-        , Cmd.map Msgs.MsgForPlayer (updateCurrentTime currentTime))
-
-    Player.UpdateVolume volume ->
-      let
-        newVolume = (Result.withDefault model.audioStatus.volume (String.toFloat volume)) / 100
-      in
-        ({ model
-        | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
-        , Cmd.map Msgs.MsgForPlayer (updateVolume newVolume))
 
 updateSidebar : SidebarMsg -> Model -> (Model, Cmd Msg)
 updateSidebar msg model =
