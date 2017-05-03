@@ -9,7 +9,8 @@ import Css exposing (property)
 import Json.Decode as Json
 
 import Models exposing (Model, Artist, SearchArtistData, Track)
-import Msgs exposing (Msg, PlayerMsg)
+import Msgs exposing (Msg)
+import BottomBar.Msgs as Player exposing (PlayerMsg)
 import Helpers
 
 import CssClasses
@@ -26,7 +27,7 @@ controlIcon icon =
   div [ class [ CssClasses.ControlIcon ] ]
       [ i [ class [ CssClasses.Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
-progressBar : Float -> (String -> PlayerMsg) -> Html Msg
+progressBar : Float -> (String -> Player.PlayerMsg) -> Html Msg
 progressBar progress msg =
   div [ class [ CssClasses.ProgressBar ] ]
       [ div
@@ -41,7 +42,6 @@ progressBar progress msg =
           , Html.Attributes.min "0"
           , step "1"
           , on "input" (Json.map (Msgs.MsgForPlayer << msg) targetValue)
-          -- , onInput targetValue (\str -> Msgs.MsgForPlayer << msg
           , value <| toString <| floor progress
       ]
           []
@@ -52,7 +52,7 @@ progress model =
   div [ class [ CssClasses.ProgressGroup ] ]
       [ span [ class [ CssClasses.FontSmall ] ]
           [ text <| "00:" ++ (Helpers.paddValue model.audioStatus.currentTime) ]
-      , progressBar (Helpers.getPct model.audioStatus.currentTime model.audioStatus.duration) Msgs.UpdateCurrentTime
+      , progressBar (Helpers.getPct model.audioStatus.currentTime model.audioStatus.duration) Player.UpdateCurrentTime
       , span [ class [ CssClasses.FontSmall ] ]
           [ text <| "00:" ++ (Helpers.paddValue  model.audioStatus.duration) ]
       ]
@@ -95,7 +95,7 @@ soundControl model =
     div [ class [ CssClasses.SoundControl ] ]
       [ div [ class [ CssClasses.ControlButtons ] ]
           [ icon ]
-      , progressBar (model.audioStatus.volume * 100) Msgs.UpdateVolume ]
+      , progressBar (model.audioStatus.volume * 100) Player.UpdateVolume ]
 
 
 controls : Model -> Html Msg
@@ -111,16 +111,16 @@ controls model =
 
     playOrPause =
       if model.isPlaying then
-        div [ onClick (Msgs.MsgForPlayer Msgs.Pause) ] [ controlIcon "pause" ]
+        div [ onClick (Msgs.MsgForPlayer Player.Pause) ] [ controlIcon "pause" ]
       else
-        div [ onClick (Msgs.MsgForPlayer (Msgs.Play preview)) ] [ controlIcon "play" ]
+        div [ onClick (Msgs.MsgForPlayer (Player.Play preview)) ] [ controlIcon "play" ]
 
   in
     div [ class [ CssClasses.Controls ] ]
         [ div [ class [ CssClasses.ControlButtons ] ]
-            [ div [ onClick (Msgs.MsgForPlayer Msgs.Previous) ] [ controlIcon "step-backward" ]
+            [ div [ onClick (Msgs.MsgForPlayer Player.Previous) ] [ controlIcon "step-backward" ]
             , playOrPause
-            , div [ onClick (Msgs.MsgForPlayer Msgs.Next) ] [ controlIcon "step-forward" ]
+            , div [ onClick (Msgs.MsgForPlayer Player.Next) ] [ controlIcon "step-forward" ]
             ]
         , progress model
         ]

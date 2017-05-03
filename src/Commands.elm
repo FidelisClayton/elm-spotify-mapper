@@ -5,7 +5,11 @@ import RemoteData
 import Json.Decode as Decode
 
 import Models exposing (Artist, searchArtistDecoder, topTracksDecoder, relatedArtistsDecoder, artistDecoder)
-import Msgs exposing (SearchMsg, SidebarMsg, ExploreMsg)
+
+import Msgs
+import Search.Msgs as Search exposing (SearchMsg)
+import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import Explore.Msgs as Explore exposing (ExploreMsg)
 
 fetchArtistUrl : String -> String
 fetchArtistUrl artist =
@@ -27,22 +31,22 @@ fetchArtist : String -> Cmd SearchMsg
 fetchArtist name =
   Http.get (fetchArtistUrl name) searchArtistDecoder
     |> RemoteData.sendRequest
-    |> Cmd.map Msgs.SearchArtistSuccess
+    |> Cmd.map Search.SearchArtistSuccess
 
 fetchTopTracks : String -> Cmd SidebarMsg
 fetchTopTracks artistId =
   Http.get (fetchTopTracksUrl artistId) topTracksDecoder
     |> RemoteData.sendRequest
-    |> Cmd.map Msgs.TopTracksSuccess
+    |> Cmd.map Sidebar.TopTracksSuccess
 
 fetchRelatedArtists : String -> Cmd ExploreMsg
 fetchRelatedArtists artistId =
   Http.get (fetchRelatedArtistsUrl artistId) relatedArtistsDecoder
     |> RemoteData.sendRequest
-    |> Cmd.map Msgs.RelatedArtistsSuccess
+    |> Cmd.map Explore.RelatedArtistsSuccess
 
 fetchArtistById : String -> Cmd ExploreMsg
 fetchArtistById artistId =
   Http.get (fetchArtistByIdUrl artistId) artistDecoder
     |> RemoteData.sendRequest
-    |> Cmd.map Msgs.ArtistByIdSuccess
+    |> Cmd.map Explore.ArtistByIdSuccess

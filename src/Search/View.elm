@@ -9,6 +9,7 @@ import Json.Decode as Json
 
 import Models exposing (Model, Artist, SearchArtistData)
 import Msgs exposing (Msg)
+import Search.Msgs as Search exposing (SearchMsg)
 import CssClasses
 
 { class } =
@@ -20,7 +21,7 @@ bigSearch model =
     [ label [] [ text "Search for an artist" ]
     , input
         [ type_ "text"
-        , on "input" (Json.map (Msgs.MsgForSearch << Msgs.Search) targetValue)
+        , on "input" (Json.map (Msgs.MsgForSearch << Search.Search) targetValue)
         ]
         []
     ]
@@ -36,7 +37,7 @@ searchResult artist =
         Nothing ->
           "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
   in
-    a [ class [ CssClasses.ArtistResult ], onClick (Msgs.MsgForSearch (Msgs.SelectArtist artist)), href "#/explore" ]
+    a [ class [ CssClasses.ArtistResult ], onClick (Msgs.MsgForSearch (Search.SelectArtist artist)), href "#/explore" ]
       [ div [ class [ CssClasses.ImageWrapper ] ]
             [ div []
                 [ i [ Html.Attributes.class "fa fa-play" ] [] ]

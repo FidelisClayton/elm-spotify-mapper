@@ -1,6 +1,11 @@
 module Update exposing (..)
 
-import Msgs exposing (Msg, SidebarMsg, PlayerMsg, ExploreMsg, SearchMsg)
+import Msgs exposing (Msg)
+import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import BottomBar.Msgs as Player exposing (PlayerMsg)
+import Explore.Msgs as Explore exposing (ExploreMsg)
+import Search.Msgs as Search exposing (SearchMsg)
+
 import Models exposing (Model)
 import Commands exposing (fetchArtist, fetchTopTracks, fetchRelatedArtists, fetchArtistById)
 import Ports exposing (playAudio, pauseAudio, provideTracks, nextTrack, previousTrack, updateCurrentTime, updateVolume, initVis, destroyVis, addSimilar)
@@ -14,25 +19,25 @@ import ModelHelpers
 updatePlayer : PlayerMsg -> Model -> (Model, Cmd Msg)
 updatePlayer msg model =
   case msg of
-    Msgs.Play previewUrl ->
+    Player.Play previewUrl ->
       ({ model | isPlaying = True }, Cmd.map Msgs.MsgForPlayer (playAudio previewUrl))
 
-    Msgs.Pause ->
+    Player.Pause ->
       ({ model | isPlaying = False }, Cmd.map Msgs.MsgForPlayer (pauseAudio ""))
 
-    Msgs.Stop value ->
+    Player.Stop value ->
       ({ model | isPlaying = False}, Cmd.none)
 
-    Msgs.Next ->
+    Player.Next ->
       (model, Cmd.map Msgs.MsgForPlayer (nextTrack ""))
 
-    Msgs.Previous ->
+    Player.Previous ->
       (model, Cmd.map Msgs.MsgForPlayer (previousTrack ""))
 
-    Msgs.UpdateAudioStatus audioStatus ->
+    Player.UpdateAudioStatus audioStatus ->
       ({ model | audioStatus = audioStatus}, Cmd.none)
 
-    Msgs.UpdateCurrentTime time ->
+    Player.UpdateCurrentTime time ->
       let
         currentTime =
           Helpers.pctToValue
@@ -43,7 +48,7 @@ updatePlayer msg model =
         | audioStatus = ModelHelpers.setAudioStatusTime currentTime model.audioStatus }
         , Cmd.map Msgs.MsgForPlayer (updateCurrentTime currentTime))
 
-    Msgs.UpdateVolume volume ->
+    Player.UpdateVolume volume ->
       let
         newVolume = (Result.withDefault model.audioStatus.volume (String.toFloat volume)) / 100
       in
@@ -54,13 +59,13 @@ updatePlayer msg model =
 updateSidebar : SidebarMsg -> Model -> (Model, Cmd Msg)
 updateSidebar msg model =
   case msg of
-    Msgs.ToggleSidebar ->
+    Sidebar.ToggleSidebar ->
       ({ model | showMenu = not model.showMenu }, Cmd.none)
 
-    Msgs.SelectTrack track ->
+    Sidebar.SelectTrack track ->
       ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
 
-    Msgs.TopTracksSuccess response ->
+    Sidebar.TopTracksSuccess response ->
       case response of
         RemoteData.Success tracks ->
           if model.waitingToPlay then
@@ -87,10 +92,10 @@ updateSidebar msg model =
 updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
   case msg of
-    Msgs.OnVisNodeClick artistId ->
+    Explore.OnVisNodeClick artistId ->
       ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId))
 
-    Msgs.ArtistByIdSuccess response ->
+    Explore.ArtistByIdSuccess response ->
       case response of
         RemoteData.Success artist ->
           let
@@ -122,7 +127,7 @@ updateExplore msg model =
         _ ->
           (model, Cmd.none)
 
-    Msgs.UpdateNetwork data ->
+    Explore.UpdateNetwork data ->
       let
         previousNetwork = model.network
 
@@ -131,10 +136,10 @@ updateExplore msg model =
       in
         ({ model | network = newNetwork }, Cmd.none)
 
-    Msgs.OnDoubleClick artistId ->
+    Explore.OnDoubleClick artistId ->
       ({ model | waitingToPlay = True }, Cmd.none)
 
-    Msgs.RelatedArtistsSuccess response ->
+    Explore.RelatedArtistsSuccess response ->
       case response of
         RemoteData.Success data ->
           let
@@ -184,7 +189,7 @@ updateExplore msg model =
 updateSearch : SearchMsg -> Model -> (Model, Cmd Msg)
 updateSearch msg model =
   case msg of
-    Msgs.Search term ->
+    Search.Search term ->
       let
         cmd =
           if String.length term > 1 then
@@ -194,13 +199,13 @@ updateSearch msg model =
       in
         ({ model | searchTerm = term } , cmd)
 
-    Msgs.SearchArtistSuccess response ->
+    Search.SearchArtistSuccess response ->
       ({ model | artists = response }, Cmd.none)
 
-    Msgs.StartSearch ->
+    Search.StartSearch ->
       ({ model | searching = True }, Cmd.none)
 
-    Msgs.SelectArtist artist ->
+    Search.SelectArtist artist ->
       let
         newModel =
           { model

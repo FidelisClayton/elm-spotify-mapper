@@ -9,6 +9,8 @@ import Css exposing (property)
 
 import Models exposing (Model, TopTracks, Track)
 import Msgs exposing (Msg)
+import Search.Msgs as Search exposing (SearchMsg)
+import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
 
 import CssClasses
 
@@ -53,7 +55,7 @@ songItem track =
           ""
   in
     div [ class [ CssClasses.SongItem ] ]
-      [ div [ class [ CssClasses.SongCover ], onClick (Msgs.MsgForSidebar (Msgs.SelectTrack track)) ]
+      [ div [ class [ CssClasses.SongCover ], onClick (Msgs.MsgForSidebar (Sidebar.SelectTrack track)) ]
           [ button []
               [ i [ Html.Attributes.class "fa fa-play"] []]
           , img
