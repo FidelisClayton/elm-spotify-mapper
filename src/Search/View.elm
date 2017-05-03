@@ -7,13 +7,13 @@ import Html.CssHelpers
 import RemoteData exposing (WebData)
 
 import Models exposing (Model, Artist, SearchArtistData)
-import Msgs exposing (Msg)
+import Msgs exposing (Msg, SearchMsg)
 import CssClasses
 
 { class } =
   Html.CssHelpers.withNamespace ""
 
-bigSearch : Model -> Html Msg
+bigSearch : Model -> Html SearchMsg
 bigSearch model =
   div [ class [ CssClasses.BigSearch ] ]
     [ label [] [ text "Search for an artist" ]
@@ -23,7 +23,7 @@ bigSearch model =
         []
     ]
 
-searchResult : Artist -> Html Msg
+searchResult : Artist -> Html SearchMsg
 searchResult artist =
   let
     image =
@@ -43,7 +43,7 @@ searchResult artist =
       , label [] [ text artist.name ]
       ]
 
-searchResults : WebData SearchArtistData -> Html Msg
+searchResults : WebData SearchArtistData -> Html SearchMsg
 searchResults response =
   let
     html =
@@ -63,7 +63,7 @@ searchResults response =
     div [ class [ CssClasses.SearchResults ] ]
       html
 
-render : Model -> List (Html Msg)
+render : Model -> List (Html SearchMsg)
 render model =
   [ bigSearch model
   , searchResults model.artists

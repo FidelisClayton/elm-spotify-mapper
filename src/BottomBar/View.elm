@@ -8,7 +8,7 @@ import RemoteData
 import Css exposing (property)
 
 import Models exposing (Model, Artist, SearchArtistData, Track)
-import Msgs exposing (Msg)
+import Msgs exposing (PlayerMsg)
 import Helpers
 
 import CssClasses
@@ -20,12 +20,12 @@ styles : List Css.Mixin -> Html.Attribute msg
 styles =
   Css.asPairs >> Html.Attributes.style
 
-controlIcon : String -> Html Msg
+controlIcon : String -> Html PlayerMsg
 controlIcon icon =
   div [ class [ CssClasses.ControlIcon ] ]
       [ i [ class [ CssClasses.Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
-progressBar : Float -> (String -> Msg) -> Html Msg
+progressBar : Float -> (String -> PlayerMsg) -> Html PlayerMsg
 progressBar progress msg =
   div [ class [ CssClasses.ProgressBar ] ]
       [ div
@@ -45,7 +45,7 @@ progressBar progress msg =
           []
       ]
 
-progress : Model -> Html Msg
+progress : Model -> Html PlayerMsg
 progress model =
   div [ class [ CssClasses.ProgressGroup ] ]
       [ span [ class [ CssClasses.FontSmall ] ]
@@ -55,7 +55,7 @@ progress model =
           [ text <| "00:" ++ (Helpers.paddValue  model.audioStatus.duration) ]
       ]
 
-musicInfo : Maybe Track -> Html Msg
+musicInfo : Maybe Track -> Html PlayerMsg
 musicInfo selectedTrack =
   let
     content =
@@ -79,7 +79,7 @@ musicInfo selectedTrack =
     div [ class [ CssClasses.NowPlaying] ]
       content
 
-soundControl : Model -> Html Msg
+soundControl : Model -> Html PlayerMsg
 soundControl model =
   let
     icon =
@@ -96,7 +96,7 @@ soundControl model =
       , progressBar (model.audioStatus.volume * 100) Msgs.UpdateVolume ]
 
 
-controls : Model -> Html Msg
+controls : Model -> Html PlayerMsg
 controls model =
   let
     preview =
@@ -123,7 +123,7 @@ controls model =
         , progress model
         ]
 
-maybeArtists : RemoteData.WebData SearchArtistData -> Html Msg
+maybeArtists : RemoteData.WebData SearchArtistData -> Html PlayerMsg
 maybeArtists response =
   case response of
     RemoteData.NotAsked ->
@@ -139,7 +139,7 @@ maybeArtists response =
       text (toString "Error")
 
 
-render : Model -> Html Msg
+render : Model -> Html PlayerMsg
 render model =
   div [ class [ CssClasses.BottomBar ] ]
       [ musicInfo model.selectedTrack

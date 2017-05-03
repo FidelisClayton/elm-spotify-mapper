@@ -8,7 +8,7 @@ import RemoteData exposing (WebData)
 import Css exposing (property)
 
 import Models exposing (Model, TopTracks, Track)
-import Msgs exposing (Msg)
+import Msgs exposing (SidebarMsg)
 
 import CssClasses
 
@@ -19,12 +19,12 @@ styles : List Css.Mixin -> Html.Attribute msg
 styles =
   Css.asPairs >> Html.Attributes.style
 
-navItem : List (Html Msg) -> Html Msg
+navItem : List (Html SidebarMsg) -> Html SidebarMsg
 navItem childrens =
   div [ class [ CssClasses.NavGroup ] ]
       childrens
 
-artistSongs : WebData TopTracks -> Html Msg
+artistSongs : WebData TopTracks -> Html SidebarMsg
 artistSongs response =
   let
     html =
@@ -41,7 +41,7 @@ artistSongs response =
     div [ class [ CssClasses.NavGroup, CssClasses.Songs ] ]
       html
 
-songItem : Track -> Html Msg
+songItem : Track -> Html SidebarMsg
 songItem track =
   let
     image =
@@ -66,7 +66,7 @@ songItem track =
           ]
       ]
 
-userProfile : Model -> Html Msg
+userProfile : Model -> Html SidebarMsg
 userProfile model =
   navItem
     [ div [ class [ CssClasses.UserProfile ] ]
@@ -79,12 +79,12 @@ userProfile model =
         ]
     ]
 
-bigSearch : Model -> Html Msg
+bigSearch : Model -> Html SidebarMsg
 bigSearch model =
   div [ class [ CssClasses.BigSearch ] ]
     [ input [ type_ "text" ] [] ]
 
-render : Model -> Html Msg
+render : Model -> Html SidebarMsg
 render model =
   let
     backgroundStyle =
