@@ -51,6 +51,39 @@ updatePlayer msg model =
         | audioStatus = ModelHelpers.setAudioStatusVolume newVolume model.audioStatus }
         , updateVolume newVolume)
 
+updateSidebar : SidebarMsg -> Model -> (Model, Cmd Msg)
+updateSidebar msg model =
+  case msg of
+    Msgs.ToggleSidebar ->
+      ({ model | showMenu = not model.showMenu }, Cmd.none)
+
+    Msgs.SelectTrack track ->
+      ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
+
+    Msgs.TopTracksSuccess response ->
+      case response of
+        RemoteData.Success tracks ->
+          if model.waitingToPlay then
+            case List.head tracks.tracks of
+              Just track ->
+                let
+                  newModel =
+                    { model
+                    | topTracks = response
+                    , selectedTrack = Just track
+                    , waitingToPlay = False
+                    }
+                in
+                  (newModel, Cmd.batch [provideTracks tracks, playAudio track.preview_url])
+
+              Nothing ->
+                ({ model | topTracks = response, waitingToPlay = False }, provideTracks tracks)
+          else
+            ({ model | topTracks = response}, provideTracks tracks)
+
+        _ ->
+          ({ model | topTracks = response}, Cmd.none)
+
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
   case msgFor of
@@ -76,38 +109,12 @@ update msg model =
       in
         ({ model | searchTerm = term } , cmd)
 
-    Msgs.ToggleSidebar ->
-      ({ model | showMenu = not model.showMenu }, Cmd.none)
-
     Msgs.SearchArtistSuccess response ->
       ({ model | artists = response }, Cmd.none)
 
     Msgs.StartSearch ->
       ({ model | searching = True }, Cmd.none)
 
-    Msgs.TopTracksSuccess response ->
-      case response of
-        RemoteData.Success tracks ->
-          if model.waitingToPlay then
-            case List.head tracks.tracks of
-              Just track ->
-                let
-                  newModel =
-                    { model
-                    | topTracks = response
-                    , selectedTrack = Just track
-                    , waitingToPlay = False
-                    }
-                in
-                  (newModel, Cmd.batch [provideTracks tracks, playAudio track.preview_url])
-
-              Nothing ->
-                ({ model | topTracks = response, waitingToPlay = False }, provideTracks tracks)
-          else
-            ({ model | topTracks = response}, provideTracks tracks)
-
-        _ ->
-          ({ model | topTracks = response}, Cmd.none)
 
     Msgs.RelatedArtistsSuccess response ->
       case response of
@@ -166,8 +173,6 @@ update msg model =
       in
         (newModel, fetchTopTracks artist.id)
 
-    Msgs.SelectTrack track ->
-      ({ model | selectedTrack = Maybe.Just track, isPlaying = True }, playAudio track.preview_url)
 
 
     Msgs.OnLocationChange location ->
