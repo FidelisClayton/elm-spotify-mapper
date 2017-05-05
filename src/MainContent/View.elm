@@ -1,4 +1,4 @@
-module Components.MainContent.View exposing (..)
+module MainContent.View exposing (..)
 
 import Html exposing (Html, div)
 import Html.Attributes
@@ -30,7 +30,6 @@ page model =
 
     Models.NotFoundRoute ->
       Search.render model
-
 
 render : Model -> Html Msg
 render model =

@@ -4,9 +4,9 @@ import Css.File exposing (..)
 
 import Style as Main
 
-import Components.BottomBar.Style as BottomBar
-import Components.Sidebar.Style as Sidebar
-import Components.MainContent.Style as MainContent
+import BottomBar.Style as BottomBar
+import Sidebar.Style as Sidebar
+import MainContent.Style as MainContent
 import Explore.Style as Explore
 
 port files : CssFileStructure -> Cmd msg

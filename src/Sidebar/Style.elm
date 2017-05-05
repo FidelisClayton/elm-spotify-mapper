@@ -1,4 +1,4 @@
-module Components.Sidebar.Style exposing (..)
+module Sidebar.Style exposing (..)
 
 import Css exposing (..)
 import Css.Elements exposing (img, button)

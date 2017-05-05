@@ -1,4 +1,4 @@
-module Components.MainContent.Style exposing (..)
+module MainContent.Style exposing (..)
 
 import Css exposing (..)
 import Css.Elements exposing (input, label, img, div, i)

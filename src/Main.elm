@@ -4,11 +4,15 @@ import Html exposing (Html, text, div)
 import Html.CssHelpers
 import Navigation exposing (Location)
 
-import Components.BottomBar.View as BottomBar
-import Components.Sidebar.View as Sidebar
-import Components.MainContent.View as MainContent
+import BottomBar.View as BottomBar
+import Sidebar.View as Sidebar
+import MainContent.View as MainContent
 
 import Msgs exposing (Msg)
+import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import BottomBar.Msgs as Player exposing (PlayerMsg)
+import Explore.Msgs as Explore exposing (ExploreMsg)
+
 import Models exposing (Model)
 import Update exposing (update)
 import CssClasses
@@ -28,12 +32,12 @@ init location =
 subscriptions : Model -> Sub Msg
 subscriptions model =
   Sub.batch
-    [ audioEnded Msgs.Stop
-    , updateCurrentTrack Msgs.SelectTrack
-    , updateAudioStatus Msgs.UpdateAudioStatus
-    , onNodeClick Msgs.OnVisNodeClick
-    , updateNetwork Msgs.UpdateNetwork
-    , onDoubleClick Msgs.OnDoubleClick
+    [ Sub.map Msgs.MsgForPlayer (audioEnded Player.Stop)
+    , Sub.map Msgs.MsgForSidebar (updateCurrentTrack Sidebar.SelectTrack)
+    , Sub.map Msgs.MsgForPlayer (updateAudioStatus Player.UpdateAudioStatus)
+    , Sub.map Msgs.MsgForExplore (onNodeClick Explore.OnVisNodeClick)
+    , Sub.map Msgs.MsgForExplore (updateNetwork Explore.UpdateNetwork)
+    , Sub.map Msgs.MsgForExplore (onDoubleClick Explore.OnDoubleClick)
     ]
 
 view : Model -> Html Msg

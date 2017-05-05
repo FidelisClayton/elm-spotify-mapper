@@ -2,12 +2,14 @@ module Search.View exposing (..)
 
 import Html exposing (Html, div, text, input, label, img, i, a)
 import Html.Attributes exposing (type_, placeholder, src, href)
-import Html.Events exposing (onInput, onClick)
+import Html.Events exposing (onInput, onClick, targetValue, on)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
+import Json.Decode as Json
 
 import Models exposing (Model, Artist, SearchArtistData)
 import Msgs exposing (Msg)
+import Search.Msgs as Search exposing (SearchMsg)
 import CssClasses
 
 { class } =
@@ -19,7 +21,8 @@ bigSearch model =
     [ label [] [ text "Search for an artist" ]
     , input
         [ type_ "text"
-        , onInput Msgs.Search ]
+        , on "input" (Json.map (Msgs.MsgForSearch << Search.Search) targetValue)
+        ]
         []
     ]
 
@@ -34,7 +37,7 @@ searchResult artist =
         Nothing ->
           "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
   in
-    a [ class [ CssClasses.ArtistResult ], onClick (Msgs.SelectArtist artist), href "#/explore" ]
+    a [ class [ CssClasses.ArtistResult ], onClick (Msgs.MsgForSearch (Search.SelectArtist artist)), href "#/explore" ]
       [ div [ class [ CssClasses.ImageWrapper ] ]
             [ div []
                 [ i [ Html.Attributes.class "fa fa-play" ] [] ]
