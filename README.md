@@ -24,7 +24,7 @@ To run this project in your machine you just need to execute the `npm start`comm
 
 ## :memo: TODO
 - [ ] Create playlist with the artists on the node tree
-- [ ] Improve the fold structure and split the Update function
+- [x] Improve the fold structure and split the Update function
 - [ ] Improve mobile experience (maybe it should seems like the spotify mobile.)
 - [ ] Tests
 
