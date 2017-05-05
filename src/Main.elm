@@ -13,7 +13,7 @@ import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
 import BottomBar.Msgs as Player exposing (PlayerMsg)
 import Explore.Msgs as Explore exposing (ExploreMsg)
 
-import Models exposing (Model)
+import Models exposing (Model, Flags)
 import Update exposing (update)
 import CssClasses
 import Routing
@@ -22,12 +22,12 @@ import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNode
 { class } =
   Html.CssHelpers.withNamespace ""
 
-init : Location -> ( Models.Model, Cmd Msg )
-init location =
+init : Flags -> Location -> ( Models.Model, Cmd Msg )
+init flags location =
   let
     currentRoute = Routing.parseLocation location
   in
-    ( Models.initialModel currentRoute, Cmd.none )
+    ( Models.initialModel currentRoute flags, Cmd.none )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -50,9 +50,9 @@ view model =
       , BottomBar.render model
       ]
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-  Navigation.program Msgs.OnLocationChange
+  Navigation.programWithFlags Msgs.OnLocationChange
     { init = init
     , view = view
     , subscriptions = subscriptions

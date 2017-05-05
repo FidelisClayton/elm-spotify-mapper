@@ -4,6 +4,11 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, hardcoded)
 import RemoteData exposing (WebData)
 
+type alias Flags = {
+  code : String
+}
+
+
 type alias Model =
   { showMenu : Bool
   , artists : WebData SearchArtistData
@@ -19,10 +24,11 @@ type alias Model =
   , relatedArtists : WebData RelatedArtists
   , playlistArtists : List Artist
   , waitingToPlay : Bool
+  , authCode : String
   }
 
-initialModel : Route -> Model
-initialModel route =
+initialModel : Route -> Flags -> Model
+initialModel route flags =
   { showMenu = True
   , artists = RemoteData.NotAsked
   , searching = False
@@ -37,6 +43,7 @@ initialModel route =
   , relatedArtists = RemoteData.NotAsked
   , playlistArtists = []
   , waitingToPlay = False
+  , authCode = flags.code
   }
 
 type Route
