@@ -20,6 +20,11 @@ $ npm install
 After clone this repository run `npm install` inside the project folder to install and build the project dependencies.
 
 ## :runner: Getting started
+First of all you will need to set the environment variables with your spotify developer credentials:
+```sh
+cp .env.sample .env
+```
+Open the `.env` file and set the `CLIENT_ID`, `CLIENT_SECRET` and `REDIRECT_URI`.
 To run this project in your machine you just need to execute the `npm start`command, it will start a development server on port `3000`. Enjoy it!
 
 ## :memo: TODO
