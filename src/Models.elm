@@ -4,10 +4,22 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, hardcoded)
 import RemoteData exposing (WebData)
 
-type alias Flags = {
-  code : String
-}
+type alias Flags =
+  { spotifyConfig: SpotifyConfig
+  , auth: Maybe SpotifyAuthData
+  }
 
+type alias SpotifyConfig =
+  { clientId: String
+  , clientSecret: String
+  , redirectUri: String
+  }
+
+type alias SpotifyAuthData =
+  { accessToken: String
+  , expiresIn: Int
+  , tokenType: String
+  }
 
 type alias Model =
   { showMenu : Bool
@@ -24,7 +36,8 @@ type alias Model =
   , relatedArtists : WebData RelatedArtists
   , playlistArtists : List Artist
   , waitingToPlay : Bool
-  , authCode : String
+  , spotifyConfig : SpotifyConfig
+  , auth : Maybe SpotifyAuthData
   }
 
 initialModel : Route -> Flags -> Model
@@ -43,7 +56,8 @@ initialModel route flags =
   , relatedArtists = RemoteData.NotAsked
   , playlistArtists = []
   , waitingToPlay = False
-  , authCode = flags.code
+  , spotifyConfig = flags.spotifyConfig
+  , auth = flags.auth
   }
 
 type Route

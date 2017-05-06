@@ -17,7 +17,7 @@ import Models exposing (Model, Flags)
 import Update exposing (update)
 import CssClasses
 import Routing
-import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick)
+import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick, fromStorage)
 
 { class } =
   Html.CssHelpers.withNamespace ""
@@ -38,6 +38,7 @@ subscriptions model =
     , Sub.map Msgs.MsgForExplore (onNodeClick Explore.OnVisNodeClick)
     , Sub.map Msgs.MsgForExplore (updateNetwork Explore.UpdateNetwork)
     , Sub.map Msgs.MsgForExplore (onDoubleClick Explore.OnDoubleClick)
+    , fromStorage Msgs.UpdateAuthData
     ]
 
 view : Model -> Html Msg

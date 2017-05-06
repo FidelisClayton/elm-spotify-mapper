@@ -16,6 +16,9 @@ import Helpers
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
   case msgFor of
+    Msgs.UpdateAuthData data ->
+      ({ model | auth = data }, Cmd.none)
+
     Msgs.MsgForPlayer msgFor ->
       updatePlayer msgFor model
 

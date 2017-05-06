@@ -1,6 +1,7 @@
 module Msgs exposing (..)
 
 import Navigation exposing (Location)
+import Models exposing (SpotifyAuthData)
 
 import BottomBar.Msgs exposing (PlayerMsg)
 import Explore.Msgs exposing (ExploreMsg)
@@ -13,3 +14,4 @@ type Msg
   | MsgForExplore ExploreMsg
   | MsgForSearch SearchMsg
   | OnLocationChange Location
+  | UpdateAuthData (Maybe SpotifyAuthData)
