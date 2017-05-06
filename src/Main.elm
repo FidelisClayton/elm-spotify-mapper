@@ -19,6 +19,8 @@ import CssClasses
 import Routing
 import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick, fromStorage)
 
+import Spotify.Api
+
 { class } =
   Html.CssHelpers.withNamespace ""
 
@@ -26,8 +28,16 @@ init : Flags -> Location -> ( Models.Model, Cmd Msg )
 init flags location =
   let
     currentRoute = Routing.parseLocation location
+
+    cmd =
+      case flags.auth of
+        Just auth ->
+          Cmd.map Msgs.MsgForSpotify (Spotify.Api.getMe auth.accessToken)
+
+        Nothing ->
+          Cmd.none
   in
-    ( Models.initialModel currentRoute flags, Cmd.none )
+    ( Models.initialModel currentRoute flags, cmd )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

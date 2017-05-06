@@ -75,16 +75,22 @@ userProfile model =
   let
     url = Constants.authUrl model.spotifyConfig.clientId model.spotifyConfig.redirectUri
   in
-    navItem
-      [ div [ class [ CssClasses.UserProfile ] ]
-          [ img
-              [ src "http://i3.kym-cdn.com/photos/images/facebook/000/120/409/03e.png"
-              , class [ CssClasses.RoundedImage, CssClasses.UserImage ]
-              ] []
-          , span [ class [ CssClasses.FontMedium ] ]
-              [ a [ href url, target "blank" ] [ text "Gabe Newell" ] ]
+    case model.user of
+      RemoteData.Success user ->
+        navItem
+          [ div [ class [ CssClasses.UserProfile ] ]
+              [ span [ class [ CssClasses.FontMedium ] ]
+                  [ text user.displayName ]
+              ]
           ]
-      ]
+
+      _ ->
+        navItem
+          [ div [ class [ CssClasses.UserProfile ] ]
+              [ span [ class [ CssClasses.FontMedium ] ]
+                  [ a [ href url, target "blank" ] [ text "Login" ] ]
+              ]
+          ]
 
 bigSearch : Model -> Html Msg
 bigSearch model =
