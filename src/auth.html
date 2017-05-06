@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spotify Mapper Auth</title>
+  <script>
+    function getSpotifyAuthData(hash) {
+      const parts = hash.substring(1).split("&");
+      return parts.reduce((previous, current) => {
+        const key = current.split("=")[0]
+        const value = current.split("=")[1]
+
+        return Object.assign({}, previous, {[key]: value})
+      }, {})
+    }
+    window.onload = function () {
+      var hash = window.location.hash;
+
+      if (window.location.search.substring(1).indexOf("error") !== -1) {
+        window.close();
+      } else if (hash) {
+        const spotifyAuthData = getSpotifyAuthData(hash)
+        localStorage.setItem('spotify-auth-data', JSON.stringify(spotifyAuthData))
+        window.close();
+      }
+    }
+  </script>
+</head>
+<body>
+
+</body>
+</html>

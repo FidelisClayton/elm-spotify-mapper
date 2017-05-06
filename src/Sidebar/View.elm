@@ -1,7 +1,7 @@
 module Sidebar.View exposing (..)
 
 import Html exposing (Html, div, text, input, span, img, i, button, a)
-import Html.Attributes exposing (type_, placeholder, src, href)
+import Html.Attributes exposing (type_, placeholder, src, href, target)
 import Html.Events exposing (onClick)
 import Html.CssHelpers
 import RemoteData exposing (WebData)
@@ -11,6 +11,8 @@ import Models exposing (Model, TopTracks, Track)
 import Msgs exposing (Msg)
 import Search.Msgs as Search exposing (SearchMsg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+
+import Constants
 
 import CssClasses
 
@@ -70,16 +72,25 @@ songItem track =
 
 userProfile : Model -> Html Msg
 userProfile model =
-  navItem
-    [ div [ class [ CssClasses.UserProfile ] ]
-        [ img
-            [ src "http://i3.kym-cdn.com/photos/images/facebook/000/120/409/03e.png"
-            , class [ CssClasses.RoundedImage, CssClasses.UserImage ]
-            ] []
-        , span [ class [ CssClasses.FontMedium ] ]
-            [ text "Gabe Newell" ]
-        ]
-    ]
+  let
+    url = Constants.authUrl model.spotifyConfig.clientId model.spotifyConfig.redirectUri
+  in
+    case model.user of
+      RemoteData.Success user ->
+        navItem
+          [ div [ class [ CssClasses.UserProfile ] ]
+              [ span [ class [ CssClasses.FontMedium ] ]
+                  [ text user.displayName ]
+              ]
+          ]
+
+      _ ->
+        navItem
+          [ div [ class [ CssClasses.UserProfile ] ]
+              [ span [ class [ CssClasses.FontMedium ] ]
+                  [ a [ href url, target "blank" ] [ text "Login" ] ]
+              ]
+          ]
 
 bigSearch : Model -> Html Msg
 bigSearch model =

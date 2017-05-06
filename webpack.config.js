@@ -1,5 +1,8 @@
+require('dotenv').config();
+
+const webpack = require('webpack');
 const path = require('path');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   entry: {
@@ -37,7 +40,9 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.EnvironmentPlugin(['CLIENT_ID', 'CLIENT_SECRET', 'REDIRECT_URI']),
     new CopyWebpackPlugin([
+      { from: 'src/auth.html', to: 'auth.html' },
       { from: 'src/style.css', to: 'dist/style.css' },
       { from: 'vendor/', to: 'dist/vendor/'}
     ])

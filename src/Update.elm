@@ -6,6 +6,7 @@ import BottomBar.Update exposing (updatePlayer)
 import Explore.Update exposing (updateExplore)
 import Sidebar.Update exposing (updateSidebar)
 import Search.Update exposing (updateSearch)
+import Spotify.Update exposing (updateSpotify)
 
 import Models exposing (Model)
 import Ports exposing (initVis, destroyVis)
@@ -16,6 +17,12 @@ import Helpers
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
   case msgFor of
+    Msgs.UpdateAuthData data ->
+      ({ model | auth = data }, Cmd.none)
+
+    Msgs.MsgForSpotify msgFor ->
+      updateSpotify msgFor model
+
     Msgs.MsgForPlayer msgFor ->
       updatePlayer msgFor model
 

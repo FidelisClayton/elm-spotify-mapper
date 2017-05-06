@@ -13,21 +13,31 @@ import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
 import BottomBar.Msgs as Player exposing (PlayerMsg)
 import Explore.Msgs as Explore exposing (ExploreMsg)
 
-import Models exposing (Model)
+import Models exposing (Model, Flags)
 import Update exposing (update)
 import CssClasses
 import Routing
-import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick)
+import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick, fromStorage)
+
+import Spotify.Api
 
 { class } =
   Html.CssHelpers.withNamespace ""
 
-init : Location -> ( Models.Model, Cmd Msg )
-init location =
+init : Flags -> Location -> ( Models.Model, Cmd Msg )
+init flags location =
   let
     currentRoute = Routing.parseLocation location
+
+    cmd =
+      case flags.auth of
+        Just auth ->
+          Cmd.map Msgs.MsgForSpotify (Spotify.Api.getMe auth.accessToken)
+
+        Nothing ->
+          Cmd.none
   in
-    ( Models.initialModel currentRoute, Cmd.none )
+    ( Models.initialModel currentRoute flags, cmd )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =
@@ -38,6 +48,7 @@ subscriptions model =
     , Sub.map Msgs.MsgForExplore (onNodeClick Explore.OnVisNodeClick)
     , Sub.map Msgs.MsgForExplore (updateNetwork Explore.UpdateNetwork)
     , Sub.map Msgs.MsgForExplore (onDoubleClick Explore.OnDoubleClick)
+    , fromStorage Msgs.UpdateAuthData
     ]
 
 view : Model -> Html Msg
@@ -50,9 +61,9 @@ view model =
       , BottomBar.render model
       ]
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-  Navigation.program Msgs.OnLocationChange
+  Navigation.programWithFlags Msgs.OnLocationChange
     { init = init
     , view = view
     , subscriptions = subscriptions
