@@ -21,14 +21,15 @@ type alias Track =
   { id : String
   , name : String
   , preview_url : String
+  , uri : String
   }
 
 type alias Playlist =
   { description : String
   , id : String
   , name : String
-  -- , owner : User
-  -- , tracks : List Track
+  , owner : User
+  , tracks : List Track
   }
 
 userDecoder : Decode.Decoder User
@@ -56,4 +57,13 @@ playlistDecoder =
     |> required "description" Decode.string
     |> required "id" Decode.string
     |> required "name" Decode.string
-    -- |> required "owner" Decode.string
+    |> required "owner" userDecoder
+    |> required "tracks" (Decode.list trackDecoder)
+
+trackDecoder : Decode.Decoder Track
+trackDecoder =
+  decode Track
+    |> required "id" Decode.string
+    |> required "name" Decode.string
+    |> optional "preview_url" Decode.string ""
+    |> required "uri" Decode.string

@@ -23,19 +23,58 @@ updateSidebar msg model =
             case List.head tracks.tracks of
               Just track ->
                 let
+                  previousPlaylist = model.playlist
+
+                  newTracks =
+                    List.map
+                      (\track -> { id = track.id, name = track.name, preview_url = track.preview_url, uri = track.uri })
+                      (List.take 5 tracks.tracks)
+
+                  oldTracks = previousPlaylist.tracks
+
+                  newPlaylist =
+                    { previousPlaylist | tracks = List.append newTracks oldTracks }
+
                   newModel =
                     { model
                     | topTracks = response
                     , selectedTrack = Just track
                     , waitingToPlay = False
+                    , playlist = newPlaylist
                     }
                 in
                   (newModel, Cmd.batch [provideTracks tracks, playAudio track.preview_url])
 
               Nothing ->
-                ({ model | topTracks = response, waitingToPlay = False }, provideTracks tracks)
+                let
+                  previousPlaylist = model.playlist
+
+                  newTracks =
+                    List.map
+                      (\track -> { id = track.id, name = track.name, preview_url = track.preview_url, uri = track.uri })
+                      (List.take 5 tracks.tracks)
+
+                  oldTracks = previousPlaylist.tracks
+
+                  newPlaylist =
+                    { previousPlaylist | tracks = List.append newTracks oldTracks}
+                in
+                  ({ model | topTracks = response, waitingToPlay = False, playlist = newPlaylist }, provideTracks tracks)
           else
-            ({ model | topTracks = response}, provideTracks tracks)
+            let
+              previousPlaylist = model.playlist
+
+              newTracks =
+                List.map
+                  (\track -> { id = track.id, name = track.name, preview_url = track.preview_url, uri = track.uri })
+                  (List.take 5 tracks.tracks)
+
+              oldTracks = previousPlaylist.tracks
+
+              newPlaylist =
+                { previousPlaylist | tracks = List.append newTracks oldTracks}
+            in
+              ({ model | topTracks = response, playlist = newPlaylist }, provideTracks tracks)
 
         _ ->
           ({ model | topTracks = response}, Cmd.none)

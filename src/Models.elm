@@ -4,7 +4,7 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, hardcoded)
 import RemoteData exposing (WebData)
 
-import Spotify.Models exposing (User)
+import Spotify.Models exposing (User, Playlist)
 
 type alias Flags =
   { spotifyConfig: SpotifyConfig
@@ -41,6 +41,7 @@ type alias Model =
   , spotifyConfig : SpotifyConfig
   , auth : Maybe SpotifyAuthData
   , user : WebData User
+  , playlist : Playlist
   }
 
 initialModel : Route -> Flags -> Model
@@ -62,6 +63,7 @@ initialModel route flags =
   , spotifyConfig = flags.spotifyConfig
   , auth = flags.auth
   , user = RemoteData.NotAsked
+  , playlist = Playlist "" "" "Spotify Mapper -" (User "" "" "") []
   }
 
 type Route
@@ -99,6 +101,7 @@ type alias Track =
   , id : String
   , name : String
   , preview_url : String
+  , uri : String
   }
 
 type alias SearchArtistData =
@@ -184,3 +187,4 @@ trackDecoder =
     |> required "id" Decode.string
     |> required "name" Decode.string
     |> optional "preview_url" Decode.string ""
+    |> required "uri" Decode.string
