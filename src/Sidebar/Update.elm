@@ -4,6 +4,7 @@ import Models exposing (Model)
 import Msgs exposing (Msg)
 import Ports exposing (playAudio, provideTracks)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import Helpers
 
 import RemoteData
 
@@ -25,12 +26,12 @@ updateSidebar msg model =
                 let
                   previousPlaylist = model.playlist
 
-                  newTracks =
-                    List.map
-                      (\track -> { id = track.id, name = track.name, preview_url = track.preview_url, uri = track.uri })
-                      (List.take 5 tracks.tracks)
-
                   oldTracks = previousPlaylist.tracks
+
+                  newTracks =
+                    List.take 5 tracks.tracks
+                      |> List.map Helpers.toSpotifyTrack
+                      |> Helpers.filterNewTracks oldTracks
 
                   newPlaylist =
                     { previousPlaylist | tracks = List.append newTracks oldTracks }
@@ -49,12 +50,12 @@ updateSidebar msg model =
                 let
                   previousPlaylist = model.playlist
 
-                  newTracks =
-                    List.map
-                      (\track -> { id = track.id, name = track.name, preview_url = track.preview_url, uri = track.uri })
-                      (List.take 5 tracks.tracks)
-
                   oldTracks = previousPlaylist.tracks
+
+                  newTracks =
+                    List.take 5 tracks.tracks
+                      |> List.map Helpers.toSpotifyTrack
+                      |> Helpers.filterNewTracks oldTracks
 
                   newPlaylist =
                     { previousPlaylist | tracks = List.append newTracks oldTracks}
@@ -64,12 +65,12 @@ updateSidebar msg model =
             let
               previousPlaylist = model.playlist
 
-              newTracks =
-                List.map
-                  (\track -> { id = track.id, name = track.name, preview_url = track.preview_url, uri = track.uri })
-                  (List.take 5 tracks.tracks)
-
               oldTracks = previousPlaylist.tracks
+
+              newTracks =
+                List.take 5 tracks.tracks
+                  |> List.map Helpers.toSpotifyTrack
+                  |> Helpers.filterNewTracks oldTracks
 
               newPlaylist =
                 { previousPlaylist | tracks = List.append newTracks oldTracks}

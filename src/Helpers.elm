@@ -1,6 +1,7 @@
 module Helpers exposing (..)
 
 import Models exposing (ImageObject, Artist, VisNode, VisEdge)
+import Spotify.Models exposing (Track)
 
 firstImageUrl : List ImageObject -> String
 firstImageUrl images =
@@ -89,3 +90,23 @@ filterArtistsWithRelated id artists =
 filterArtistById : String -> List Artist -> List Artist
 filterArtistById id artists =
   List.filter (\artist -> artist.id == id) artists
+
+filterTrackById : String -> List Track -> List Track
+filterTrackById id tracks =
+  List.filter
+    (\track ->
+      track.id == id
+    )
+    tracks
+
+filterNewTracks : List Track -> List Track -> List Track
+filterNewTracks oldTracks newTracks =
+  List.filter
+    (\track ->
+      List.isEmpty (filterTrackById track.id oldTracks)
+    )
+    newTracks
+
+toSpotifyTrack : Models.Track -> Spotify.Models.Track
+toSpotifyTrack track =
+  Track track.id track.name track.preview_url track.uri
