@@ -88,7 +88,8 @@ userProfile model =
         navItem
           [ div [ class [ CssClasses.UserProfile ] ]
               [ span [ class [ CssClasses.FontMedium ] ]
-                  [ a [ href url, target "blank" ] [ text "Login" ] ]
+                  [ a [ href url, target "blank" ] [ text "Login" ]
+                  ]
               ]
           ]
 

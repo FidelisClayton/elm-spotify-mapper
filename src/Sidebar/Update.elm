@@ -5,6 +5,7 @@ import Msgs exposing (Msg)
 import Ports exposing (playAudio, provideTracks)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
 import Helpers
+import Spotify.Api exposing (addTracks)
 
 import RemoteData
 

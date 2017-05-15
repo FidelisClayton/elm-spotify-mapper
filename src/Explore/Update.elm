@@ -9,9 +9,32 @@ import RemoteData exposing (WebData)
 import Constants exposing (maxRelatedArtists)
 import Helpers
 
+import Spotify.Api exposing (addTracks)
+
 updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
   case msg of
+    Explore.AddTracks ->
+      let
+        uris =
+          { uris = List.map (\track -> track.uri) model.playlist.tracks }
+
+        userId =
+          model.playlist.owner.id
+
+        playlistId =
+          model.playlist.id
+
+        token =
+          case model.auth of
+            Just auth ->
+              auth.accessToken
+
+            Nothing ->
+              ""
+      in
+        (model, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token) )
+
     Explore.OnVisNodeClick artistId ->
       ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId))
 

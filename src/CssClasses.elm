@@ -42,6 +42,7 @@ type Classes
   | ImageWrapper
   | SidebarLink
   | Active
+  | SavePlaylist
 
 type Ids
   = VisContainer

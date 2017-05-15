@@ -2,7 +2,7 @@ module Spotify.Models exposing (..)
 
 import Json.Encode as Encode
 import Json.Decode as Decode
-import Json.Decode.Pipeline exposing (required, decode, optional)
+import Json.Decode.Pipeline exposing (required, decode, optional, hardcoded)
 
 type alias User =
   { displayName : String
@@ -32,6 +32,12 @@ type alias Playlist =
   , tracks : List Track
   }
 
+type alias Snapshot =
+  { id : String }
+
+type alias URIs =
+  { uris : List String }
+
 userDecoder : Decode.Decoder User
 userDecoder =
   decode User
@@ -51,6 +57,14 @@ newPlaylistEncoder playlist =
   in
     Encode.object attributes
 
+urisEncoder : URIs -> Encode.Value
+urisEncoder uris =
+  let
+    attributes =
+      [ ("uris", uris.uris |> List.map Encode.string |> Encode.list) ]
+  in
+    Encode.object attributes
+
 playlistDecoder : Decode.Decoder Playlist
 playlistDecoder =
   decode Playlist
@@ -58,7 +72,7 @@ playlistDecoder =
     |> required "id" Decode.string
     |> required "name" Decode.string
     |> required "owner" userDecoder
-    |> required "tracks" (Decode.list trackDecoder)
+    |> hardcoded []
 
 trackDecoder : Decode.Decoder Track
 trackDecoder =
@@ -67,3 +81,8 @@ trackDecoder =
     |> required "name" Decode.string
     |> optional "preview_url" Decode.string ""
     |> required "uri" Decode.string
+
+snapshotDecoder : Decode.Decoder Snapshot
+snapshotDecoder =
+  decode Snapshot
+    |> required "snapshot_id" Decode.string

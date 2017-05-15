@@ -9,3 +9,4 @@ type ExploreMsg
   | ArtistByIdSuccess (WebData Artist)
   | OnDoubleClick String
   | RelatedArtistsSuccess (WebData RelatedArtists)
+  | AddTracks
