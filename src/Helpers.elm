@@ -110,3 +110,22 @@ filterNewTracks oldTracks newTracks =
 toSpotifyTrack : Models.Track -> Spotify.Models.Track
 toSpotifyTrack track =
   Track track.id track.name track.preview_url track.uri
+
+firstArtist : List Artist -> Maybe Artist
+firstArtist artists =
+  List.filter (\artist -> artist.hasRelated) artists
+  |> List.reverse
+  |> List.head
+
+joinWithComma : String -> String -> String
+joinWithComma stringA stringB =
+  if String.length stringB > 0 then
+    stringA ++ ", " ++ stringB
+  else
+    stringA ++ stringB ++ "."
+
+generatePlaylistDescription : List Artist -> String
+generatePlaylistDescription artists =
+  List.filter (\artist -> artist.hasRelated) artists
+  |> List.map (\artist -> artist.name)
+  |> List.foldr joinWithComma ""

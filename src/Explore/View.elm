@@ -21,7 +21,7 @@ visContainer =
 savePlaylistButton : Model -> Html Msg
 savePlaylistButton model =
   div [ class [ CssClasses.SavePlaylist ]
-      , onClick (Msgs.MsgForExplore Explore.AddTracks)
+      , onClick (Msgs.MsgForExplore Explore.SavePlaylist)
       ]
       [ i [ Html.Attributes.class "fa fa-plus" ] []
       ]

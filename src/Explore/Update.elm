@@ -9,11 +9,38 @@ import RemoteData exposing (WebData)
 import Constants exposing (maxRelatedArtists)
 import Helpers
 
-import Spotify.Api exposing (addTracks)
+import Spotify.Api exposing (addTracks, createPlaylist)
+import Spotify.Models exposing (NewPlaylist)
 
 updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
   case msg of
+    Explore.SavePlaylist ->
+      case model.user of
+        RemoteData.Success user ->
+          case model.auth of
+            Just auth ->
+              let
+                playlistName =
+                  case (Helpers.firstArtist model.playlistArtists) of
+                    Just artist ->
+                      "Spotify Mapper - " ++ artist.name
+
+                    Nothing ->
+                      "Spotify Mapper"
+
+                playlistDescription =
+                  Helpers.generatePlaylistDescription model.playlistArtists
+
+                playlist = NewPlaylist playlistName False False playlistDescription
+              in
+                (model, Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken))
+
+            Nothing ->
+              (model, Cmd.none)
+        _ ->
+          (model, Cmd.none)
+
     Explore.AddTracks ->
       let
         uris =

@@ -10,3 +10,4 @@ type ExploreMsg
   | OnDoubleClick String
   | RelatedArtistsSuccess (WebData RelatedArtists)
   | AddTracks
+  | SavePlaylist

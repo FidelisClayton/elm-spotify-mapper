@@ -4,7 +4,7 @@ import RemoteData
 
 import Spotify.Models exposing (User, NewPlaylist)
 import Spotify.Msgs exposing (SpotifyMsg)
-import Spotify.Api exposing (createPlaylist)
+import Spotify.Api exposing (createPlaylist, addTracks)
 import Msgs exposing (Msg)
 import Models exposing (Model)
 
@@ -14,15 +14,7 @@ updateSpotify msg model =
     Spotify.Msgs.FetchUserSuccess response ->
       case response of
         RemoteData.Success user ->
-          case model.auth of
-            Just auth ->
-              let
-                playlist = NewPlaylist "salkdj" False False "Testando"
-              in
-                -- ({ model | user = response }, Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken)) 
-                ({ model | user = response }, Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken)) 
-            Nothing ->
-              ({ model | user = response }, Cmd.none )
+          ({ model | user = response }, Cmd.none )
 
         _ ->
           ({ model | user = response }, Cmd.none )
@@ -39,8 +31,25 @@ updateSpotify msg model =
               , owner = playlist.owner
               , name = playlist.name
               }
+
+            uris =
+              { uris = List.map (\track -> track.uri) model.playlist.tracks }
+
+            userId =
+              newPlaylist.owner.id
+
+            playlistId =
+              newPlaylist.id
+
+            token =
+              case model.auth of
+                Just auth ->
+                  auth.accessToken
+
+                Nothing ->
+                  ""
           in
-            ({ model | playlist = newPlaylist }, Cmd.none)
+            ({ model | playlist = newPlaylist }, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token))
 
         _ ->
           (model, Cmd.none)
