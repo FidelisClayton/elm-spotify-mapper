@@ -43,6 +43,8 @@ type Classes
   | SidebarLink
   | Active
   | SavePlaylist
+  | FlashMessage
+  | CloseButton
 
 type Ids
   = VisContainer

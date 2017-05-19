@@ -7,6 +7,7 @@ import Navigation exposing (Location)
 import BottomBar.View as BottomBar
 import Sidebar.View as Sidebar
 import MainContent.View as MainContent
+import FlashMessage.View as FlashMessage
 
 import Msgs exposing (Msg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
@@ -56,6 +57,7 @@ view model =
   div [ class [ CssClasses.Container ]]
       [ div [ class [ CssClasses.Content ] ]
           [ Sidebar.render model
+          , FlashMessage.render model
           , MainContent.render model
           ]
       , BottomBar.render model
