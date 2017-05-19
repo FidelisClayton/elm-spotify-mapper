@@ -5,6 +5,7 @@ import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, ha
 import RemoteData exposing (WebData)
 
 import Spotify.Models exposing (User, Playlist)
+import FlashMessage.Models as FlashMessage
 
 type alias Flags =
   { spotifyConfig: SpotifyConfig
@@ -42,6 +43,7 @@ type alias Model =
   , auth : Maybe SpotifyAuthData
   , user : WebData User
   , playlist : Playlist
+  , flashMessage : FlashMessage.Model
   }
 
 initialModel : Route -> Flags -> Model
@@ -64,6 +66,7 @@ initialModel route flags =
   , auth = flags.auth
   , user = RemoteData.NotAsked
   , playlist = Playlist "" "" "Spotify Mapper -" (User "" "" "") []
+  , flashMessage = FlashMessage.initialModel
   }
 
 type Route

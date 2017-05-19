@@ -13,8 +13,11 @@ import CssClasses
 
 render : Model -> Html Msg
 render model =
-  div [ class [ CssClasses.FlashMessage ] ]
-      [ text "Flash Message"
-      , span [ class [ CssClasses.CloseButton ] ]
-          [ text "x" ]
-      ]
+  if model.flashMessage.active then
+    div [ class [ CssClasses.FlashMessage ] ]
+        [ text "Flash Message"
+        , span [ class [ CssClasses.CloseButton ] ]
+            [ text "x" ]
+        ]
+  else
+    text ""
