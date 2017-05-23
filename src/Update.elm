@@ -7,6 +7,7 @@ import Explore.Update exposing (updateExplore)
 import Sidebar.Update exposing (updateSidebar)
 import Search.Update exposing (updateSearch)
 import Spotify.Update exposing (updateSpotify)
+import FlashMessage.Update exposing (updateFlashMessage)
 
 import Models exposing (Model)
 import Ports exposing (initVis, destroyVis)
@@ -17,6 +18,9 @@ import Helpers
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
   case msgFor of
+    Msgs.MsgForFlashMessage msgFor ->
+      updateFlashMessage msgFor model
+
     Msgs.UpdateAuthData data ->
       ({ model | auth = data }, Cmd.none)
 

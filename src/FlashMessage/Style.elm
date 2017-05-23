@@ -18,6 +18,10 @@ css =
       , textAlign center
       , fontSize <| pt 9
       , padding2 (px 2) zero
+
+      , withClass CssClasses.Hidden
+        [ display none
+        ]
       ]
   , class CssClasses.CloseButton
       [ position absolute

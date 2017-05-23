@@ -45,6 +45,7 @@ type Classes
   | SavePlaylist
   | FlashMessage
   | CloseButton
+  | Hidden
 
 type Ids
   = VisContainer

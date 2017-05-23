@@ -2,9 +2,11 @@ module FlashMessage.View exposing (..)
 
 import Html exposing (Html, div, text, span)
 import Html.CssHelpers
+import Html.Events exposing (onClick)
 
 import Msgs exposing (Msg)
 import Models exposing (Model)
+import FlashMessage.Msgs as FlashMsg
 
 import CssClasses
 
@@ -13,11 +15,15 @@ import CssClasses
 
 render : Model -> Html Msg
 render model =
-  if model.flashMessage.active then
-    div [ class [ CssClasses.FlashMessage ] ]
+  let
+    classes =
+      if model.flashMessage.active then
+        [ CssClasses.FlashMessage ]
+      else
+        [ CssClasses.FlashMessage, CssClasses.Hidden ]
+  in
+    div [ class classes ]
         [ text "Flash Message"
-        , span [ class [ CssClasses.CloseButton ] ]
+        , span [ class [ CssClasses.CloseButton ], onClick (Msgs.MsgForFlashMessage  FlashMsg.Close) ]
             [ text "x" ]
         ]
-  else
-    text ""
