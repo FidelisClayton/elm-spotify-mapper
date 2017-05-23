@@ -14,3 +14,11 @@ updateFlashMessage msg model =
         newModel = { model | flashMessage = newFlashMessage }
       in
         newModel ! []
+
+    FlashMessage.Show message ->
+      let
+        flashMessage = model.flashMessage
+        newFlashMessage = { flashMessage | active = True, message = message }
+        newModel = { model | flashMessage = flashMessage }
+      in
+        newModel ! []

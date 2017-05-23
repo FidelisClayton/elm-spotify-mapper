@@ -23,7 +23,7 @@ render model =
         [ CssClasses.FlashMessage, CssClasses.Hidden ]
   in
     div [ class classes ]
-        [ text "Flash Message"
+        [ text model.flashMessage.message
         , span [ class [ CssClasses.CloseButton ], onClick (Msgs.MsgForFlashMessage  FlashMsg.Close) ]
             [ text "x" ]
         ]

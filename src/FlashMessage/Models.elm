@@ -14,7 +14,7 @@ type alias Model =
 
 initialModel : Model
 initialModel =
-  { active = True
+  { active = False
   , messageType = Info
   , message = ""
   }

@@ -11,6 +11,7 @@ import Helpers
 
 import Spotify.Api exposing (addTracks, createPlaylist)
 import Spotify.Models exposing (NewPlaylist)
+import FlashMessage.Msgs as FlashMessage
 
 updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
@@ -33,8 +34,11 @@ updateExplore msg model =
                   Helpers.generatePlaylistDescription model.playlistArtists
 
                 playlist = NewPlaylist playlistName False False playlistDescription
+
+                cmd =
+                  [ Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken) ]
               in
-                (model, Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken))
+                model ! cmd
 
             Nothing ->
               (model, Cmd.none)
