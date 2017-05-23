@@ -9,9 +9,63 @@ import RemoteData exposing (WebData)
 import Constants exposing (maxRelatedArtists)
 import Helpers
 
+import Spotify.Api exposing (addTracks, createPlaylist)
+import Spotify.Models exposing (NewPlaylist)
+import FlashMessage.Msgs as FlashMessage
+
 updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
   case msg of
+    Explore.SavePlaylist ->
+      case model.user of
+        RemoteData.Success user ->
+          case model.auth of
+            Just auth ->
+              let
+                playlistName =
+                  case (Helpers.firstArtist model.playlistArtists) of
+                    Just artist ->
+                      "Spotify Mapper - " ++ artist.name
+
+                    Nothing ->
+                      "Spotify Mapper"
+
+                playlistDescription =
+                  Helpers.generatePlaylistDescription model.playlistArtists
+
+                playlist = NewPlaylist playlistName False False playlistDescription
+
+                cmd =
+                  [ Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken) ]
+              in
+                model ! cmd
+
+            Nothing ->
+              (model, Cmd.none)
+        _ ->
+          (model, Cmd.none)
+
+    Explore.AddTracks ->
+      let
+        uris =
+          { uris = List.map (\track -> track.uri) model.playlist.tracks }
+
+        userId =
+          model.playlist.owner.id
+
+        playlistId =
+          model.playlist.id
+
+        token =
+          case model.auth of
+            Just auth ->
+              auth.accessToken
+
+            Nothing ->
+              ""
+      in
+        (model, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token) )
+
     Explore.OnVisNodeClick artistId ->
       ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId))
 

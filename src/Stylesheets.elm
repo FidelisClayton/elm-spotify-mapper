@@ -8,6 +8,7 @@ import BottomBar.Style as BottomBar
 import Sidebar.Style as Sidebar
 import MainContent.Style as MainContent
 import Explore.Style as Explore
+import FlashMessage.Style as FlashMessage
 
 port files : CssFileStructure -> Cmd msg
 
@@ -16,7 +17,13 @@ cssFiles =
   toFileStructure
     [ ("spotify-mapper.css",
         compile
-          [ BottomBar.css, Sidebar.css, Main.css, MainContent.css, Explore.css ]
+          [ BottomBar.css
+          , Sidebar.css
+          , Main.css
+          , MainContent.css
+          , Explore.css
+          , FlashMessage.css
+          ]
       )
     ]
 

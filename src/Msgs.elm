@@ -8,6 +8,7 @@ import Explore.Msgs exposing (ExploreMsg)
 import Search.Msgs exposing (SearchMsg)
 import Sidebar.Msgs exposing (SidebarMsg)
 import Spotify.Msgs exposing (SpotifyMsg)
+import FlashMessage.Msgs exposing (FlashMessageMsg)
 
 type Msg
   = MsgForPlayer PlayerMsg
@@ -15,5 +16,6 @@ type Msg
   | MsgForExplore ExploreMsg
   | MsgForSearch SearchMsg
   | MsgForSpotify SpotifyMsg
+  | MsgForFlashMessage FlashMessageMsg
   | OnLocationChange Location
   | UpdateAuthData (Maybe SpotifyAuthData)
