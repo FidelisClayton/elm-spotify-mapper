@@ -8,6 +8,7 @@ import BottomBar.View as BottomBar
 import Sidebar.View as Sidebar
 import MainContent.View as MainContent
 import FlashMessage.View as FlashMessage
+import Dialog.View as Dialog
 
 import Msgs exposing (Msg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
@@ -67,6 +68,7 @@ view model =
           , MainContent.render model
           ]
       , BottomBar.render model
+      , Dialog.render
       ]
 
 main : Program Flags Model Msg
