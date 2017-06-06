@@ -9,6 +9,8 @@ import Search.Update exposing (updateSearch)
 import Spotify.Update exposing (updateSpotify)
 import FlashMessage.Update exposing (updateFlashMessage)
 
+import Spotify.Api exposing (getMe)
+
 import Models exposing (Model)
 import Ports exposing (initVis, destroyVis)
 import Routing exposing (parseLocation)
@@ -22,7 +24,16 @@ update msgFor model =
       updateFlashMessage msgFor model
 
     Msgs.UpdateAuthData data ->
-      ({ model | auth = data }, Cmd.none)
+      let
+        cmd =
+          case data of
+            Just auth ->
+              Cmd.map Msgs.MsgForSpotify (getMe auth.accessToken)
+
+            Nothing ->
+              Cmd.none
+      in
+        { model | auth = data } ! [ cmd ]
 
     Msgs.MsgForSpotify msgFor ->
       updateSpotify msgFor model
