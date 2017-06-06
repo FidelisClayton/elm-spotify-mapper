@@ -67,15 +67,15 @@ updateExplore msg model =
         (model, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token) )
 
     Explore.OnVisNodeClick artistId ->
-      ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId))
+      ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId model.clientAuthData.accessToken))
 
     Explore.ArtistByIdSuccess response ->
       case response of
         RemoteData.Success artist ->
           let
             commands = Cmd.batch
-              [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id)
-              , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id)
+              [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id model.clientAuthData.accessToken)
+              , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
               ]
 
             newModel =
@@ -83,7 +83,7 @@ updateExplore msg model =
                 ({ model
                 | selectedArtist = Just artist
                 }
-                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id)
+                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
                 )
               else
                 let

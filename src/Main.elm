@@ -30,15 +30,16 @@ init flags location =
   let
     currentRoute = Routing.parseLocation location
 
-    cmd =
+    cmds =
       case flags.auth of
         Just auth ->
-          Cmd.map Msgs.MsgForSpotify (Spotify.Api.getMe auth.accessToken)
+          [ Cmd.map Msgs.MsgForSpotify (Spotify.Api.getMe auth.accessToken)
+          , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret ) ]
 
         Nothing ->
-          Cmd.none
+          [ Cmd.none ]
   in
-    ( Models.initialModel currentRoute flags, cmd )
+    ( Models.initialModel currentRoute flags, Cmd.batch cmds )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

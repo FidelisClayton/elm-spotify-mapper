@@ -1,15 +1,14 @@
 module Commands exposing (..)
 
-import Http
 import RemoteData
-import Json.Decode as Decode
 
 import Models exposing (Artist, searchArtistDecoder, topTracksDecoder, relatedArtistsDecoder, artistDecoder)
 
-import Msgs
 import Search.Msgs as Search exposing (SearchMsg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
 import Explore.Msgs as Explore exposing (ExploreMsg)
+
+import Spotify.Http exposing (get)
 
 fetchArtistUrl : String -> String
 fetchArtistUrl artist =
@@ -27,26 +26,26 @@ fetchArtistByIdUrl : String -> String
 fetchArtistByIdUrl artistId =
   "https://api.spotify.com/v1/artists/" ++ artistId
 
-fetchArtist : String -> Cmd SearchMsg
-fetchArtist name =
-  Http.get (fetchArtistUrl name) searchArtistDecoder
+fetchArtist : String -> String -> Cmd SearchMsg
+fetchArtist name token =
+  get (fetchArtistUrl name) searchArtistDecoder token
     |> RemoteData.sendRequest
     |> Cmd.map Search.SearchArtistSuccess
 
-fetchTopTracks : String -> Cmd SidebarMsg
-fetchTopTracks artistId =
-  Http.get (fetchTopTracksUrl artistId) topTracksDecoder
+fetchTopTracks : String -> String -> Cmd SidebarMsg
+fetchTopTracks artistId token =
+  get (fetchTopTracksUrl artistId) topTracksDecoder token
     |> RemoteData.sendRequest
     |> Cmd.map Sidebar.TopTracksSuccess
 
-fetchRelatedArtists : String -> Cmd ExploreMsg
-fetchRelatedArtists artistId =
-  Http.get (fetchRelatedArtistsUrl artistId) relatedArtistsDecoder
+fetchRelatedArtists : String -> String -> Cmd ExploreMsg
+fetchRelatedArtists artistId token =
+  get (fetchRelatedArtistsUrl artistId) relatedArtistsDecoder token
     |> RemoteData.sendRequest
     |> Cmd.map Explore.RelatedArtistsSuccess
 
-fetchArtistById : String -> Cmd ExploreMsg
-fetchArtistById artistId =
-  Http.get (fetchArtistByIdUrl artistId) artistDecoder
+fetchArtistById : String -> String -> Cmd ExploreMsg
+fetchArtistById artistId token =
+  get (fetchArtistByIdUrl artistId) artistDecoder token
     |> RemoteData.sendRequest
     |> Cmd.map Explore.ArtistByIdSuccess

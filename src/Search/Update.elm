@@ -12,7 +12,7 @@ updateSearch msg model =
       let
         cmd =
           if String.length term > 1 then
-            Cmd.map Msgs.MsgForSearch (fetchArtist term)
+            Cmd.map Msgs.MsgForSearch (fetchArtist term model.clientAuthData.accessToken)
           else
             Cmd.none
       in
@@ -32,4 +32,4 @@ updateSearch msg model =
           , route = Models.ExploreRoute
           }
       in
-        (newModel, Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id))
+        (newModel, Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken))
