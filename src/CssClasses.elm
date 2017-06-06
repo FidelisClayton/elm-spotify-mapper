@@ -49,3 +49,5 @@ type Classes
 
 type Ids
   = VisContainer
+  | TutSearch
+  | TutSearchInput

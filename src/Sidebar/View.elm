@@ -16,7 +16,7 @@ import Constants
 
 import CssClasses
 
-{ class } =
+{ class, id } =
   Html.CssHelpers.withNamespace ""
 
 styles : List Css.Mixin -> Html.Attribute msg
@@ -131,6 +131,7 @@ render model =
           [ a
               [ class searchClasses
               , href "#/search"
+              , id [ CssClasses.TutSearch ]
               ]
               [ text "Search" ]
           , a

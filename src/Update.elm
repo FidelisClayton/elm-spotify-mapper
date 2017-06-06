@@ -8,6 +8,7 @@ import Sidebar.Update exposing (updateSidebar)
 import Search.Update exposing (updateSearch)
 import Spotify.Update exposing (updateSpotify)
 import FlashMessage.Update exposing (updateFlashMessage)
+import Tutorial.Update exposing (updateTutorial)
 
 import Spotify.Api exposing (getMe)
 
@@ -49,6 +50,9 @@ update msgFor model =
 
     Msgs.MsgForSearch msgFor ->
       updateSearch msgFor model
+
+    Msgs.MsgForTutorial msgFor ->
+      updateTutorial msgFor model
 
     Msgs.OnLocationChange location ->
       let

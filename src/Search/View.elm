@@ -12,7 +12,7 @@ import Msgs exposing (Msg)
 import Search.Msgs as Search exposing (SearchMsg)
 import CssClasses
 
-{ class } =
+{ class, id } =
   Html.CssHelpers.withNamespace ""
 
 bigSearch : Model -> Html Msg
@@ -22,6 +22,7 @@ bigSearch model =
     , input
         [ type_ "text"
         , on "input" (Json.map (Msgs.MsgForSearch << Search.Search) targetValue)
+        , id [ CssClasses.TutSearchInput ]
         ]
         []
     ]
