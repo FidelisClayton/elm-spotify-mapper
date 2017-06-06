@@ -1,7 +1,6 @@
 const vis = require("vis")
 
-const defaultOptions =
-{
+const defaultOptions = {
   nodes: {
     borderWidth: 3,
     borderWidthSelected: 3,
@@ -50,26 +49,28 @@ module.exports = function(app) {
   let nodes
 
   function init(data) {
-    setTimeout(() => {
-      const container = document.getElementById("VisContainer")
-      edges = new vis.DataSet(data.edges)
-      nodes = new vis.DataSet(data.nodes)
+    if (data.nodes[0].id !== "") {
+      setTimeout(() => {
+        const container = document.getElementById("VisContainer")
+        edges = new vis.DataSet(data.edges)
+        nodes = new vis.DataSet(data.nodes)
 
-      const visData = {edges, nodes}
+        const visData = {edges, nodes}
 
-      network = new vis.Network(container, visData, defaultOptions)
+        network = new vis.Network(container, visData, defaultOptions)
 
-      network.on("click", function (params) {
-        if(params.nodes[0] != undefined){
-          app.ports.onNodeClick.send(params.nodes[0])
-        }
-      })
+        network.on("click", function (params) {
+          if(params.nodes[0] != undefined){
+            app.ports.onNodeClick.send(params.nodes[0])
+          }
+        })
 
-      network.on("doubleClick", function (params) {
-        app.ports.onDoubleClick.send(params.nodes[0])
-      })
+        network.on("doubleClick", function (params) {
+          app.ports.onDoubleClick.send(params.nodes[0])
+        })
 
-    }, 100)
+      }, 100)
+    }
   }
 
   function destroy() {
