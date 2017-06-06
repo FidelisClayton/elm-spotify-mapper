@@ -9,7 +9,7 @@ This app is a new version of my previous Spotify mapper built with Angular 1.x. 
 - :mag_right: Search Artists
 - :microphone: Discover related artists
 - :notes: Play song previews
-- :musical_score: Generate Spotify playlists with the explored artists [TODO]
+- :musical_score: Generate Spotify playlists with the explored artists
 
 ## Installation
 ```sh
@@ -28,7 +28,7 @@ Open the `.env` file and set the `CLIENT_ID`, `CLIENT_SECRET` and `REDIRECT_URI`
 To run this project in your machine you just need to execute the `npm start`command, it will start a development server on port `3000`. Enjoy it!
 
 ## :memo: TODO
-- [ ] Create playlist with the artists on the node tree
+- [x] Create playlist with the artists on the node tree
 - [x] Improve the fold structure and split the Update function
 - [ ] Improve mobile experience (maybe it should seems like the spotify mobile.)
 - [ ] Tests
