@@ -37,6 +37,14 @@ updateSpotify msg model =
     Spotify.AddTracksSuccess response ->
       (model, Cmd.none)
 
+    Spotify.ClientTokenSuccess (RemoteData.Success authData) ->
+      { model | clientAuthData = authData } ! []
+
+    Spotify.ClientTokenSuccess response ->
+      case response of
+        _ ->
+          model ! []
+
 
 onCreatePlaylistFailure : Http.Error -> Model -> (Model, Cmd Msg)
 onCreatePlaylistFailure error model =

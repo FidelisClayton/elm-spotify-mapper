@@ -44,6 +44,7 @@ type alias Model =
   , user : WebData User
   , playlist : Playlist
   , flashMessage : FlashMessage.Model
+  , clientAuthData : SpotifyAuthData
   }
 
 initialModel : Route -> Flags -> Model
@@ -67,6 +68,7 @@ initialModel route flags =
   , user = RemoteData.NotAsked
   , playlist = Playlist "" "" "Spotify Mapper -" (User "" "" "") []
   , flashMessage = FlashMessage.initialModel
+  , clientAuthData = SpotifyAuthData "" 0 ""
   }
 
 type Route
@@ -191,3 +193,10 @@ trackDecoder =
     |> required "name" Decode.string
     |> optional "preview_url" Decode.string ""
     |> required "uri" Decode.string
+
+authDataDecoder : Decode.Decoder SpotifyAuthData
+authDataDecoder =
+  decode SpotifyAuthData
+    |> required "access_token" Decode.string
+    |> required "expires_in" Decode.int
+    |> required "token_type" Decode.string

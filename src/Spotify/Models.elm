@@ -86,3 +86,11 @@ snapshotDecoder : Decode.Decoder Snapshot
 snapshotDecoder =
   decode Snapshot
     |> required "snapshot_id" Decode.string
+
+grantTypeEncoder : String -> Encode.Value
+grantTypeEncoder grantType =
+  let
+    attributes =
+      [ ("grant_type", grantType |> Encode.string) ]
+  in
+    Encode.object attributes
