@@ -32,7 +32,7 @@ initTutorial =
     , { id = "search-input"
       , title = "Search for an artist"
       , text = "Use this field to search an artist"
-      , attachTo = "#TutSearchInput center"
+      , attachTo = "#TutSearchInput bottom"
       , advanceOn = Nothing
       , done = False
       }

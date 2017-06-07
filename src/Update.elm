@@ -86,8 +86,13 @@ update msgFor model =
 
               newModel = Tuple.first newData
               newNetwork = Tuple.second newData
+
+              cmds =
+                [ Cmd.map Msgs.MsgForExplore (initVis newNetwork)
+                , Ports.nextStep ""
+                ]
             in
-              ({ newModel | route = newRoute, network = newNetwork }, Cmd.map Msgs.MsgForExplore (initVis newNetwork))
+              { newModel | route = newRoute, network = newNetwork } ! cmds
 
           _ ->
             ({ model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis ""))

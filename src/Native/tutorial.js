@@ -6,28 +6,64 @@ let tour = new Shepherd.Tour({
   }
 });
 
-module.exports = function(app) {
-  app.ports.initTutorial.subscribe(steps => {
-    steps.forEach(step => {
-      if (!step.done)
-        tour.addStep(step.id, step);
-    })
+const updateStoredSteps = stepId => {
+  const previousSteps = JSON.parse(localStorage.getItem('steps')) || []
+  const newSteps = removeDuplicated([ ...previousSteps, stepId ])
 
-    tour.start();
+  localStorage.setItem('steps', JSON.stringify(newSteps))
+
+  return newSteps;
+}
+
+const removeDuplicated = items => {
+  return items.reduce((previous, current) => {
+    return previous.filter(item => item === current).length > 0
+      ? previous
+      : [ ...previous, current ]
+  }, [])
+}
+
+const getStoredSteps = () => JSON.parse(localStorage.getItem('steps')) || []
+const stepDone = (step, steps) => steps.filter(id => step.id === id).length > 0
+
+const onInitTutorial = steps => {
+  steps = steps || []
+
+  const storedSteps = getStoredSteps()
+
+  steps.forEach(step => {
+    if (!stepDone(step, storedSteps))
+      tour.addStep(step.id, step)
   })
 
-  app.ports.addSteps.subscribe(steps => {
-    steps.forEach(step => {
-      if (!step.done)
-        tour.addStep(step.id, step);
-    })
+  tour.start()
+}
 
-    setTimeout(() => {
-      tour.next();
-    }, 1000);
+const onAddSteps = steps => {
+  steps = steps || []
+
+  const storedSteps = getStoredSteps()
+
+  steps.forEach(step => {
+    if (!stepDone(step, storedSteps))
+      tour.addStep(step.id, step)
   })
 
-  app.ports.nextStep.subscribe(() => {
+  setTimeout(() => {
     tour.next();
+  }, 1000)
+}
+
+const onNextStep = () => tour.next()
+
+tour.on('show', event => {
+  event.step.on('hide', () => {
+    updateStoredSteps(event.step.id)
   })
+})
+
+module.exports = function(app) {
+  app.ports.initTutorial.subscribe(onInitTutorial)
+  app.ports.addSteps.subscribe(onAddSteps)
+  app.ports.nextStep.subscribe(onAddSteps)
 }

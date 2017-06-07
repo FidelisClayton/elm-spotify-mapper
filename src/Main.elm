@@ -40,7 +40,9 @@ init flags location =
           ]
 
         Nothing ->
-          [ Cmd.none ]
+          [ initTutorial initialModel.tutorial.steps
+          , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret )
+          ]
   in
     ( initialModel, Cmd.batch cmds )
 
