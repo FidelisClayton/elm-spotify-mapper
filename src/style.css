@@ -68,3 +68,7 @@ input[type=range]::-ms-track {
   border-color: transparent;
   color: transparent;
 }
+
+.node-tree-tutorial {
+  margin-top: -80px;
+}

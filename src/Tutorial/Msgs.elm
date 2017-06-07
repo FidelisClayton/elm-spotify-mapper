@@ -11,6 +11,7 @@ type alias Step =
   , attachTo: String
   , advanceOn: Maybe String
   , done: Bool
+  , classes: Maybe String
   }
 
 type alias TutorialModel =
@@ -32,6 +33,7 @@ search =
   , attachTo = "#TutSearch right"
   , advanceOn = Nothing
   , done = False
+  , classes = Just "shepherd-theme-arrows"
   }
 
 searchInput : Step
@@ -42,6 +44,7 @@ searchInput =
   , attachTo = "#TutSearchInput bottom"
   , advanceOn = Nothing
   , done = False
+  , classes = Just "shepherd-theme-arrows"
   }
 
 explore : Step
@@ -52,6 +55,7 @@ explore =
   , attachTo = "#TutExplore right"
   , done = False
   , advanceOn = Nothing
+  , classes = Just "shepherd-theme-arrows"
   }
 
 nodeTree : Step
@@ -62,6 +66,7 @@ nodeTree =
   , attachTo = ".Main center"
   , done = False
   , advanceOn = Nothing
+  , classes = Just "node-tree-tutorial shepherd-theme-arrows"
   }
 
 sidebarTrack : Step
@@ -72,6 +77,7 @@ sidebarTrack =
   , attachTo = ".SongItem right"
   , done = False
   , advanceOn = Nothing
+  , classes = Just "shepherd-theme-arrows"
   }
 
 savePlaylist : Step
@@ -82,6 +88,7 @@ savePlaylist =
   , attachTo = ".SavePlaylist left"
   , done = False
   , advanceOn = Nothing
+  , classes = Just "shepherd-theme-arrows"
   }
 
 login : Step
@@ -92,4 +99,16 @@ login =
   , attachTo = "#TutLogin right"
   , done = False
   , advanceOn = Nothing
+  , classes = Just "shepherd-theme-arrows"
+  }
+
+artistResult : Step
+artistResult =
+  { id = "artist-result"
+  , title = "Artist"
+  , text = "You can click on an artist to start to discover artists related."
+  , attachTo = ".ImageWrapper bottom"
+  , advanceOn = Just ".ArtistResult click"
+  , done = False
+  , classes = Just "shepherd-theme-arrows"
   }

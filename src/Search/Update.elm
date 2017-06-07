@@ -8,6 +8,8 @@ import Search.Msgs as Search exposing (SearchMsg)
 import Tutorial.Update exposing (addSteps)
 import Ports
 
+import Tutorial.Msgs as Tutorial
+
 updateSearch : SearchMsg -> Model -> (Model, Cmd Msg)
 updateSearch msg model =
   case msg of
@@ -25,15 +27,7 @@ updateSearch msg model =
       case response of
         RemoteData.Success data ->
           let
-            steps = [
-              { id = "artist-result"
-              , title = "Artist"
-              , text = "You can click on an artist to start to discover artists related."
-              , attachTo = ".ImageWrapper bottom"
-              , advanceOn = Just ".ArtistResult click"
-              , done = False
-              }
-            ]
+            steps = [ Tutorial.artistResult ]
 
             newTutorial =
               model.tutorial
