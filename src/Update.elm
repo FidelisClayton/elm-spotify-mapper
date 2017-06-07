@@ -87,9 +87,47 @@ update msgFor model =
               newModel = Tuple.first newData
               newNetwork = Tuple.second newData
 
+              steps = [
+                { id = "explore"
+                , title = "Explore artists"
+                , text = "This is the Explore section, here you can discover new artists from the previously selected"
+                , attachTo = "#TutExplore right"
+                , done = False
+                , advanceOn = Nothing
+                }
+              , { id = "node-tree"
+                , title = "Artist node"
+                , text = "You can click on this circle to find similar artists. You also can click twice to start to play the artist top tracks."
+                , attachTo = ".Main center"
+                , done = False
+                , advanceOn = Nothing
+                }
+              , { id = "sidebar-track"
+                , title = "Tracks"
+                , text = "Here is the list of the artist top tracks. Click on the track cover to play it."
+                , attachTo = ".SongItem right"
+                , done = False
+                , advanceOn = Nothing
+                }
+              , { id = "save-playlist"
+                , title = "Save playlist"
+                , text = "Use this button to save your playlist (you must be logged in)."
+                , attachTo = ".SavePlaylist left"
+                , done = False
+                , advanceOn = Nothing
+                }
+              , { id = "login"
+                , title = "Login"
+                , text = "You also can log in to be able to save your playlist."
+                , attachTo = "#TutLogin right"
+                , done = False
+                , advanceOn = Nothing
+                }
+              ]
+
               cmds =
                 [ Cmd.map Msgs.MsgForExplore (initVis newNetwork)
-                , Ports.nextStep ""
+                , Ports.addSteps steps
                 ]
             in
               { newModel | route = newRoute, network = newNetwork } ! cmds

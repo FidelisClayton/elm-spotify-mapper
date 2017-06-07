@@ -86,7 +86,7 @@ userProfile model =
 
       _ ->
         navItem
-          [ div [ class [ CssClasses.UserProfile ] ]
+          [ div [ class [ CssClasses.UserProfile ], id [ CssClasses.TutLogin ] ]
               [ span [ class [ CssClasses.FontMedium ] ]
                   [ a [ href url, target "blank" ] [ text "Login" ]
                   ]
@@ -137,6 +137,7 @@ render model =
           , a
               [ class exploreClasses
               , href "#/explore"
+              , id [ CssClasses.TutExplore ]
               ]
               [ text "Explore" ]
           ]

@@ -50,7 +50,8 @@ const onAddSteps = steps => {
   })
 
   setTimeout(() => {
-    tour.next();
+    if (steps.length >= 1)
+      tour.next();
   }, 1000)
 }
 
