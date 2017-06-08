@@ -18,7 +18,7 @@ import Models exposing (Model, Flags)
 import Update exposing (update)
 import CssClasses
 import Routing
-import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick, fromStorage)
+import Ports exposing (audioEnded, updateCurrentTrack, updateAudioStatus, onNodeClick, updateNetwork, onDoubleClick, fromStorage, initTutorial)
 
 import Spotify.Api
 
@@ -29,17 +29,22 @@ init : Flags -> Location -> ( Models.Model, Cmd Msg )
 init flags location =
   let
     currentRoute = Routing.parseLocation location
+    initialModel = Models.initialModel currentRoute flags
 
     cmds =
       case flags.auth of
         Just auth ->
           [ Cmd.map Msgs.MsgForSpotify (Spotify.Api.getMe auth.accessToken)
-          , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret ) ]
+          , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret )
+          , initTutorial initialModel.tutorial.steps
+          ]
 
         Nothing ->
-          [ Cmd.none ]
+          [ initTutorial initialModel.tutorial.steps
+          , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret )
+          ]
   in
-    ( Models.initialModel currentRoute flags, Cmd.batch cmds )
+    ( initialModel, Cmd.batch cmds )
 
 subscriptions : Model -> Sub Msg
 subscriptions model =

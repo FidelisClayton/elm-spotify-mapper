@@ -16,7 +16,7 @@ import Constants
 
 import CssClasses
 
-{ class } =
+{ class, id } =
   Html.CssHelpers.withNamespace ""
 
 styles : List Css.Mixin -> Html.Attribute msg
@@ -86,7 +86,7 @@ userProfile model =
 
       _ ->
         navItem
-          [ div [ class [ CssClasses.UserProfile ] ]
+          [ div [ class [ CssClasses.UserProfile ], id [ CssClasses.TutLogin ] ]
               [ span [ class [ CssClasses.FontMedium ] ]
                   [ a [ href url, target "blank" ] [ text "Login" ]
                   ]
@@ -131,11 +131,13 @@ render model =
           [ a
               [ class searchClasses
               , href "#/search"
+              , id [ CssClasses.TutSearch ]
               ]
               [ text "Search" ]
           , a
               [ class exploreClasses
               , href "#/explore"
+              , id [ CssClasses.TutExplore ]
               ]
               [ text "Explore" ]
           ]

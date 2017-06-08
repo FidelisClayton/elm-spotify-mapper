@@ -31,6 +31,7 @@
     "css-loader": "^0.28.0",
     "file-loader": "^0.11.1",
     "style-loader": "^0.16.1",
+    "tether-shepherd": "^1.8.1",
     "url-parser": "0.0.1",
     "vis": "^4.19.1"
   }

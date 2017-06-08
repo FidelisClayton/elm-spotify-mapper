@@ -6,6 +6,7 @@ import RemoteData exposing (WebData)
 
 import Spotify.Models exposing (User, Playlist)
 import FlashMessage.Models as FlashMessage
+import Tutorial.Msgs exposing (TutorialModel, initTutorial)
 
 type alias Flags =
   { spotifyConfig: SpotifyConfig
@@ -45,6 +46,7 @@ type alias Model =
   , playlist : Playlist
   , flashMessage : FlashMessage.Model
   , clientAuthData : SpotifyAuthData
+  , tutorial: TutorialModel
   }
 
 initialModel : Route -> Flags -> Model
@@ -69,6 +71,7 @@ initialModel route flags =
   , playlist = Playlist "" "" "Spotify Mapper -" (User "" "" "") []
   , flashMessage = FlashMessage.initialModel
   , clientAuthData = SpotifyAuthData "" 0 ""
+  , tutorial = initTutorial
   }
 
 type Route

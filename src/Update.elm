@@ -8,6 +8,9 @@ import Sidebar.Update exposing (updateSidebar)
 import Search.Update exposing (updateSearch)
 import Spotify.Update exposing (updateSpotify)
 import FlashMessage.Update exposing (updateFlashMessage)
+import Tutorial.Update exposing (updateTutorial)
+
+import Tutorial.Msgs as Tutorial
 
 import Spotify.Api exposing (getMe)
 
@@ -50,6 +53,9 @@ update msgFor model =
     Msgs.MsgForSearch msgFor ->
       updateSearch msgFor model
 
+    Msgs.MsgForTutorial msgFor ->
+      updateTutorial msgFor model
+
     Msgs.OnLocationChange location ->
       let
         newRoute = parseLocation location
@@ -82,8 +88,21 @@ update msgFor model =
 
               newModel = Tuple.first newData
               newNetwork = Tuple.second newData
+
+              steps =
+                [ Tutorial.explore
+                , Tutorial.nodeTree
+                , Tutorial.sidebarTrack
+                , Tutorial.savePlaylist
+                , Tutorial.login
+                ]
+
+              cmds =
+                [ Cmd.map Msgs.MsgForExplore (initVis newNetwork)
+                , Ports.addSteps steps
+                ]
             in
-              ({ newModel | route = newRoute, network = newNetwork }, Cmd.map Msgs.MsgForExplore (initVis newNetwork))
+              { newModel | route = newRoute, network = newNetwork } ! cmds
 
           _ ->
             ({ model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis ""))

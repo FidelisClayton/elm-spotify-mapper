@@ -1,6 +1,7 @@
 port module Ports exposing (..)
 
 import Models exposing (TopTracks, Track, AudioStatus, Artist, VisNetwork, VisNode, VisEdge, SpotifyAuthData)
+import Tutorial.Msgs exposing (Step)
 
 port playAudio : String -> Cmd msg
 port pauseAudio : String -> Cmd msg
@@ -24,3 +25,7 @@ port onDoubleClick : (String -> msg) -> Sub msg
 port updateNetwork : ((List VisNode, List VisEdge) -> msg) -> Sub msg
 
 port fromStorage : (Maybe SpotifyAuthData -> msg) -> Sub msg
+
+port initTutorial : (List Step) -> Cmd msg
+port addSteps : (List Step) -> Cmd msg
+port nextStep : String -> Cmd msg

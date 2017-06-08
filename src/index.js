@@ -7,6 +7,7 @@ window.urlParser = urlParser
 const audioPorts = require("./Native/audio")
 const visPorts = require("./Native/vis")
 const localStoragePorts = require("./Native/localStorage")
+const tutorialPorts = require("./Native/tutorial")
 
 require("./index.html")
 require("./Stylesheets.elm")
@@ -35,3 +36,4 @@ const app = Elm.Main.embed(mountNode, {
 audioPorts(app)
 visPorts(app)
 localStoragePorts(app)
+tutorialPorts(app)
