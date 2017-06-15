@@ -138,4 +138,11 @@ css =
       , lineHeight <| px 16
       , color <| hex "FFF"
       ]
+
+  , class CssClasses.SidebarLoading
+      [ width <| px 35
+      , padding <| px 40
+      , display block
+      , margin2 zero auto
+      ]
   ]
