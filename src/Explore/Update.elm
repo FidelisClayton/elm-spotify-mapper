@@ -114,7 +114,7 @@ updateExplore msg model =
         ({ model | network = newNetwork }, Cmd.none)
 
     Explore.OnDoubleClick artistId ->
-      ({ model | waitingToPlay = True }, Cmd.none)
+      { model | waitingToPlay = True , isPlaying = True } ! []
 
     Explore.RelatedArtistsSuccess response ->
       case response of
