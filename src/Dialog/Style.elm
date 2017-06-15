@@ -16,6 +16,9 @@ type Classes
   | Default
   | ConfirmButton
   | CancelButton
+  | Spinner
+  | Mask
+  | ModalWrapper
 
 css =
   (stylesheet << namespace "")
@@ -90,4 +93,28 @@ css =
       ]
   , class ConfirmButton
       [ backgroundColor <| hex "1db954" ]
+
+  , class Spinner
+      [ width <| px 70
+      , position absolute
+      , property "top" "calc(50% - 35px)"
+      , property "left" "calc(50% - 35px)"
+      ]
+
+  , class ModalWrapper
+      [ position absolute
+      , width <| pct 100
+      , height <| pct 100
+      , displayFlex
+      , flexDirection column
+      ]
+
+  , class Mask
+      [ position absolute
+      , width <| pct 100
+      , height <| pct 100
+      , flexDirection column
+      , backgroundColor <| rgba 0 0 0 0.5
+      , zIndex <| int -1
+      ]
   ]

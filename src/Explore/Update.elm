@@ -35,7 +35,16 @@ updateExplore msg model =
         newPlaylist =
           { oldPlaylist | name = playlistName, description = playlistDescription }
 
-        newModel = { model | playlistModalActive = True, playlist = newPlaylist }
+        oldPlaylistInfo = model.playlistInfo
+        newPlaylistInfo =
+          { oldPlaylistInfo | name = playlistName , description = playlistDescription }
+
+        newModel =
+          { model
+          | playlistModalActive = True
+          , playlist = newPlaylist
+          , playlistInfo = newPlaylistInfo
+          }
       in
         newModel ! []
 

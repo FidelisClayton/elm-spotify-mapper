@@ -29,13 +29,21 @@ updateSpotify msg model =
       onCreatePlaylistFailure error model
 
     Spotify.CreatePlaylistSuccess RemoteData.Loading ->
-      model ! []
+      { model | playlistModalLoading = True } ! []
 
     Spotify.CreatePlaylistSuccess RemoteData.NotAsked ->
-      model ! []
+      { model | playlistModalLoading = model.playlistModalLoading } ! []
 
     Spotify.AddTracksSuccess response ->
-      (model, Cmd.none)
+      case response of
+        RemoteData.Loading ->
+          { model | playlistModalLoading = True } ! []
+
+        RemoteData.NotAsked ->
+          { model | playlistModalLoading = model.playlistModalLoading } ! []
+
+        _ ->
+          { model | playlistModalLoading = False, playlistModalActive = False } ! []
 
     Spotify.ClientTokenSuccess (RemoteData.Success authData) ->
       { model | clientAuthData = authData } ! []

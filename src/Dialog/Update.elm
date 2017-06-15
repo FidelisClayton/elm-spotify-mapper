@@ -48,12 +48,13 @@ savePlaylist model =
       case model.auth of
         Just auth ->
           let
-            -- cmd =
-            --   [ Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken) ]
+            playlist = NewPlaylist model.playlist.name False False model.playlist.description
+            cmds =
+              [ Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken) ]
 
-            newModel = { model | playlistModalActive = True }
+            newModel = { model | playlistModalActive = True, playlistModalLoading = True }
           in
-            newModel ! []
+            newModel ! cmds
 
         Nothing ->
           model ! []
