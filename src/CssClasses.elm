@@ -46,6 +46,7 @@ type Classes
   | FlashMessage
   | CloseButton
   | Hidden
+  | SidebarLoading
 
 type Ids
   = VisContainer

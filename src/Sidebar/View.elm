@@ -37,7 +37,11 @@ artistSongs response =
           List.map songItem topTracks.tracks
 
         RemoteData.Loading ->
-          [text "Loading"]
+          [ img
+              [ src "http://shop.laurie.dk/Content/images/loading.gif"
+              , class [ CssClasses.SidebarLoading ] ]
+              []
+          ]
 
         _ ->
           []
