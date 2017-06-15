@@ -47,6 +47,8 @@ type alias Model =
   , flashMessage : FlashMessage.Model
   , clientAuthData : SpotifyAuthData
   , tutorial: TutorialModel
+  , playlistModalActive : Bool
+  , playlistInfo : Playlist
   }
 
 initialModel : Route -> Flags -> Model
@@ -72,6 +74,8 @@ initialModel route flags =
   , flashMessage = FlashMessage.initialModel
   , clientAuthData = SpotifyAuthData "" 0 ""
   , tutorial = initTutorial
+  , playlistModalActive = False
+  , playlistInfo = Playlist "" "" "" (User "" "" "") []
   }
 
 type Route

@@ -10,6 +10,7 @@ type Classes
   | ModalHeader
   | ModalBody
   | ModalFooter
+  | ModalHidden
   | InputGroup
   | Input
   | Default
@@ -45,6 +46,10 @@ css =
               , justifyContent spaceAround
               , padding2 zero (px 130)
               ]
+          ]
+
+      , withClass ModalHidden
+          [ display none
           ]
       ]
   , class InputGroup

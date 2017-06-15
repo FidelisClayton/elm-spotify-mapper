@@ -10,6 +10,7 @@ import Sidebar.Msgs exposing (SidebarMsg)
 import Spotify.Msgs exposing (SpotifyMsg)
 import FlashMessage.Msgs exposing (FlashMessageMsg)
 import Tutorial.Msgs exposing (TutorialMsg)
+import Dialog.Msgs exposing (DialogMsg)
 
 type Msg
   = MsgForPlayer PlayerMsg
@@ -19,5 +20,6 @@ type Msg
   | MsgForSpotify SpotifyMsg
   | MsgForFlashMessage FlashMessageMsg
   | MsgForTutorial TutorialMsg
+  | MsgForDialog DialogMsg
   | OnLocationChange Location
   | UpdateAuthData (Maybe SpotifyAuthData)

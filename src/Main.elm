@@ -68,7 +68,7 @@ view model =
           , MainContent.render model
           ]
       , BottomBar.render model
-      , Dialog.render
+      , Dialog.render model
       ]
 
 main : Program Flags Model Msg

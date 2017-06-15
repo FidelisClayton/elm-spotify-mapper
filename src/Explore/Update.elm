@@ -17,33 +17,27 @@ updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
 updateExplore msg model =
   case msg of
     Explore.SavePlaylist ->
-      case model.user of
-        RemoteData.Success user ->
-          case model.auth of
-            Just auth ->
-              let
-                playlistName =
-                  case (Helpers.firstArtist model.playlistArtists) of
-                    Just artist ->
-                      "Spotify Mapper - " ++ artist.name
-
-                    Nothing ->
-                      "Spotify Mapper"
-
-                playlistDescription =
-                  Helpers.generatePlaylistDescription model.playlistArtists
-
-                playlist = NewPlaylist playlistName False False playlistDescription
-
-                cmd =
-                  [ Cmd.map Msgs.MsgForSpotify (createPlaylist user.id playlist auth.accessToken) ]
-              in
-                model ! cmd
+      let
+        playlistName =
+          case (Helpers.firstArtist model.playlistArtists) of
+            Just artist ->
+              "Spotify Mapper - " ++ artist.name
 
             Nothing ->
-              (model, Cmd.none)
-        _ ->
-          (model, Cmd.none)
+              "Spotify Mapper"
+
+        playlistDescription =
+          Helpers.generatePlaylistDescription model.playlistArtists
+
+        -- playlist = NewPlaylist playlistName False False playlistDescription
+
+        oldPlaylist = model.playlist
+        newPlaylist =
+          { oldPlaylist | name = playlistName, description = playlistDescription }
+
+        newModel = { model | playlistModalActive = True, playlist = newPlaylist }
+      in
+        newModel ! []
 
     Explore.AddTracks ->
       let
