@@ -4,7 +4,7 @@ import Json.Decode as Decode
 import Json.Decode.Pipeline exposing (decode, required, requiredAt, optional, hardcoded)
 import RemoteData exposing (WebData)
 
-import Spotify.Models exposing (User, Playlist)
+import Spotify.Models exposing (User, Playlist, Snapshot)
 import FlashMessage.Models as FlashMessage
 import Tutorial.Msgs exposing (TutorialModel, initTutorial)
 
@@ -47,6 +47,9 @@ type alias Model =
   , flashMessage : FlashMessage.Model
   , clientAuthData : SpotifyAuthData
   , tutorial: TutorialModel
+  , playlistModalActive : Bool
+  , playlistModalLoading : Bool
+  , playlistInfo : Playlist
   }
 
 initialModel : Route -> Flags -> Model
@@ -72,6 +75,9 @@ initialModel route flags =
   , flashMessage = FlashMessage.initialModel
   , clientAuthData = SpotifyAuthData "" 0 ""
   , tutorial = initTutorial
+  , playlistModalActive = False
+  , playlistModalLoading = False
+  , playlistInfo = Playlist "" "" "" (User "" "" "") []
   }
 
 type Route

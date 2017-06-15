@@ -13,6 +13,7 @@ import Tutorial.Update exposing (updateTutorial)
 import Tutorial.Msgs as Tutorial
 
 import Spotify.Api exposing (getMe)
+import Dialog.Update exposing (updateDialog)
 
 import Models exposing (Model)
 import Ports exposing (initVis, destroyVis)
@@ -23,6 +24,9 @@ import Helpers
 update : Msg -> Model -> (Model, Cmd Msg)
 update msgFor model =
   case msgFor of
+    Msgs.MsgForDialog msgFor ->
+      updateDialog msgFor model
+
     Msgs.MsgForFlashMessage msgFor ->
       updateFlashMessage msgFor model
 

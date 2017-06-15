@@ -9,6 +9,7 @@ import Sidebar.Style as Sidebar
 import MainContent.Style as MainContent
 import Explore.Style as Explore
 import FlashMessage.Style as FlashMessage
+import Dialog.Style as Dialog
 
 port files : CssFileStructure -> Cmd msg
 
@@ -23,6 +24,7 @@ cssFiles =
           , MainContent.css
           , Explore.css
           , FlashMessage.css
+          , Dialog.css
           ]
       )
     ]
