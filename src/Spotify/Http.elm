@@ -1,6 +1,7 @@
 module Spotify.Http exposing (..)
 
 import Http exposing (request, header, expectJson, emptyBody, jsonBody, Request, Header)
+import HttpBuilder exposing (..)
 import Json.Decode as Decode
 import Json.Encode as Encode
 import Base64
@@ -21,25 +22,16 @@ defaultHeaders authToken =
 
 get : String -> Decode.Decoder a -> String -> Request a
 get url decoder authToken =
-  request
-    { method = "GET"
-    , headers = [ defaultHeaders authToken ]
-    , body = emptyBody
-    , expect = expectJson decoder
-    , timeout = Nothing
-    , withCredentials = False
-    , url = url
-    }
+  HttpBuilder.get url
+    |> withHeader "Authorization" ("Bearer " ++ authToken)
+    |> withExpect (expectJson decoder)
+    |> toRequest
 
 post : String -> Encode.Value -> Decode.Decoder a -> String -> Request a
 post url body decoder authToken =
-  request
-    { method = "POST"
-    , headers = [ defaultHeaders authToken ]
-    , body = jsonBody body
-    , expect = expectJson decoder
-    , timeout = Nothing
-    , withCredentials = False
-    , url = url
-    }
+  HttpBuilder.post url
+    |> withHeader "Authorization" ("Bearer " ++ authToken)
+    |> withJsonBody body
+    |> withExpect (expectJson decoder)
+    |> toRequest
 
