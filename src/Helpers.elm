@@ -38,7 +38,7 @@ pctToValue current max =
 
 getByIndex : Int -> List a -> Maybe a
 getByIndex index items =
-  List.take index items
+  List.take (index + 1) items
     |> List.reverse
     |> List.head
 
