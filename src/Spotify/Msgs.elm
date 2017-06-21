@@ -1,11 +1,12 @@
 module Spotify.Msgs exposing (..)
 
-import RemoteData exposing (WebData)
-import Spotify.Models exposing (User, Playlist, Snapshot)
 import Models exposing (SpotifyAuthData)
+import RemoteData exposing (WebData)
+import Spotify.Models exposing (Playlist, Snapshot, User)
+
 
 type SpotifyMsg
-  = FetchUserSuccess (WebData User)
-  | CreatePlaylistSuccess (WebData Playlist)
-  | AddTracksSuccess (WebData Snapshot)
-  | ClientTokenSuccess (WebData SpotifyAuthData)
+    = FetchUserSuccess (WebData User)
+    | CreatePlaylistSuccess (WebData Playlist)
+    | AddTracksSuccess (WebData Snapshot)
+    | ClientTokenSuccess (WebData SpotifyAuthData)

@@ -1,9 +1,10 @@
 module Sidebar.Msgs exposing (..)
 
-import RemoteData exposing (WebData)
 import Models exposing (TopTracks, Track)
+import RemoteData exposing (WebData)
+
 
 type SidebarMsg
-  = ToggleSidebar
-  | SelectTrack Track
-  | TopTracksSuccess (WebData TopTracks)
+    = ToggleSidebar
+    | SelectTrack Track
+    | TopTracksSuccess (WebData TopTracks)

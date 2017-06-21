@@ -1,10 +1,11 @@
 module Search.Msgs exposing (..)
 
-import RemoteData exposing (WebData)
 import Models exposing (Artist, SearchArtistData)
+import RemoteData exposing (WebData)
+
 
 type SearchMsg
-  = StartSearch
-  | Search String
-  | SearchArtistSuccess (WebData SearchArtistData)
-  | SelectArtist Artist
+    = StartSearch
+    | Search String
+    | SearchArtistSuccess (WebData SearchArtistData)
+    | SelectArtist Artist

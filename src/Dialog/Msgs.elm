@@ -1,7 +1,8 @@
 module Dialog.Msgs exposing (..)
 
+
 type DialogMsg
-  = SetPlaylistName String
-  | SetPlaylistDescription String
-  | Cancel
-  | Save
+    = SetPlaylistName String
+    | SetPlaylistDescription String
+    | Cancel
+    | Save
