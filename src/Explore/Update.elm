@@ -1,164 +1,171 @@
 module Explore.Update exposing (..)
 
-import Msgs exposing (Msg)
+import Commands exposing (fetchArtistById, fetchRelatedArtists, fetchTopTracks)
+import Constants exposing (maxRelatedArtists)
 import Explore.Msgs as Explore exposing (ExploreMsg)
+import FlashMessage.Msgs as FlashMessage
+import Helpers
 import Models exposing (Model)
-import Commands exposing (fetchRelatedArtists, fetchTopTracks, fetchArtistById)
+import Msgs exposing (Msg)
 import Ports exposing (addSimilar)
 import RemoteData exposing (WebData)
-import Constants exposing (maxRelatedArtists)
-import Helpers
-
 import Spotify.Api exposing (addTracks, createPlaylist)
 import Spotify.Models exposing (NewPlaylist)
-import FlashMessage.Msgs as FlashMessage
 
-updateExplore : ExploreMsg -> Model -> (Model, Cmd Msg)
+
+updateExplore : ExploreMsg -> Model -> ( Model, Cmd Msg )
 updateExplore msg model =
-  case msg of
-    Explore.SavePlaylist ->
-      let
-        playlistName =
-          case (Helpers.firstArtist model.playlistArtists) of
-            Just artist ->
-              "Spotify Mapper - " ++ artist.name
+    case msg of
+        Explore.SavePlaylist ->
+            let
+                playlistName =
+                    case Helpers.firstArtist model.playlistArtists of
+                        Just artist ->
+                            "Spotify Mapper - " ++ artist.name
 
-            Nothing ->
-              "Spotify Mapper"
+                        Nothing ->
+                            "Spotify Mapper"
 
-        playlistDescription =
-          Helpers.generatePlaylistDescription model.playlistArtists
+                playlistDescription =
+                    Helpers.generatePlaylistDescription model.playlistArtists
 
-        -- playlist = NewPlaylist playlistName False False playlistDescription
+                -- playlist = NewPlaylist playlistName False False playlistDescription
+                oldPlaylist =
+                    model.playlist
 
-        oldPlaylist = model.playlist
-        newPlaylist =
-          { oldPlaylist | name = playlistName, description = playlistDescription }
+                newPlaylist =
+                    { oldPlaylist | name = playlistName, description = playlistDescription }
 
-        oldPlaylistInfo = model.playlistInfo
-        newPlaylistInfo =
-          { oldPlaylistInfo | name = playlistName , description = playlistDescription }
+                oldPlaylistInfo =
+                    model.playlistInfo
 
-        newModel =
-          { model
-          | playlistModalActive = True
-          , playlist = newPlaylist
-          , playlistInfo = newPlaylistInfo
-          }
-      in
-        newModel ! []
+                newPlaylistInfo =
+                    { oldPlaylistInfo | name = playlistName, description = playlistDescription }
 
-    Explore.AddTracks ->
-      let
-        uris =
-          { uris = List.map (\track -> track.uri) model.playlist.tracks }
+                newModel =
+                    { model
+                        | playlistModalActive = True
+                        , playlist = newPlaylist
+                        , playlistInfo = newPlaylistInfo
+                    }
+            in
+            newModel ! []
 
-        userId =
-          model.playlist.owner.id
+        Explore.AddTracks ->
+            let
+                uris =
+                    { uris = List.map (\track -> track.uri) model.playlist.tracks }
 
-        playlistId =
-          model.playlist.id
+                userId =
+                    model.playlist.owner.id
 
-        token =
-          case model.auth of
-            Just auth ->
-              auth.accessToken
+                playlistId =
+                    model.playlist.id
 
-            Nothing ->
-              ""
-      in
-        (model, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token) )
+                token =
+                    case model.auth of
+                        Just auth ->
+                            auth.accessToken
 
-    Explore.OnVisNodeClick artistId ->
-      ({ model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId model.clientAuthData.accessToken))
+                        Nothing ->
+                            ""
+            in
+            ( model, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token) )
 
-    Explore.ArtistByIdSuccess response ->
-      case response of
-        RemoteData.Success artist ->
-          let
-            commands = Cmd.batch
-              [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id model.clientAuthData.accessToken)
-              , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
-              ]
+        Explore.OnVisNodeClick artistId ->
+            ( { model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId model.clientAuthData.accessToken) )
 
-            newModel =
-              if (List.length <| Helpers.filterArtistsWithRelated artist.id model.playlistArtists) > 0 then
-                ({ model
-                | selectedArtist = Just artist
-                }
-                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
-                )
-              else
-                let
-                  newArtist = { artist | hasRelated = True }
-                in
-                  ({ model
-                  | selectedArtist = Just newArtist
-                  , playlistArtists = newArtist :: model.playlistArtists
-                  }
-                  , commands
-                  )
-          in
-            newModel
+        Explore.ArtistByIdSuccess response ->
+            case response of
+                RemoteData.Success artist ->
+                    let
+                        commands =
+                            Cmd.batch
+                                [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id model.clientAuthData.accessToken)
+                                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
+                                ]
 
-        _ ->
-          (model, Cmd.none)
+                        newModel =
+                            if (List.length <| Helpers.filterArtistsWithRelated artist.id model.playlistArtists) > 0 then
+                                ( { model
+                                    | selectedArtist = Just artist
+                                  }
+                                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
+                                )
+                            else
+                                let
+                                    newArtist =
+                                        { artist | hasRelated = True }
+                                in
+                                ( { model
+                                    | selectedArtist = Just newArtist
+                                    , playlistArtists = newArtist :: model.playlistArtists
+                                  }
+                                , commands
+                                )
+                    in
+                    newModel
 
-    Explore.UpdateNetwork data ->
-      let
-        previousNetwork = model.network
+                _ ->
+                    ( model, Cmd.none )
 
-        newNetwork =
-          { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
-      in
-        ({ model | network = newNetwork }, Cmd.none)
+        Explore.UpdateNetwork data ->
+            let
+                previousNetwork =
+                    model.network
 
-    Explore.OnDoubleClick artistId ->
-      { model | waitingToPlay = True , isPlaying = True } ! []
+                newNetwork =
+                    { previousNetwork | nodes = previousNetwork.nodes, edges = previousNetwork.edges }
+            in
+            ( { model | network = newNetwork }, Cmd.none )
 
-    Explore.RelatedArtistsSuccess response ->
-      case response of
-        RemoteData.Success data ->
-          let
-            newArtists =
-                Helpers.filterNewArtists data.artists model.network.nodes
-                |> List.take maxRelatedArtists
+        Explore.OnDoubleClick artistId ->
+            { model | waitingToPlay = True, isPlaying = True } ! []
 
-            nodes =
-              List.map Helpers.artistToNode newArtists
+        Explore.RelatedArtistsSuccess response ->
+            case response of
+                RemoteData.Success data ->
+                    let
+                        newArtists =
+                            Helpers.filterNewArtists data.artists model.network.nodes
+                                |> List.take maxRelatedArtists
 
-            edges =
-              case model.selectedArtist of
-                Just artist ->
-                  Helpers.filterNewArtists data.artists model.network.nodes
-                  |> List.take maxRelatedArtists
-                  |> Helpers.artistsToEdge artist.id
+                        nodes =
+                            List.map Helpers.artistToNode newArtists
 
-                Nothing ->
-                  []
+                        edges =
+                            case model.selectedArtist of
+                                Just artist ->
+                                    Helpers.filterNewArtists data.artists model.network.nodes
+                                        |> List.take maxRelatedArtists
+                                        |> Helpers.artistsToEdge artist.id
 
-            newNodes =
-              List.append model.network.nodes nodes
+                                Nothing ->
+                                    []
 
-            newEdges =
-              List.append model.network.edges edges
+                        newNodes =
+                            List.append model.network.nodes nodes
 
-            previousNetwork = model.network
+                        newEdges =
+                            List.append model.network.edges edges
 
-            newNetwork =
-              { previousNetwork | nodes = newNodes, edges = newEdges }
+                        previousNetwork =
+                            model.network
 
-            newPlaylistArtists =
-              List.append model.playlistArtists newArtists
+                        newNetwork =
+                            { previousNetwork | nodes = newNodes, edges = newEdges }
 
-            newModel =
-              { model
-              | relatedArtists = response
-              , network = newNetwork
-              , playlistArtists = newPlaylistArtists
-              }
-          in
-            (newModel, addSimilar (nodes, edges))
+                        newPlaylistArtists =
+                            List.append model.playlistArtists newArtists
 
-        _ ->
-          ({ model | relatedArtists = response }, Cmd.none)
+                        newModel =
+                            { model
+                                | relatedArtists = response
+                                , network = newNetwork
+                                , playlistArtists = newPlaylistArtists
+                            }
+                    in
+                    ( newModel, addSimilar ( nodes, edges ) )
+
+                _ ->
+                    ( { model | relatedArtists = response }, Cmd.none )

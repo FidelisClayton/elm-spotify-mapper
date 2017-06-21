@@ -1,33 +1,37 @@
 module Explore.View exposing (..)
 
-import Html exposing (Html, div, text, i)
-import Html.Attributes
-import Html.Events exposing (onClick)
-import Html.CssHelpers
-
-import Msgs exposing(Msg)
-import Explore.Msgs as Explore exposing (ExploreMsg)
-import Models exposing (Model)
 import CssClasses
+import Explore.Msgs as Explore exposing (ExploreMsg)
+import Html exposing (Html, div, i, text)
+import Html.Attributes
+import Html.CssHelpers
+import Html.Events exposing (onClick)
+import Models exposing (Model)
+import Msgs exposing (Msg)
+
 
 { class, id } =
-  Html.CssHelpers.withNamespace ""
+    Html.CssHelpers.withNamespace ""
+
 
 visContainer : Html Msg
 visContainer =
-  div [ id [ CssClasses.VisContainer ] ]
-      []
+    div [ id [ CssClasses.VisContainer ] ]
+        []
+
 
 savePlaylistButton : Model -> Html Msg
 savePlaylistButton model =
-  div [ class [ CssClasses.SavePlaylist ]
-      , onClick (Msgs.MsgForExplore Explore.SavePlaylist)
-      ]
-      [ i [ Html.Attributes.class "fa fa-plus" ] []
-      ]
+    div
+        [ class [ CssClasses.SavePlaylist ]
+        , onClick (Msgs.MsgForExplore Explore.SavePlaylist)
+        ]
+        [ i [ Html.Attributes.class "fa fa-plus" ] []
+        ]
+
 
 render : Model -> List (Html Msg)
 render model =
-  [ savePlaylistButton model
-  , visContainer
-  ]
+    [ savePlaylistButton model
+    , visContainer
+    ]
