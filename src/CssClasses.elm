@@ -29,15 +29,13 @@ type Classes
     | ImageWrapper
     | SidebarLink
     | Active
-    | SavePlaylist
     | FlashMessage
     | CloseButton
     | Hidden
 
 
 type Ids
-    = VisContainer
-    | TutSearch
+    = TutSearch
     | TutSearchInput
     | TutExplore
     | TutNodeTree

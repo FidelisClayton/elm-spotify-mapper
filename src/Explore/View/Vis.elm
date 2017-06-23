@@ -2,6 +2,7 @@ module Explore.View.Vis exposing (..)
 
 import CssClasses
 import Explore.Msgs as Explore exposing (ExploreMsg)
+import Explore.Style exposing (Classes(VisContainer))
 import Html exposing (Html, div, i, text)
 import Html.Attributes
 import Html.CssHelpers
@@ -17,7 +18,7 @@ import Msgs exposing (Msg)
 visContainer : Html Msg
 visContainer =
     div
-        [ id [ CssClasses.VisContainer ]
-        , class [ CssClasses.VisContainer ]
+        [ id [ VisContainer ]
+        , class [ VisContainer ]
         ]
         []

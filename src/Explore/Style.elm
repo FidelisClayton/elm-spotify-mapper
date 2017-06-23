@@ -3,19 +3,23 @@ module Explore.Style exposing (..)
 import Css exposing (..)
 import Css.Elements exposing (i, input)
 import Css.Namespace exposing (namespace)
-import CssClasses
 import Html.CssHelpers exposing (withNamespace)
+
+
+type Classes
+    = VisContainer
+    | BtnSavePlaylist
 
 
 css =
     (stylesheet << namespace "")
-        [ class CssClasses.VisContainer
+        [ class VisContainer
             [ position absolute
             , width <| pct 100
             , height <| pct 100
             , overflow hidden
             ]
-        , class CssClasses.SavePlaylist
+        , class BtnSavePlaylist
             [ position absolute
             , width <| px 50
             , height <| px 50
