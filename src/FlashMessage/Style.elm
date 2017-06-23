@@ -7,9 +7,15 @@ import CssClasses
 import Html.CssHelpers exposing (withNamespace)
 
 
+type Classes
+    = FlashMessage
+    | BtnClose
+    | Hidden
+
+
 css =
     (stylesheet << namespace "")
-        [ class CssClasses.FlashMessage
+        [ class FlashMessage
             [ position absolute
             , width <| pct 100
             , color <| hex "FFF"
@@ -18,15 +24,18 @@ css =
             , textAlign center
             , fontSize <| pt 9
             , padding2 (px 2) zero
-            , withClass CssClasses.Hidden
+            , withClass Hidden
                 [ display none
                 ]
             ]
-        , class CssClasses.CloseButton
+        , class BtnClose
             [ position absolute
             , right <| px 10
             , cursor pointer
             , padding2 (px 2) (px 10)
             , top zero
+            ]
+        , class Hidden
+            [ display none
             ]
         ]

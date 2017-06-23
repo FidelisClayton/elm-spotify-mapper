@@ -29,9 +29,6 @@ type Classes
     | ImageWrapper
     | SidebarLink
     | Active
-    | FlashMessage
-    | CloseButton
-    | Hidden
 
 
 type Ids
