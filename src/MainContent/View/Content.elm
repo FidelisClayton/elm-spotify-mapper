@@ -1,10 +1,10 @@
 module MainContent.View.Content exposing (..)
 
 import Css exposing (property)
-import CssClasses
 import Html exposing (Html, div)
 import Html.Attributes
 import Html.CssHelpers
+import MainContent.Style exposing (Classes(Main))
 import MainContent.View.Pages exposing (page)
 import Models exposing (Model)
 import Msgs exposing (Msg)
@@ -30,7 +30,7 @@ render model =
                 [ property "background-color" "transparent" ]
     in
     div
-        [ class [ CssClasses.Main ]
+        [ class [ Main ]
         , styles backgroundStyle
         ]
         (page model)

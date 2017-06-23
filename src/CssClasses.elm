@@ -21,14 +21,9 @@ type Classes
     | SongCover
     | SongDescription
     | IsPlaying
-    | BigSearch
-    | Content
-    | Main
-    | SearchResults
-    | ArtistResult
-    | ImageWrapper
     | SidebarLink
     | Active
+    | Content
 
 
 type Ids

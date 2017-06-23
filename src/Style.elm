@@ -13,6 +13,10 @@ css =
             [ margin zero
             , padding zero
             ]
+        , class CssClasses.Content
+            [ displayFlex
+            , flex <| int 1
+            ]
         , class CssClasses.Container
             [ displayFlex
             , flexDirection column

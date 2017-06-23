@@ -1,6 +1,6 @@
 module Search.View.Search exposing (..)
 
-import CssClasses
+import CssClasses exposing (Ids(TutSearchInput))
 import Html exposing (Html, a, div, i, img, input, label, text)
 import Html.Attributes exposing (href, placeholder, src, type_)
 import Html.CssHelpers
@@ -10,6 +10,7 @@ import Models exposing (Artist, Model, SearchArtistData)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Search.Msgs as Search exposing (SearchMsg)
+import Search.Style exposing (Classes(ArtistResult, BigSearch, ImageWrapper, SearchResults))
 
 
 { class, id } =
@@ -18,12 +19,12 @@ import Search.Msgs as Search exposing (SearchMsg)
 
 bigSearch : Model -> Html Msg
 bigSearch model =
-    div [ class [ CssClasses.BigSearch ] ]
+    div [ class [ BigSearch ] ]
         [ label [] [ text "Search for an artist" ]
         , input
             [ type_ "text"
             , on "input" (Json.map (Msgs.MsgForSearch << Search.Search) targetValue)
-            , id [ CssClasses.TutSearchInput ]
+            , id [ TutSearchInput ]
             ]
             []
         ]
@@ -40,8 +41,8 @@ searchResult artist =
                 Nothing ->
                     "http://www.the-music-shop.com/wp-content/uploads/2015/02/placeholder.png"
     in
-    a [ class [ CssClasses.ArtistResult ], onClick (Msgs.MsgForSearch (Search.SelectArtist artist)), href "#/explore" ]
-        [ div [ class [ CssClasses.ImageWrapper ] ]
+    a [ class [ ArtistResult ], onClick (Msgs.MsgForSearch (Search.SelectArtist artist)), href "#/explore" ]
+        [ div [ class [ ImageWrapper ] ]
             [ div []
                 [ i [ Html.Attributes.class "fa fa-play" ] [] ]
             , img [ src image ] []
@@ -67,7 +68,7 @@ searchResults response =
                 RemoteData.Failure error ->
                     [ text "" ]
     in
-    div [ class [ CssClasses.SearchResults ] ]
+    div [ class [ SearchResults ] ]
         html
 
 
