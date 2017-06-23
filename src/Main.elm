@@ -3,7 +3,7 @@ module Main exposing (..)
 import BottomBar.Msgs as Player exposing (PlayerMsg)
 import BottomBar.View as BottomBar
 import CssClasses
-import Dialog.View as Dialog
+import Dialog.View.Modal as Dialog
 import Explore.Msgs as Explore exposing (ExploreMsg)
 import FlashMessage.View as FlashMessage
 import Html exposing (Html, div, text)

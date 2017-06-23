@@ -1,0 +1,73 @@
+module Dialog.View.Modal exposing (..)
+
+import Css
+import Dialog.Msgs as DialogMsg
+import Dialog.Style as DialogStyle
+import Dialog.View.Form exposing (modalForm, modalFormFooter)
+import Html exposing (Html, button, div, img, input, label, text, textarea)
+import Html.Attributes exposing (for, rows, src, type_, value)
+import Html.CssHelpers
+import Html.Events exposing (on, onClick, onInput, targetValue)
+import Json.Decode as Json
+import Models exposing (Model)
+import Msgs exposing (Msg)
+import RemoteData
+
+
+{ class } =
+    Html.CssHelpers.withNamespace ""
+
+
+modalLoading : Model -> Html Msg
+modalLoading model =
+    img
+        [ class [ DialogStyle.Spinner ]
+        , src "http://shop.laurie.dk/Content/images/loading.gif"
+        ]
+        []
+
+
+modal : Model -> String -> (Model -> Html Msg) -> Maybe (Model -> Html Msg) -> Html Msg
+modal model title content footer =
+    let
+        wrapperClasses =
+            if model.playlistModalActive then
+                [ DialogStyle.ModalWrapper ]
+            else
+                [ DialogStyle.Hidden ]
+
+        modalClasses =
+            if model.playlistModalActive then
+                [ DialogStyle.Modal ]
+            else
+                [ DialogStyle.Modal, DialogStyle.ModalHidden ]
+
+        maybeFooter =
+            case footer of
+                Just view ->
+                    [ view model ]
+
+                Nothing ->
+                    []
+    in
+    div
+        [ class wrapperClasses ]
+        [ div [ class modalClasses ]
+            [ div [ class [ DialogStyle.ModalHeader ] ] [ text title ]
+            , div [ class [ DialogStyle.ModalBody ] ]
+                [ content model ]
+            , div [ class [ DialogStyle.ModalFooter ] ]
+                maybeFooter
+            ]
+        , div [ class [ DialogStyle.Mask ], onClick (Msgs.MsgForDialog DialogMsg.Cancel) ] []
+        ]
+
+
+render : Model -> Html Msg
+render model =
+    case model.playlistModalLoading of
+        True ->
+            modal model "Edit playlist info" modalLoading Nothing
+
+        False ->
+            modal model "Edit playlist info" modalForm (Just modalFormFooter)
