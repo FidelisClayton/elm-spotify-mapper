@@ -16,7 +16,10 @@ import Msgs exposing (Msg)
 
 visContainer : Html Msg
 visContainer =
-    div [ id [ CssClasses.VisContainer ] ]
+    div
+        [ id [ CssClasses.VisContainer ]
+        , class [ CssClasses.VisContainer ]
+        ]
         []
 
 

@@ -29,7 +29,7 @@ modalForm model =
             if model.playlistModalActive then
                 [ DialogStyle.ModalWrapper ]
             else
-                []
+                [ DialogStyle.Hidden ]
 
         modalClasses =
             if model.playlistModalActive then

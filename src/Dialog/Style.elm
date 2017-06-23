@@ -20,6 +20,7 @@ type Classes
     | Spinner
     | Mask
     | ModalWrapper
+    | Hidden
 
 
 css =
@@ -111,5 +112,8 @@ css =
             , flexDirection column
             , backgroundColor <| rgba 0 0 0 0.5
             , zIndex <| int -1
+            ]
+        , class Hidden
+            [ display none
             ]
         ]

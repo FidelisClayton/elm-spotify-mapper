@@ -13,6 +13,7 @@ css =
             [ position absolute
             , width <| pct 100
             , height <| pct 100
+            , overflow hidden
             ]
         , class CssClasses.SavePlaylist
             [ position absolute
