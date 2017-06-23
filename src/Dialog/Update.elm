@@ -40,6 +40,9 @@ updateDialog msg model =
 
         Dialog.Cancel ->
             let
+                _ =
+                    Debug.log "Dialog.Cancel" "Hide modal"
+
                 newModel =
                     { model | playlistModalActive = False }
             in
