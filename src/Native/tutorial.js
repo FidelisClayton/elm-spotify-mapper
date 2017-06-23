@@ -4,7 +4,7 @@ let tour = new Shepherd.Tour({
   defaults: {
     classes: 'shepherd-theme-arrows'
   }
-});
+})
 
 const updateStoredSteps = stepId => {
   const previousSteps = JSON.parse(localStorage.getItem('steps')) || []
@@ -12,7 +12,7 @@ const updateStoredSteps = stepId => {
 
   localStorage.setItem('steps', JSON.stringify(newSteps))
 
-  return newSteps;
+  return newSteps
 }
 
 const removeDuplicated = items => {
@@ -26,13 +26,22 @@ const removeDuplicated = items => {
 const getStoredSteps = () => JSON.parse(localStorage.getItem('steps')) || []
 const stepDone = (step, steps) => steps.filter(id => step.id === id).length > 0
 
+const elementAvailable = step => {
+  const attachTo = step.attachTo.split(" ")
+  const attachToLength = attachTo.length
+
+  const selector = attachTo.slice(0, attachToLength - 1).join(" ")
+
+  return document.querySelector(selector) !== null
+}
+
 const onInitTutorial = steps => {
   steps = steps || []
 
   const storedSteps = getStoredSteps()
 
   steps.forEach(step => {
-    if (!stepDone(step, storedSteps))
+    if (!stepDone(step, storedSteps) && elementAvailable(step))
       tour.addStep(step.id, step)
   })
 
