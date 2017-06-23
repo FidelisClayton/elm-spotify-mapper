@@ -1,5 +1,9 @@
 module Helpers exposing (..)
 
+import Css
+import Html
+import Html.Attributes
+import Html.CssHelpers
 import Models exposing (Artist, ImageObject, VisEdge, VisNode)
 import Spotify.Models exposing (Track)
 
@@ -154,3 +158,26 @@ generatePlaylistDescription artists =
     List.filter (\artist -> artist.hasRelated) artists
         |> List.map (\artist -> artist.name)
         |> List.foldr joinWithComma ""
+
+
+cssClass : List class -> Html.Attribute msg
+cssClass =
+    let
+        { class } =
+            Html.CssHelpers.withNamespace ""
+    in
+    class
+
+
+cssId : id -> Html.Attribute msg
+cssId =
+    let
+        { id } =
+            Html.CssHelpers.withNamespace ""
+    in
+    id
+
+
+cssStyles : List Css.Mixin -> Html.Attribute msg
+cssStyles =
+    Css.asPairs >> Html.Attributes.style

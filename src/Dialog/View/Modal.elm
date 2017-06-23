@@ -4,6 +4,7 @@ import Css
 import Dialog.Msgs as DialogMsg
 import Dialog.Style as DialogStyle
 import Dialog.View.Form exposing (modalForm, modalFormFooter)
+import Helpers exposing (cssClass)
 import Html exposing (Html, button, div, img, input, label, text, textarea)
 import Html.Attributes exposing (for, rows, src, type_, value)
 import Html.CssHelpers
@@ -14,14 +15,10 @@ import Msgs exposing (Msg)
 import RemoteData
 
 
-{ class } =
-    Html.CssHelpers.withNamespace ""
-
-
 modalLoading : Model -> Html Msg
 modalLoading model =
     img
-        [ class [ DialogStyle.Spinner ]
+        [ cssClass [ DialogStyle.Spinner ]
         , src "http://shop.laurie.dk/Content/images/loading.gif"
         ]
         []
@@ -51,15 +48,15 @@ modal model title content footer =
                     []
     in
     div
-        [ class wrapperClasses ]
-        [ div [ class modalClasses ]
-            [ div [ class [ DialogStyle.ModalHeader ] ] [ text title ]
-            , div [ class [ DialogStyle.ModalBody ] ]
+        [ cssClass wrapperClasses ]
+        [ div [ cssClass modalClasses ]
+            [ div [ cssClass [ DialogStyle.ModalHeader ] ] [ text title ]
+            , div [ cssClass [ DialogStyle.ModalBody ] ]
                 [ content model ]
-            , div [ class [ DialogStyle.ModalFooter ] ]
+            , div [ cssClass [ DialogStyle.ModalFooter ] ]
                 maybeFooter
             ]
-        , div [ class [ DialogStyle.Mask ], onClick (Msgs.MsgForDialog DialogMsg.Cancel) ] []
+        , div [ cssClass [ DialogStyle.Mask ], onClick (Msgs.MsgForDialog DialogMsg.Cancel) ] []
         ]
 
 

@@ -9,6 +9,9 @@ import Html.CssHelpers exposing (withNamespace)
 type Classes
     = VisContainer
     | BtnSavePlaylist
+    | Navbar
+    | NavbarItem
+    | Active
 
 
 css =
@@ -37,6 +40,37 @@ css =
                     , textAlign center
                     , width <| pct 100
                     , color <| hex "FFF"
+                    ]
+                ]
+            ]
+        , class Navbar
+            [ displayFlex
+            , alignItems center
+            , justifyContent center
+            , height <| px 80
+            , zIndex <| int 10
+            ]
+        , class NavbarItem
+            [ padding2 zero (px 10)
+            , property "color" "hsla(0,0%,100%,.5)"
+            , textTransform uppercase
+            , fontSize <| pt 10
+            , letterSpacing <| px 1.5
+            , textDecoration none
+            , position relative
+            , hover
+                [ color <| hex "FFF"
+                ]
+            , withClass Active
+                [ color <| hex "FFF"
+                , after
+                    [ property "content" "' '"
+                    , position absolute
+                    , width <| px 20
+                    , height <| px 2
+                    , backgroundColor <| hex "1db954"
+                    , property "left" "calc(50% - 10px)"
+                    , marginTop <| px 18
                     ]
                 ]
             ]
