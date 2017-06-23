@@ -33,6 +33,7 @@ css =
             , color <| hex "FFF"
             , height <| px 330
             , property "top" "calc(50% - 330px)"
+            , zIndex <| int 2
             , children
                 [ class ModalHeader
                     [ backgroundColor <| hex "333"
@@ -111,7 +112,7 @@ css =
             , height <| pct 100
             , flexDirection column
             , backgroundColor <| rgba 0 0 0 0.5
-            , zIndex <| int -1
+            , zIndex <| int 1
             ]
         , class Hidden
             [ display none
