@@ -8,7 +8,7 @@ import Html.Attributes
 import Html.CssHelpers
 import Models exposing (Model)
 import Msgs exposing (Msg)
-import Search.View as Search
+import Search.View.Search as Search
 
 
 { class } =

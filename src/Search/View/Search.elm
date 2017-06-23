@@ -1,4 +1,4 @@
-module Search.View exposing (..)
+module Search.View.Search exposing (..)
 
 import CssClasses
 import Html exposing (Html, a, div, i, img, input, label, text)
