@@ -54,7 +54,7 @@ const onAddSteps = steps => {
   const storedSteps = getStoredSteps()
 
   steps.forEach(step => {
-    if (!stepDone(step, storedSteps))
+    if (!stepDone(step, storedSteps) && elementAvailable(step))
       tour.addStep(step.id, step)
   })
 
