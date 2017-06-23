@@ -15,7 +15,7 @@ import Navigation exposing (Location)
 import Ports exposing (audioEnded, fromStorage, initTutorial, onDoubleClick, onNodeClick, updateAudioStatus, updateCurrentTrack, updateNetwork)
 import Routing
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
-import Sidebar.View as Sidebar
+import Sidebar.View.Sidebar as Sidebar
 import Spotify.Api
 import Update exposing (update)
 
