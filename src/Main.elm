@@ -5,7 +5,7 @@ import BottomBar.View as BottomBar
 import CssClasses
 import Dialog.View.Modal as Dialog
 import Explore.Msgs as Explore exposing (ExploreMsg)
-import FlashMessage.View as FlashMessage
+import FlashMessage.View.Message as FlashMessage
 import Html exposing (Html, div, text)
 import Html.CssHelpers
 import MainContent.View as MainContent

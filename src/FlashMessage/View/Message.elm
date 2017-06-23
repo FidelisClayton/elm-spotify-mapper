@@ -1,4 +1,4 @@
-module FlashMessage.View exposing (..)
+module FlashMessage.View.Message exposing (..)
 
 import CssClasses
 import FlashMessage.Msgs as FlashMsg
