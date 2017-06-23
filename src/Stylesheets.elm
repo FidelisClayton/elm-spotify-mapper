@@ -6,6 +6,7 @@ import Dialog.Style as Dialog
 import Explore.Style as Explore
 import FlashMessage.Style as FlashMessage
 import MainContent.Style as MainContent
+import Search.Style as Search
 import Sidebar.Style as Sidebar
 import Style as Main
 
@@ -25,6 +26,7 @@ cssFiles =
                 , Explore.css
                 , FlashMessage.css
                 , Dialog.css
+                , Search.css
                 ]
           )
         ]
