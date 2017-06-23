@@ -2,7 +2,7 @@ module Sidebar.View.Navigation exposing (..)
 
 import Constants
 import Css exposing (property)
-import CssClasses
+import CssClasses exposing (Ids(TutExplore, TutSearch))
 import Html exposing (Html, a, button, div, i, img, input, span, text)
 import Html.Attributes exposing (href, placeholder, src, target, type_)
 import Html.CssHelpers
@@ -12,6 +12,7 @@ import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Search.Msgs as Search exposing (SearchMsg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import Sidebar.Style exposing (Classes(Active, Logo, NavGroup, SidebarLink))
 
 
 { class, id } =
@@ -25,7 +26,7 @@ styles =
 
 navItem : List (Html Msg) -> Html Msg
 navItem childrens =
-    div [ class [ CssClasses.NavGroup ] ]
+    div [ class [ NavGroup ] ]
         childrens
 
 
@@ -34,32 +35,32 @@ navMenu model =
     let
         searchClasses =
             if model.route == Models.SearchRoute then
-                [ CssClasses.SidebarLink, CssClasses.Active ]
+                [ SidebarLink, Active ]
             else
-                [ CssClasses.SidebarLink ]
+                [ SidebarLink ]
 
         exploreClasses =
             if model.route == Models.ExploreRoute then
-                [ CssClasses.SidebarLink, CssClasses.Active ]
+                [ SidebarLink, Active ]
             else
-                [ CssClasses.SidebarLink ]
+                [ SidebarLink ]
     in
     div []
         [ navItem
-            [ span [ class [ CssClasses.Logo ] ]
+            [ span [ class [ Logo ] ]
                 [ i [ Html.Attributes.class "fa fa-spotify" ] [] ]
             ]
         , navItem
             [ a
                 [ class searchClasses
                 , href "#/search"
-                , id [ CssClasses.TutSearch ]
+                , id [ TutSearch ]
                 ]
                 [ text "Search" ]
             , a
                 [ class exploreClasses
                 , href "#/explore"
-                , id [ CssClasses.TutExplore ]
+                , id [ TutExplore ]
                 ]
                 [ text "Explore" ]
             ]

@@ -2,7 +2,6 @@ module Sidebar.View.Sidebar exposing (..)
 
 import Constants
 import Css exposing (property)
-import CssClasses
 import Html exposing (Html, a, button, div, i, img, input, span, text)
 import Html.Attributes exposing (href, placeholder, src, target, type_)
 import Html.CssHelpers
@@ -12,6 +11,7 @@ import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Search.Msgs as Search exposing (SearchMsg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import Sidebar.Style exposing (Classes(Sidebar))
 import Sidebar.View.LoginProfile exposing (maybeUser)
 import Sidebar.View.Navigation exposing (navItem, navMenu)
 import Sidebar.View.Songs exposing (songs)
@@ -36,7 +36,7 @@ render model =
                 []
     in
     div
-        [ class [ CssClasses.Sidebar ]
+        [ class [ Sidebar ]
         , styles backgroundStyle
         ]
         [ navMenu model

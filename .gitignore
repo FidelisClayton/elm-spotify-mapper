@@ -2,3 +2,4 @@ node_modules/
 elm-stuff/
 .env
 dist/
+index.html

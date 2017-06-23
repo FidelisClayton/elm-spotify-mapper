@@ -2,7 +2,6 @@ module Sidebar.View.Songs exposing (..)
 
 import Constants
 import Css exposing (property)
-import CssClasses
 import Html exposing (Html, a, button, div, i, img, input, span, text)
 import Html.Attributes exposing (href, placeholder, src, target, type_)
 import Html.CssHelpers
@@ -12,6 +11,7 @@ import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Search.Msgs as Search exposing (SearchMsg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import Sidebar.Style exposing (Classes(NavGroup, SongAlbumTitle, SongCover, SongDescription, SongItem, SongTitle, Songs))
 
 
 { class, id } =
@@ -37,7 +37,7 @@ songs response =
                 _ ->
                     []
     in
-    div [ class [ CssClasses.NavGroup, CssClasses.Songs ] ]
+    div [ class [ NavGroup, Songs ] ]
         html
 
 
@@ -52,16 +52,16 @@ songItem track =
                 Nothing ->
                     ""
     in
-    div [ class [ CssClasses.SongItem ] ]
-        [ div [ class [ CssClasses.SongCover ], onClick (Msgs.MsgForSidebar (Sidebar.SelectTrack track)) ]
+    div [ class [ SongItem ] ]
+        [ div [ class [ SongCover ], onClick (Msgs.MsgForSidebar (Sidebar.SelectTrack track)) ]
             [ button []
                 [ i [ Html.Attributes.class "fa fa-play" ] [] ]
             , img
                 [ src image ]
                 []
             ]
-        , div [ class [ CssClasses.SongDescription ] ]
-            [ span [ class [ CssClasses.SongTitle ] ] [ text track.name ]
-            , span [ class [ CssClasses.SongAlbumTitle ] ] [ text track.album.name ]
+        , div [ class [ SongDescription ] ]
+            [ span [ class [ SongTitle ] ] [ text track.name ]
+            , span [ class [ SongAlbumTitle ] ] [ text track.album.name ]
             ]
         ]
