@@ -1,8 +1,8 @@
 module BottomBar.View.Player exposing (..)
 
 import BottomBar.Msgs as Player exposing (PlayerMsg)
+import BottomBar.Style exposing (Classes(..))
 import Css exposing (property)
-import CssClasses
 import Helpers
 import Html exposing (Html, div, i, img, input, span, text)
 import Html.Attributes exposing (src, step, type_, value)
@@ -25,15 +25,15 @@ styles =
 
 controlIcon : String -> Html Msg
 controlIcon icon =
-    div [ class [ CssClasses.ControlIcon ] ]
-        [ i [ class [ CssClasses.Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
+    div [ class [ ControlIcon ] ]
+        [ i [ class [ Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
 
 progressBar : Float -> (String -> Player.PlayerMsg) -> Html Msg
 progressBar progress msg =
-    div [ class [ CssClasses.ProgressBar ] ]
+    div [ class [ ProgressBar ] ]
         [ div
-            [ class [ CssClasses.Progress ]
+            [ class [ Progress ]
             , styles
                 [ property "width" (toString (floor progress) ++ "%") ]
             ]
@@ -53,11 +53,11 @@ progressBar progress msg =
 
 progress : Model -> Html Msg
 progress model =
-    div [ class [ CssClasses.ProgressGroup ] ]
-        [ span [ class [ CssClasses.FontSmall ] ]
+    div [ class [ ProgressGroup ] ]
+        [ span [ class [ FontSmall ] ]
             [ text <| "00:" ++ Helpers.paddValue model.audioStatus.currentTime ]
         , progressBar (Helpers.getPct model.audioStatus.currentTime model.audioStatus.duration) Player.UpdateCurrentTime
-        , span [ class [ CssClasses.FontSmall ] ]
+        , span [ class [ FontSmall ] ]
             [ text <| "00:" ++ Helpers.paddValue model.audioStatus.duration ]
         ]
 
@@ -70,13 +70,13 @@ musicInfo selectedTrack =
                 Just track ->
                     [ img
                         [ src <| Helpers.firstImageUrl track.album.images
-                        , class [ CssClasses.AlbumCover ]
+                        , class [ AlbumCover ]
                         ]
                         []
-                    , div [ class [ CssClasses.MusicInfo ] ]
-                        [ span [ class [ CssClasses.MusicTitle ] ]
+                    , div [ class [ MusicInfo ] ]
+                        [ span [ class [ MusicTitle ] ]
                             [ text track.name ]
-                        , span [ class [ CssClasses.FontSmall ] ]
+                        , span [ class [ FontSmall ] ]
                             [ text <| Helpers.firstArtistName track.artists ]
                         ]
                     ]
@@ -84,7 +84,7 @@ musicInfo selectedTrack =
                 Nothing ->
                     []
     in
-    div [ class [ CssClasses.NowPlaying ] ]
+    div [ class [ NowPlaying ] ]
         content
 
 
@@ -99,8 +99,8 @@ soundControl model =
             else
                 controlIcon "volume-off"
     in
-    div [ class [ CssClasses.SoundControl ] ]
-        [ div [ class [ CssClasses.ControlButtons ] ]
+    div [ class [ SoundControl ] ]
+        [ div [ class [ ControlButtons ] ]
             [ icon ]
         , progressBar (model.audioStatus.volume * 100) Player.UpdateVolume
         ]
@@ -123,8 +123,8 @@ controls model =
             else
                 div [ onClick (Msgs.MsgForPlayer (Player.Play preview)) ] [ controlIcon "play" ]
     in
-    div [ class [ CssClasses.Controls ] ]
-        [ div [ class [ CssClasses.ControlButtons ] ]
+    div [ class [ Controls ] ]
+        [ div [ class [ ControlButtons ] ]
             [ div [ onClick (Msgs.MsgForPlayer Player.Previous) ] [ controlIcon "step-backward" ]
             , playOrPause
             , div [ onClick (Msgs.MsgForPlayer Player.Next) ] [ controlIcon "step-forward" ]
@@ -151,7 +151,7 @@ maybeArtists response =
 
 render : Model -> Html Msg
 render model =
-    div [ class [ CssClasses.BottomBar ] ]
+    div [ class [ BottomBar ] ]
         [ musicInfo model.selectedTrack
         , controls model
         , soundControl model

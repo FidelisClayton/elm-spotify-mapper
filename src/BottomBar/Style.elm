@@ -7,9 +7,26 @@ import CssClasses
 import Html.CssHelpers exposing (withNamespace)
 
 
+type Classes
+    = BottomBar
+    | NowPlaying
+    | AlbumCover
+    | MusicInfo
+    | MusicTitle
+    | ProgressGroup
+    | Controls
+    | ProgressBar
+    | Progress
+    | FontSmall
+    | ControlIcon
+    | Icon
+    | ControlButtons
+    | SoundControl
+
+
 css =
     (stylesheet << namespace "")
-        [ class CssClasses.BottomBar
+        [ class BottomBar
             [ backgroundColor <| hex "282828"
             , color <| hex "FFF"
             , displayFlex
@@ -19,25 +36,25 @@ css =
             , alignItems center
             , justifyContent center
             ]
-        , class CssClasses.NowPlaying
+        , class NowPlaying
             [ displayFlex
             , alignItems center
             , height <| px 56
             , width <| px 225
             , overflow hidden
             , children
-                [ class CssClasses.AlbumCover
+                [ class AlbumCover
                     [ width <| px 56
                     , height <| px 56
                     ]
-                , class CssClasses.MusicInfo
+                , class MusicInfo
                     [ displayFlex
                     , flexDirection column
                     , paddingLeft <| px 10
                     , height <| pct 100
                     , justifyContent center
                     , children
-                        [ class CssClasses.MusicTitle
+                        [ class MusicTitle
                             [ fontSize <| px 14
                             , lineHeight <| px 24
                             , maxWidth <| px 150
@@ -49,17 +66,17 @@ css =
                     ]
                 ]
             ]
-        , class CssClasses.ProgressGroup
+        , class ProgressGroup
             [ displayFlex
             , alignItems center
             , justifyContent center
             ]
-        , class CssClasses.Controls
+        , class Controls
             [ displayFlex
             , flexDirection column
             , flex (int 1)
             ]
-        , class CssClasses.ProgressBar
+        , class ProgressBar
             [ backgroundColor <| hex "404040"
             , width <| pct 50
             , height <| px 4
@@ -74,7 +91,7 @@ css =
                     , marginTop zero
                     , zIndex <| int 2
                     ]
-                , class CssClasses.Progress
+                , class Progress
                     [ backgroundColor <| hex "a0a0a0"
                     , width <| pct 0
                     , height <| pct 100
@@ -83,31 +100,31 @@ css =
                     ]
                 ]
             ]
-        , class CssClasses.FontSmall
+        , class FontSmall
             [ fontSize <| px 11
             , lineHeight <| px 20
             , fontWeight <| int 300
             , letterSpacing <| px 0.8
             ]
-        , class CssClasses.ControlIcon
+        , class ControlIcon
             [ width <| px 32
             , height <| px 32
             , textAlign center
             , children
-                [ class CssClasses.Icon
+                [ class Icon
                     [ lineHeight <| px 32
                     , fontSize <| px 18
                     ]
                 ]
             ]
-        , class CssClasses.ControlButtons
+        , class ControlButtons
             [ displayFlex
             , flexDirection row
             , height <| px 50
             , justifyContent center
             , alignItems center
             ]
-        , class CssClasses.SoundControl
+        , class SoundControl
             [ displayFlex
             , flex <| int 1
             , maxWidth <| px 200
