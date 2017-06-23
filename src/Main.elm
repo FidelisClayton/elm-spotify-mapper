@@ -8,7 +8,7 @@ import Explore.Msgs as Explore exposing (ExploreMsg)
 import FlashMessage.View.Message as FlashMessage
 import Html exposing (Html, div, text)
 import Html.CssHelpers
-import MainContent.View as MainContent
+import MainContent.View.Content as MainContent
 import Models exposing (Flags, Model)
 import Msgs exposing (Msg)
 import Navigation exposing (Location)

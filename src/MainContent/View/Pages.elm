@@ -1,4 +1,4 @@
-module MainContent.View exposing (..)
+module MainContent.View.Pages exposing (..)
 
 import Css exposing (property)
 import CssClasses
@@ -15,11 +15,6 @@ import Search.View as Search
     Html.CssHelpers.withNamespace ""
 
 
-styles : List Css.Mixin -> Html.Attribute msg
-styles =
-    Css.asPairs >> Html.Attributes.style
-
-
 page : Model -> List (Html Msg)
 page model =
     case model.route of
@@ -31,19 +26,3 @@ page model =
 
         Models.NotFoundRoute ->
             Search.render model
-
-
-render : Model -> Html Msg
-render model =
-    let
-        backgroundStyle =
-            if model.route == Models.SearchRoute then
-                [ property "background-color" "#181818" ]
-            else
-                [ property "background-color" "transparent" ]
-    in
-    div
-        [ class [ CssClasses.Main ]
-        , styles backgroundStyle
-        ]
-        (page model)
