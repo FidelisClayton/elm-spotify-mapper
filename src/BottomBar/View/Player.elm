@@ -1,4 +1,4 @@
-module BottomBar.View exposing (..)
+module BottomBar.View.Player exposing (..)
 
 import BottomBar.Msgs as Player exposing (PlayerMsg)
 import Css exposing (property)

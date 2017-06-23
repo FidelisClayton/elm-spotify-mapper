@@ -1,7 +1,7 @@
 module Main exposing (..)
 
 import BottomBar.Msgs as Player exposing (PlayerMsg)
-import BottomBar.View as BottomBar
+import BottomBar.View.Player as BottomBar
 import CssClasses
 import Dialog.View.Modal as Dialog
 import Explore.Msgs as Explore exposing (ExploreMsg)
