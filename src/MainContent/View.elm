@@ -2,7 +2,7 @@ module MainContent.View exposing (..)
 
 import Css exposing (property)
 import CssClasses
-import Explore.View as Explore
+import Explore.View.Explore as Explore
 import Html exposing (Html, div)
 import Html.Attributes
 import Html.CssHelpers

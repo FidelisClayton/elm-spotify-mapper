@@ -1,4 +1,4 @@
-module Explore.View exposing (..)
+module Explore.View.SaveButton exposing (..)
 
 import CssClasses
 import Explore.Msgs as Explore exposing (ExploreMsg)
@@ -14,27 +14,11 @@ import Msgs exposing (Msg)
     Html.CssHelpers.withNamespace ""
 
 
-visContainer : Html Msg
-visContainer =
-    div
-        [ id [ CssClasses.VisContainer ]
-        , class [ CssClasses.VisContainer ]
-        ]
-        []
-
-
-savePlaylistButton : Model -> Html Msg
-savePlaylistButton model =
+savePlaylistButton : Html Msg
+savePlaylistButton =
     div
         [ class [ CssClasses.SavePlaylist ]
         , onClick (Msgs.MsgForExplore Explore.SavePlaylist)
         ]
         [ i [ Html.Attributes.class "fa fa-plus" ] []
         ]
-
-
-render : Model -> List (Html Msg)
-render model =
-    [ savePlaylistButton model
-    , visContainer
-    ]
