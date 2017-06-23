@@ -2,7 +2,7 @@ module Sidebar.View.LoginProfile exposing (..)
 
 import Constants
 import Css exposing (property)
-import CssClasses
+import CssClasses exposing (Ids(TutLogin))
 import Html exposing (Html, a, button, div, i, img, input, span, text)
 import Html.Attributes exposing (href, placeholder, src, target, type_)
 import Html.CssHelpers
@@ -12,6 +12,7 @@ import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Search.Msgs as Search exposing (SearchMsg)
 import Sidebar.Msgs as Sidebar exposing (SidebarMsg)
+import Sidebar.Style exposing (Classes(FontMedium, UserProfile))
 import Sidebar.View.Navigation exposing (navItem, navMenu)
 
 
@@ -31,8 +32,8 @@ login model =
             Constants.authUrl model.spotifyConfig.clientId model.spotifyConfig.redirectUri
     in
     navItem
-        [ div [ class [ CssClasses.UserProfile ], id [ CssClasses.TutLogin ] ]
-            [ span [ class [ CssClasses.FontMedium ] ]
+        [ div [ class [ UserProfile ], id [ TutLogin ] ]
+            [ span [ class [ FontMedium ] ]
                 [ a [ href url, target "blank" ] [ text "Login" ]
                 ]
             ]
@@ -44,8 +45,8 @@ maybeUser model =
     case model.user of
         RemoteData.Success user ->
             navItem
-                [ div [ class [ CssClasses.UserProfile ] ]
-                    [ span [ class [ CssClasses.FontMedium ] ]
+                [ div [ class [ UserProfile ] ]
+                    [ span [ class [ FontMedium ] ]
                         [ text user.displayName ]
                     ]
                 ]
