@@ -75,13 +75,13 @@ initialModel route flags =
     , spotifyConfig = flags.spotifyConfig
     , auth = flags.auth
     , user = RemoteData.NotAsked
-    , playlist = Playlist "" "" "Spotify Mapper -" (User "" "" "") []
+    , playlist = Playlist "" "" "Spotify Mapper -" (User "" "" "") [] ""
     , flashMessage = FlashMessage.initialModel
     , clientAuthData = SpotifyAuthData "" 0 ""
     , tutorial = initTutorial
     , playlistModalActive = False
     , playlistModalLoading = False
-    , playlistInfo = Playlist "" "" "" (User "" "" "") []
+    , playlistInfo = Playlist "" "" "" (User "" "" "") [] ""
     }
 
 

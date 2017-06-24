@@ -12,16 +12,16 @@ playlistInfo : Model -> Html Msg
 playlistInfo model =
     div [ cssClass [ PlaylistInfo ] ]
         [ img
-            [ src "http://www.baixarsomgratis.com/wp-content/uploads/2015/05/cd-matanza-a-arte-do-insulto.jpg"
+            [ src model.playlist.cover
             , cssClass [ PlaylistCover ]
             ]
             []
         , h3
             [ cssClass [ PlaylistTitle ] ]
-            [ text "Radar de Novidades" ]
+            [ text model.playlist.name ]
         , p
             [ cssClass [ PlaylistDescription ] ]
-            [ text "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc viverra sem id felis malesuada aliquam. Pellentesque pretium sagittis ornare. Interdum et malesuada fames ac ante ipsum primis in faucibus." ]
+            [ text model.playlist.description ]
         , button
             [ cssClass [ BtnSave ] ]
             [ text "Save" ]

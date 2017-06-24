@@ -35,6 +35,7 @@ type alias Playlist =
     , name : String
     , owner : User
     , tracks : List Track
+    , cover : String
     }
 
 
@@ -84,6 +85,7 @@ playlistDecoder =
         |> required "name" Decode.string
         |> required "owner" userDecoder
         |> hardcoded []
+        |> hardcoded ""
 
 
 trackDecoder : Decode.Decoder Track
