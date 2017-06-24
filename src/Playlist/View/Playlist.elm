@@ -2,7 +2,9 @@ module Playlist.View.Playlist exposing (..)
 
 import Html exposing (Html, text, div, span, i)
 import Html.Attributes exposing (class)
-import Msgs exposing (Msg)
+import Html.Events exposing (onClick)
+import Msgs exposing (Msg(MsgForPlayer))
+import BottomBar.Msgs as Player
 import Models exposing (Model)
 import List.Extra exposing (elemIndex)
 import Playlist.View.Info exposing (playlistInfo)
@@ -34,9 +36,22 @@ song trackNumber isPlaying track =
             [ span [ cssClass [ SongNumber ] ] [ text <| toString (trackNumber) ++ "." ]
             , div
                 [ cssClass [ Icons ] ]
-                [ i [ cssClass [ SpeakerIcon ], class "fa fa-volume-up" ] []
-                , i [ cssClass [ PauseIcon ], class "fa fa-pause" ] []
-                , i [ cssClass [ PlayIcon ], class "fa fa-play" ] []
+                [ i
+                    [ cssClass [ SpeakerIcon ]
+                    , class "fa fa-volume-up"
+                    ]
+                    []
+                , i
+                    [ cssClass [ PauseIcon ]
+                    , class "fa fa-pause"
+                    ]
+                    []
+                , i
+                    [ cssClass [ PlayIcon ]
+                    , class "fa fa-play"
+                    , onClick (Msgs.MsgForPlayer (Player.Play track.preview_url))
+                    ]
+                    []
                 ]
             , div []
                 [ span [ cssClass [ SongName ] ] [ text track.name ]
