@@ -7,22 +7,36 @@ import Html.CssHelpers exposing (withNamespace)
 
 
 type Classes
-    = PlaylistInfo
+    = PlaylistPage
+    | PlaylistInfo
     | PlaylistCover
     | PlaylistTitle
     | PlaylistDescription
     | BtnSave
+    | PlaylistSongs
+    | Song
+    | SongName
+    | SongDescription
+    | SongNumber
+    | SongLength
+    | SongPlaying
+    | Icons
+    | SpeakerIcon
+    | PauseIcon
+    | PlayIcon
 
 
 css =
     (stylesheet << namespace "")
-        [ class PlaylistInfo
+        [ class PlaylistPage
+            [ displayFlex
+            ]
+        , class PlaylistInfo
             [ width <| px 200
             , marginLeft <| px 20
             , marginRight <| px 20
             , displayFlex
             , flexDirection column
-            , flex <| int 1
             , alignItems center
             ]
         , class PlaylistCover
@@ -54,5 +68,84 @@ css =
                 [ cursor pointer
                 , property "transform" "scale(1.05)"
                 ]
+            ]
+        , class PlaylistSongs
+            [ displayFlex
+            , flex <| int 1
+            , flexDirection column
+            ]
+        , class Song
+            [ displayFlex
+            , color <| hex "FFF"
+            , padding <| px 15
+            , cursor default
+            , property "transition" "0.3s ease background-color"
+            , hover
+                [ backgroundColor <| rgba 0 0 0 0.5
+                , descendants
+                    [ class SongNumber
+                        [ display none
+                        ]
+                    , class Icons
+                        [ display block
+                        , children
+                            [ class PlayIcon
+                                [ display inline
+                                , cursor pointer
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            , withClass SongPlaying
+                [ descendants
+                    [ class SongNumber
+                        [ display none
+                        ]
+                    , class SongName
+                        [ color <| hex "1ed760"
+                        ]
+                    , class SpeakerIcon
+                        [ display inline
+                        , color <| hex "1ed760"
+                        ]
+                    , class Icons
+                        [ display block
+                        , hover
+                            [ children
+                                [ class PauseIcon
+                                    [ display inline
+                                    , color <| hex "1ed760"
+                                    ]
+                                , class SpeakerIcon
+                                    [ display none
+                                    ]
+                                ]
+                            ]
+                        ]
+                    ]
+                , hover
+                    [ descendants
+                        [ class PlayIcon
+                            [ display none
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        , class SongNumber
+            [ paddingRight <| px 15
+            , color <| rgba 255 255 255 0.5
+            ]
+        , class SongDescription
+            [ color <| rgba 255 255 255 0.5
+            ]
+        , each [ class SpeakerIcon, class PauseIcon, class PlayIcon ]
+            [ display none
+            , paddingRight <| px 15
+            , cursor pointer
+            ]
+        , class Icons
+            [ display none
             ]
         ]
