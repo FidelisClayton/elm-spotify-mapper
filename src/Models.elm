@@ -89,6 +89,7 @@ type Route
     = SearchRoute
     | ExploreRoute
     | NotFoundRoute
+    | PlaylistRoute
 
 
 type alias ImageObject =

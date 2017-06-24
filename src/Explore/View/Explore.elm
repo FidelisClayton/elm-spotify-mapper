@@ -14,17 +14,8 @@ import Models exposing (Model)
 import Msgs exposing (Msg)
 
 
-navbar : Html Msg
-navbar =
-    div [ cssClass [ Navbar ] ]
-        [ a [ cssClass [ NavbarItem, Active ], href "#/explore" ] [ text "Explore" ]
-        , a [ cssClass [ NavbarItem ], href "#/explore" ] [ text "Playlist" ]
-        ]
-
-
 render : Model -> List (Html Msg)
 render model =
-    [ navbar
-    , savePlaylistButton
+    [ savePlaylistButton
     , visContainer
     ]

@@ -11,6 +11,7 @@ matchers =
         [ map Models.SearchRoute top
         , map Models.ExploreRoute (s "explore")
         , map Models.SearchRoute (s "search")
+        , map Models.PlaylistRoute (s "playlist")
         ]
 
 

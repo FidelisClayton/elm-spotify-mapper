@@ -9,6 +9,7 @@ import MainContent.View.Pages exposing (page)
 import Models exposing (Model)
 import Msgs exposing (Msg)
 import Search.View.Search as Search
+import MainContent.View.Navbar exposing (navbar)
 
 
 { class } =
@@ -28,9 +29,17 @@ render model =
                 [ property "background-color" "#181818" ]
             else
                 [ property "background-color" "transparent" ]
+
+        elements =
+            case model.route of
+                Models.SearchRoute ->
+                    page model
+
+                _ ->
+                    (navbar model) :: (page model)
     in
-    div
-        [ class [ Main ]
-        , styles backgroundStyle
-        ]
-        (page model)
+        div
+            [ class [ Main ]
+            , styles backgroundStyle
+            ]
+            elements
