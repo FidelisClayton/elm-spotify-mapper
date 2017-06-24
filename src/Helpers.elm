@@ -70,12 +70,12 @@ artistToNode artist =
                 Nothing ->
                     ""
     in
-    { id = artist.id
-    , label = artist.name
-    , value = artist.popularity
-    , shape = "circularImage"
-    , image = image
-    }
+        { id = artist.id
+        , label = artist.name
+        , value = artist.popularity
+        , shape = "circularImage"
+        , image = image
+        }
 
 
 artistsToEdge : String -> List Artist -> List VisEdge
@@ -99,7 +99,7 @@ filterNewArtists artists nodes =
                         )
                         nodes
             in
-            not (List.length repeatedNodes > 0)
+                not (List.length repeatedNodes > 0)
         )
         artists
 
@@ -135,7 +135,11 @@ filterNewTracks oldTracks newTracks =
 
 toSpotifyTrack : Models.Track -> Spotify.Models.Track
 toSpotifyTrack track =
-    Track track.id track.name track.preview_url track.uri
+    let
+        artists =
+            List.map (\artist -> artist.name) track.artists
+    in
+        Track track.id track.name track.preview_url track.uri artists
 
 
 firstArtist : List Artist -> Maybe Artist
@@ -166,7 +170,7 @@ cssClass =
         { class } =
             Html.CssHelpers.withNamespace ""
     in
-    class
+        class
 
 
 cssId : id -> Html.Attribute msg
@@ -175,7 +179,7 @@ cssId =
         { id } =
             Html.CssHelpers.withNamespace ""
     in
-    id
+        id
 
 
 cssStyles : List Css.Mixin -> Html.Attribute msg

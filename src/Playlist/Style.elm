@@ -1,7 +1,7 @@
 module Playlist.Style exposing (..)
 
 import Css exposing (..)
-import Css.Elements exposing (div)
+import Css.Elements exposing (div, span)
 import Css.Namespace exposing (namespace)
 import Html.CssHelpers exposing (withNamespace)
 
@@ -16,7 +16,8 @@ type Classes
     | PlaylistSongs
     | Song
     | SongName
-    | SongDescription
+    | SongInfo
+    | SongArtist
     | SongNumber
     | SongLength
     | SongPlaying
@@ -70,14 +71,11 @@ css =
                 ]
             ]
         , class PlaylistSongs
-            [ displayFlex
-            , flex <| int 1
-            , flexDirection column
-            ]
+            []
         , class Song
             [ displayFlex
             , color <| hex "FFF"
-            , padding <| px 15
+            , padding <| px 10
             , cursor default
             , property "transition" "0.3s ease background-color"
             , hover
@@ -137,8 +135,23 @@ css =
             [ paddingRight <| px 15
             , color <| rgba 255 255 255 0.5
             ]
-        , class SongDescription
+        , class SongInfo
             [ color <| rgba 255 255 255 0.5
+            , display block
+            , descendants
+                [ span
+                    [ (nthOfType "even")
+                        [ before
+                            [ property "content" "', '"
+                            ]
+                        ]
+                    , lastChild
+                        [ after
+                            [ property "content" "'.'"
+                            ]
+                        ]
+                    ]
+                ]
             ]
         , each [ class SpeakerIcon, class PauseIcon, class PlayIcon ]
             [ display none

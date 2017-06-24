@@ -25,6 +25,7 @@ type alias Track =
     , name : String
     , preview_url : String
     , uri : String
+    , artists : List String
     }
 
 
@@ -63,7 +64,7 @@ newPlaylistEncoder playlist =
             , ( "description", Encode.string playlist.description )
             ]
     in
-    Encode.object attributes
+        Encode.object attributes
 
 
 urisEncoder : URIs -> Encode.Value
@@ -72,7 +73,7 @@ urisEncoder uris =
         attributes =
             [ ( "uris", uris.uris |> List.map Encode.string |> Encode.list ) ]
     in
-    Encode.object attributes
+        Encode.object attributes
 
 
 playlistDecoder : Decode.Decoder Playlist
@@ -92,6 +93,7 @@ trackDecoder =
         |> required "name" Decode.string
         |> optional "preview_url" Decode.string ""
         |> required "uri" Decode.string
+        |> hardcoded []
 
 
 snapshotDecoder : Decode.Decoder Snapshot
@@ -106,4 +108,4 @@ grantTypeEncoder grantType =
         attributes =
             [ ( "grant_type", grantType |> Encode.string ) ]
     in
-    Encode.object attributes
+        Encode.object attributes
