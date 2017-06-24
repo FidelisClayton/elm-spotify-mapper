@@ -9,6 +9,7 @@ import MainContent.Style as MainContent
 import Search.Style as Search
 import Sidebar.Style as Sidebar
 import Style as Main
+import Playlist.Style as Playlist
 
 
 port files : CssFileStructure -> Cmd msg
@@ -27,6 +28,7 @@ cssFiles =
                 , FlashMessage.css
                 , Dialog.css
                 , Search.css
+                , Playlist.css
                 ]
           )
         ]
