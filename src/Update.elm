@@ -7,6 +7,7 @@ import FlashMessage.Update exposing (updateFlashMessage)
 import Helpers
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import Playlist.Update exposing (updatePlaylist)
 import Ports exposing (destroyVis, initVis)
 import Routing exposing (parseLocation)
 import Search.Update exposing (updateSearch)
@@ -36,7 +37,7 @@ update msgFor model =
                         Nothing ->
                             Cmd.none
             in
-                { model | auth = data } ! [ cmd ]
+            { model | auth = data } ! [ cmd ]
 
         Msgs.MsgForSpotify msgFor ->
             updateSpotify msgFor model
@@ -56,97 +57,100 @@ update msgFor model =
         Msgs.MsgForTutorial msgFor ->
             updateTutorial msgFor model
 
+        Msgs.MsgForPlaylist msgFor ->
+            updatePlaylist msgFor model
+
         Msgs.OnLocationChange location ->
             let
                 newRoute =
                     parseLocation location
             in
-                case newRoute of
-                    Models.ExploreRoute ->
-                        let
-                            previousNetwork =
-                                model.network
+            case newRoute of
+                Models.ExploreRoute ->
+                    let
+                        previousNetwork =
+                            model.network
 
-                            firstNetworkNode =
-                                List.head previousNetwork.nodes
+                        firstNetworkNode =
+                            List.head previousNetwork.nodes
 
-                            selectedArtistNode =
-                                case model.selectedArtist of
-                                    Just artist ->
-                                        Helpers.artistToNode artist
+                        selectedArtistNode =
+                            case model.selectedArtist of
+                                Just artist ->
+                                    Helpers.artistToNode artist
 
-                                    Nothing ->
-                                        Models.VisNode "" "" 0 "" ""
+                                Nothing ->
+                                    Models.VisNode "" "" 0 "" ""
 
-                            newData =
-                                case firstNetworkNode of
-                                    Just node ->
-                                        if selectedArtistNode.id == node.id then
-                                            ( model, previousNetwork )
-                                        else
-                                            ( { model | playlistArtists = [] }, { previousNetwork | nodes = [ selectedArtistNode ], edges = [] } )
-
-                                    Nothing ->
+                        newData =
+                            case firstNetworkNode of
+                                Just node ->
+                                    if selectedArtistNode.id == node.id then
+                                        ( model, previousNetwork )
+                                    else
                                         ( { model | playlistArtists = [] }, { previousNetwork | nodes = [ selectedArtistNode ], edges = [] } )
 
-                            newModel =
-                                Tuple.first newData
+                                Nothing ->
+                                    ( { model | playlistArtists = [] }, { previousNetwork | nodes = [ selectedArtistNode ], edges = [] } )
 
-                            newNetwork =
-                                Tuple.second newData
+                        newModel =
+                            Tuple.first newData
 
-                            steps =
-                                [ Tutorial.explore
-                                , Tutorial.nodeTree
-                                , Tutorial.sidebarTrack
-                                , Tutorial.savePlaylist
-                                , Tutorial.login
-                                ]
+                        newNetwork =
+                            Tuple.second newData
 
-                            cmds =
-                                [ Cmd.map Msgs.MsgForExplore (initVis newNetwork)
-                                , Ports.addSteps steps
-                                ]
-                        in
-                            { newModel | route = newRoute, network = newNetwork } ! cmds
+                        steps =
+                            [ Tutorial.explore
+                            , Tutorial.nodeTree
+                            , Tutorial.sidebarTrack
+                            , Tutorial.savePlaylist
+                            , Tutorial.login
+                            ]
 
-                    Models.PlaylistRoute ->
-                        let
-                            ( playlistName, playlistCover ) =
-                                case Helpers.firstArtist model.playlistArtists of
-                                    Just artist ->
-                                        let
-                                            image =
-                                                Helpers.firstImageUrl artist.images
-                                        in
-                                            ( "Spotify Mapper - " ++ artist.name, image )
+                        cmds =
+                            [ Cmd.map Msgs.MsgForExplore (initVis newNetwork)
+                            , Ports.addSteps steps
+                            ]
+                    in
+                    { newModel | route = newRoute, network = newNetwork } ! cmds
 
-                                    Nothing ->
-                                        ( "Spotify Mapper", "" )
+                Models.PlaylistRoute ->
+                    let
+                        ( playlistName, playlistCover ) =
+                            case Helpers.firstArtist model.playlistArtists of
+                                Just artist ->
+                                    let
+                                        image =
+                                            Helpers.firstImageUrl artist.images
+                                    in
+                                    ( "Spotify Mapper - " ++ artist.name, image )
 
-                            playlistDescription =
-                                Helpers.generatePlaylistDescription model.playlistArtists
+                                Nothing ->
+                                    ( "Spotify Mapper", "" )
 
-                            oldPlaylist =
-                                model.playlist
+                        playlistDescription =
+                            Helpers.generatePlaylistDescription model.playlistArtists
 
-                            newPlaylist =
-                                { oldPlaylist | name = playlistName, description = playlistDescription, cover = playlistCover }
+                        oldPlaylist =
+                            model.playlist
 
-                            oldPlaylistInfo =
-                                model.playlistInfo
+                        newPlaylist =
+                            { oldPlaylist | name = playlistName, description = playlistDescription, cover = playlistCover }
 
-                            newPlaylistInfo =
-                                { oldPlaylistInfo | name = playlistName, description = playlistDescription }
+                        oldPlaylistInfo =
+                            model.playlistInfo
 
-                            newModel =
-                                { model
-                                    | playlist = newPlaylist
-                                    , playlistInfo = newPlaylistInfo
-                                    , route = newRoute
-                                }
-                        in
-                            newModel ! []
+                        newPlaylistInfo =
+                            { oldPlaylistInfo | name = playlistName, description = playlistDescription }
 
-                    _ ->
-                        ( { model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis "") )
+                        newModel =
+                            { model
+                                | playlist = newPlaylist
+                                , playlistInfo = newPlaylistInfo
+                                , route = newRoute
+                            }
+                    in
+                    newModel ! []
+
+                _ ->
+                    ( { model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis "") )

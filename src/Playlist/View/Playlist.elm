@@ -9,6 +9,7 @@ import Html.Events exposing (onClick)
 import List.Extra exposing (elemIndex)
 import Models exposing (Model)
 import Msgs exposing (Msg(MsgForPlayer))
+import Playlist.Msgs as Playlist
 import Playlist.Style exposing (Classes(CloseIcon, Icons, PauseIcon, PlayIcon, PlaylistPage, PlaylistSongs, RightIcons, Song, SongInfo, SongName, SongNumber, SongPlaying, SpeakerIcon))
 import Playlist.View.Info exposing (playlistInfo)
 import Spotify.Models exposing (Track)
@@ -61,6 +62,7 @@ song trackNumber isPlaying track =
             [ i
                 [ cssClass [ CloseIcon ]
                 , class "fa fa-close"
+                , onClick (Msgs.MsgForPlaylist (Playlist.RemoveTrack track.id))
                 ]
                 []
             ]
