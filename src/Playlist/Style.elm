@@ -25,17 +25,19 @@ type Classes
     | SpeakerIcon
     | PauseIcon
     | PlayIcon
+    | RightIcons
+    | CloseIcon
 
 
 css =
     (stylesheet << namespace "")
         [ class PlaylistPage
             [ displayFlex
+            , padding2 zero (px 30)
             ]
         , class PlaylistInfo
             [ width <| px 200
-            , marginLeft <| px 20
-            , marginRight <| px 20
+            , marginRight <| px 30
             , displayFlex
             , flexDirection column
             , alignItems center
@@ -71,11 +73,13 @@ css =
                 ]
             ]
         , class PlaylistSongs
-            []
+            [ flex <| int 1
+            ]
         , class Song
             [ displayFlex
             , color <| hex "FFF"
             , padding <| px 10
+            , position relative
             , cursor default
             , property "transition" "0.3s ease background-color"
             , hover
@@ -140,7 +144,7 @@ css =
             , display block
             , descendants
                 [ span
-                    [ (nthOfType "even")
+                    [ nthOfType "even"
                         [ before
                             [ property "content" "', '"
                             ]
@@ -160,5 +164,19 @@ css =
             ]
         , class Icons
             [ display none
+            ]
+        , class RightIcons
+            [ alignSelf center
+            , position absolute
+            , right zero
+            ]
+        , class CloseIcon
+            [ cursor pointer
+            , padding <| px 15
+            , color <| rgba 255 255 255 0.5
+            , property "transition" "0.3s ease color"
+            , hover
+                [ color <| rgba 255 255 255 1
+                ]
             ]
         ]

@@ -21,7 +21,6 @@ css =
     (stylesheet << namespace "")
         [ class Main
             [ width <| pct 100
-            , displayFlex
             , flexDirection column
             , property "overflow-y" "overlay"
             , overflowX hidden

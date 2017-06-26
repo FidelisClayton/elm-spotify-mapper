@@ -1,17 +1,17 @@
 module Playlist.View.Playlist exposing (..)
 
-import Html exposing (Html, text, div, span, i)
+import BottomBar.Msgs as Player
+import BottomBar.View.Player exposing (controlIcon)
+import Helpers exposing (cssClass, toSpotifyTrack)
+import Html exposing (Html, div, i, span, text)
 import Html.Attributes exposing (class)
 import Html.Events exposing (onClick)
-import Msgs exposing (Msg(MsgForPlayer))
-import BottomBar.Msgs as Player
-import Models exposing (Model)
 import List.Extra exposing (elemIndex)
+import Models exposing (Model)
+import Msgs exposing (Msg(MsgForPlayer))
+import Playlist.Style exposing (Classes(CloseIcon, Icons, PauseIcon, PlayIcon, PlaylistPage, PlaylistSongs, RightIcons, Song, SongInfo, SongName, SongNumber, SongPlaying, SpeakerIcon))
 import Playlist.View.Info exposing (playlistInfo)
 import Spotify.Models exposing (Track)
-import Playlist.Style exposing (Classes(Song, SongNumber, SongName, SongInfo, PlaylistPage, PlaylistSongs, SongPlaying, SpeakerIcon, PauseIcon, PlayIcon, Icons))
-import Helpers exposing (cssClass, toSpotifyTrack)
-import BottomBar.View.Player exposing (controlIcon)
 
 
 formatArtists : List String -> Html Msg
@@ -32,32 +32,39 @@ song trackNumber isPlaying track =
             else
                 [ Song ]
     in
-        div [ cssClass songClasses ]
-            [ span [ cssClass [ SongNumber ] ] [ text <| toString (trackNumber) ++ "." ]
-            , div
-                [ cssClass [ Icons ] ]
-                [ i
-                    [ cssClass [ SpeakerIcon ]
-                    , class "fa fa-volume-up"
-                    ]
-                    []
-                , i
-                    [ cssClass [ PauseIcon ]
-                    , class "fa fa-pause"
-                    ]
-                    []
-                , i
-                    [ cssClass [ PlayIcon ]
-                    , class "fa fa-play"
-                    , onClick (Msgs.MsgForPlayer (Player.Play track.preview_url))
-                    ]
-                    []
+    div [ cssClass songClasses ]
+        [ span [ cssClass [ SongNumber ] ] [ text <| toString trackNumber ++ "." ]
+        , div
+            [ cssClass [ Icons ] ]
+            [ i
+                [ cssClass [ SpeakerIcon ]
+                , class "fa fa-volume-up"
                 ]
-            , div []
-                [ span [ cssClass [ SongName ] ] [ text track.name ]
-                , formatArtists track.artists
+                []
+            , i
+                [ cssClass [ PauseIcon ]
+                , class "fa fa-pause"
                 ]
+                []
+            , i
+                [ cssClass [ PlayIcon ]
+                , class "fa fa-play"
+                , onClick (Msgs.MsgForPlayer (Player.Play track.preview_url))
+                ]
+                []
             ]
+        , div []
+            [ span [ cssClass [ SongName ] ] [ text track.name ]
+            , formatArtists track.artists
+            ]
+        , div [ cssClass [ RightIcons ] ]
+            [ i
+                [ cssClass [ CloseIcon ]
+                , class "fa fa-close"
+                ]
+                []
+            ]
+        ]
 
 
 playlist : Model -> Html Msg
@@ -67,7 +74,7 @@ playlist model =
             (\track ->
                 let
                     index =
-                        case (elemIndex track model.playlist.tracks) of
+                        case elemIndex track model.playlist.tracks of
                             Just value ->
                                 value + 1
 
@@ -81,12 +88,12 @@ playlist model =
                                     currentTrack =
                                         toSpotifyTrack selectedTrack
                                 in
-                                    currentTrack == track
+                                currentTrack == track
 
                             Nothing ->
                                 False
                 in
-                    song index isPlaying track
+                song index isPlaying track
             )
             model.playlist.tracks
         )
