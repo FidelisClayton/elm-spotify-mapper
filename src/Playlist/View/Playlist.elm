@@ -24,14 +24,38 @@ formatArtists artists =
         )
 
 
-song : Int -> Bool -> Track -> Html Msg
-song trackNumber isPlaying track =
+song : Int -> Bool -> Bool -> Track -> Html Msg
+song trackNumber isCurrent isPlaying track =
     let
         songClasses =
-            if isPlaying then
+            if isCurrent then
                 [ Song, SongPlaying ]
             else
                 [ Song ]
+
+        playPauseButton =
+            if isCurrent then
+                if isPlaying then
+                    i
+                        [ cssClass [ PauseIcon ]
+                        , class "fa fa-pause"
+                        , onClick (Msgs.MsgForPlayer Player.Pause)
+                        ]
+                        []
+                else
+                    i
+                        [ cssClass [ PlayIcon ]
+                        , class "fa fa-play"
+                        , onClick (Msgs.MsgForPlayer (Player.Play track.preview_url))
+                        ]
+                        []
+            else
+                i
+                    [ cssClass [ PlayIcon ]
+                    , class "fa fa-play"
+                    , onClick (Msgs.MsgForPlayer (Player.Play track.preview_url))
+                    ]
+                    []
     in
     div [ cssClass songClasses ]
         [ span [ cssClass [ SongNumber ] ] [ text <| toString trackNumber ++ "." ]
@@ -42,17 +66,7 @@ song trackNumber isPlaying track =
                 , class "fa fa-volume-up"
                 ]
                 []
-            , i
-                [ cssClass [ PauseIcon ]
-                , class "fa fa-pause"
-                ]
-                []
-            , i
-                [ cssClass [ PlayIcon ]
-                , class "fa fa-play"
-                , onClick (Msgs.MsgForPlayer (Player.Play track.preview_url))
-                ]
-                []
+            , playPauseButton
             ]
         , div []
             [ span [ cssClass [ SongName ] ] [ text track.name ]
@@ -95,7 +109,7 @@ playlist model =
                             Nothing ->
                                 False
                 in
-                song index isPlaying track
+                song index isPlaying model.isPlaying track
             )
             model.playlist.tracks
         )

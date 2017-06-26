@@ -119,6 +119,10 @@ css =
                                     [ display inline
                                     , color <| hex "1ed760"
                                     ]
+                                , class PlayIcon
+                                    [ display inline
+                                    , color <| hex "1ed760"
+                                    ]
                                 , class SpeakerIcon
                                     [ display none
                                     ]
