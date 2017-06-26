@@ -9,6 +9,9 @@ import Html.CssHelpers exposing (withNamespace)
 type Classes
     = VisContainer
     | BtnSavePlaylist
+    | Navbar
+    | NavbarItem
+    | Active
 
 
 css =

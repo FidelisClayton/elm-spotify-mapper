@@ -6,6 +6,7 @@ import Explore.Msgs exposing (ExploreMsg)
 import FlashMessage.Msgs exposing (FlashMessageMsg)
 import Models exposing (SpotifyAuthData)
 import Navigation exposing (Location)
+import Playlist.Msgs exposing (PlaylistMsg)
 import Search.Msgs exposing (SearchMsg)
 import Sidebar.Msgs exposing (SidebarMsg)
 import Spotify.Msgs exposing (SpotifyMsg)
@@ -21,5 +22,6 @@ type Msg
     | MsgForFlashMessage FlashMessageMsg
     | MsgForTutorial TutorialMsg
     | MsgForDialog DialogMsg
+    | MsgForPlaylist PlaylistMsg
     | OnLocationChange Location
     | UpdateAuthData (Maybe SpotifyAuthData)

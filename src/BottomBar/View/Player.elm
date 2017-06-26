@@ -3,7 +3,7 @@ module BottomBar.View.Player exposing (..)
 import BottomBar.Msgs as Player exposing (PlayerMsg)
 import BottomBar.Style exposing (Classes(..))
 import Css exposing (property)
-import Helpers
+import Helpers exposing (cssClass, cssStyles)
 import Html exposing (Html, div, i, img, input, span, text)
 import Html.Attributes exposing (src, step, type_, value)
 import Html.CssHelpers
@@ -14,33 +14,24 @@ import Msgs exposing (Msg)
 import RemoteData
 
 
-{ class } =
-    Html.CssHelpers.withNamespace ""
-
-
-styles : List Css.Mixin -> Html.Attribute msg
-styles =
-    Css.asPairs >> Html.Attributes.style
-
-
 controlIcon : String -> Html Msg
 controlIcon icon =
-    div [ class [ ControlIcon ] ]
-        [ i [ class [ Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
+    div [ cssClass [ ControlIcon ] ]
+        [ i [ cssClass [ Icon ], Html.Attributes.class ("fa fa-" ++ icon) ] [] ]
 
 
 progressBar : Float -> (String -> Player.PlayerMsg) -> Html Msg
 progressBar progress msg =
-    div [ class [ ProgressBar ] ]
+    div [ cssClass [ ProgressBar ] ]
         [ div
-            [ class [ Progress ]
-            , styles
+            [ cssClass [ Progress ]
+            , cssStyles
                 [ property "width" (toString (floor progress) ++ "%") ]
             ]
             []
         , input
             [ type_ "range"
-            , class []
+            , cssClass []
             , Html.Attributes.max "100"
             , Html.Attributes.min "0"
             , step "1"
@@ -53,11 +44,11 @@ progressBar progress msg =
 
 progress : Model -> Html Msg
 progress model =
-    div [ class [ ProgressGroup ] ]
-        [ span [ class [ FontSmall ] ]
+    div [ cssClass [ ProgressGroup ] ]
+        [ span [ cssClass [ FontSmall ] ]
             [ text <| "00:" ++ Helpers.paddValue model.audioStatus.currentTime ]
         , progressBar (Helpers.getPct model.audioStatus.currentTime model.audioStatus.duration) Player.UpdateCurrentTime
-        , span [ class [ FontSmall ] ]
+        , span [ cssClass [ FontSmall ] ]
             [ text <| "00:" ++ Helpers.paddValue model.audioStatus.duration ]
         ]
 
@@ -70,13 +61,13 @@ musicInfo selectedTrack =
                 Just track ->
                     [ img
                         [ src <| Helpers.firstImageUrl track.album.images
-                        , class [ AlbumCover ]
+                        , cssClass [ AlbumCover ]
                         ]
                         []
-                    , div [ class [ MusicInfo ] ]
-                        [ span [ class [ MusicTitle ] ]
+                    , div [ cssClass [ MusicInfo ] ]
+                        [ span [ cssClass [ MusicTitle ] ]
                             [ text track.name ]
-                        , span [ class [ FontSmall ] ]
+                        , span [ cssClass [ FontSmall ] ]
                             [ text <| Helpers.firstArtistName track.artists ]
                         ]
                     ]
@@ -84,7 +75,7 @@ musicInfo selectedTrack =
                 Nothing ->
                     []
     in
-    div [ class [ NowPlaying ] ]
+    div [ cssClass [ NowPlaying ] ]
         content
 
 
@@ -99,8 +90,8 @@ soundControl model =
             else
                 controlIcon "volume-off"
     in
-    div [ class [ SoundControl ] ]
-        [ div [ class [ ControlButtons ] ]
+    div [ cssClass [ SoundControl ] ]
+        [ div [ cssClass [ ControlButtons ] ]
             [ icon ]
         , progressBar (model.audioStatus.volume * 100) Player.UpdateVolume
         ]
@@ -123,8 +114,8 @@ controls model =
             else
                 div [ onClick (Msgs.MsgForPlayer (Player.Play preview)) ] [ controlIcon "play" ]
     in
-    div [ class [ Controls ] ]
-        [ div [ class [ ControlButtons ] ]
+    div [ cssClass [ Controls ] ]
+        [ div [ cssClass [ ControlButtons ] ]
             [ div [ onClick (Msgs.MsgForPlayer Player.Previous) ] [ controlIcon "step-backward" ]
             , playOrPause
             , div [ onClick (Msgs.MsgForPlayer Player.Next) ] [ controlIcon "step-forward" ]
@@ -151,7 +142,7 @@ maybeArtists response =
 
 render : Model -> Html Msg
 render model =
-    div [ class [ BottomBar ] ]
+    div [ cssClass [ BottomBar ] ]
         [ musicInfo model.selectedTrack
         , controls model
         , soundControl model

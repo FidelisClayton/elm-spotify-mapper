@@ -7,6 +7,7 @@ import FlashMessage.Update exposing (updateFlashMessage)
 import Helpers
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import Playlist.Update exposing (updatePlaylist)
 import Ports exposing (destroyVis, initVis)
 import Routing exposing (parseLocation)
 import Search.Update exposing (updateSearch)
@@ -55,6 +56,9 @@ update msgFor model =
 
         Msgs.MsgForTutorial msgFor ->
             updateTutorial msgFor model
+
+        Msgs.MsgForPlaylist msgFor ->
+            updatePlaylist msgFor model
 
         Msgs.OnLocationChange location ->
             let
@@ -109,6 +113,44 @@ update msgFor model =
                             ]
                     in
                     { newModel | route = newRoute, network = newNetwork } ! cmds
+
+                Models.PlaylistRoute ->
+                    let
+                        ( playlistName, playlistCover ) =
+                            case Helpers.firstArtist model.playlistArtists of
+                                Just artist ->
+                                    let
+                                        image =
+                                            Helpers.firstImageUrl artist.images
+                                    in
+                                    ( "Spotify Mapper - " ++ artist.name, image )
+
+                                Nothing ->
+                                    ( "Spotify Mapper", "" )
+
+                        playlistDescription =
+                            Helpers.generatePlaylistDescription model.playlistArtists
+
+                        oldPlaylist =
+                            model.playlist
+
+                        newPlaylist =
+                            { oldPlaylist | name = playlistName, description = playlistDescription, cover = playlistCover }
+
+                        oldPlaylistInfo =
+                            model.playlistInfo
+
+                        newPlaylistInfo =
+                            { oldPlaylistInfo | name = playlistName, description = playlistDescription }
+
+                        newModel =
+                            { model
+                                | playlist = newPlaylist
+                                , playlistInfo = newPlaylistInfo
+                                , route = newRoute
+                            }
+                    in
+                    newModel ! []
 
                 _ ->
                     ( { model | route = newRoute }, Cmd.map Msgs.MsgForExplore (destroyVis "") )

@@ -9,6 +9,7 @@ import Html.CssHelpers
 import Models exposing (Model)
 import Msgs exposing (Msg)
 import Search.View.Search as Search
+import Playlist.View.Playlist as Playlist
 
 
 { class } =
@@ -26,3 +27,6 @@ page model =
 
         Models.NotFoundRoute ->
             Search.render model
+
+        Models.PlaylistRoute ->
+            Playlist.render model
