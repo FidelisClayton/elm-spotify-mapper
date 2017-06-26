@@ -33,7 +33,7 @@ css =
             , color <| hex "FFF"
             , height <| px 330
             , property "top" "calc(50% - 330px)"
-            , zIndex <| int 2
+            , zIndex <| int 9999
             , children
                 [ class ModalHeader
                     [ backgroundColor <| hex "333"
