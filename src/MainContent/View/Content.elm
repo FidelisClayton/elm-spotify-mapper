@@ -5,11 +5,12 @@ import Html exposing (Html, div)
 import Html.Attributes
 import Html.CssHelpers
 import MainContent.Style exposing (Classes(Main))
+import MainContent.View.Navbar exposing (navbar)
 import MainContent.View.Pages exposing (page)
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import RemoteData
 import Search.View.Search as Search
-import MainContent.View.Navbar exposing (navbar)
 
 
 { class } =
@@ -30,16 +31,24 @@ render model =
             else
                 [ property "background-color" "transparent" ]
 
+        shouldRenderNavbar =
+            case model.user of
+                RemoteData.Success user ->
+                    [ navbar model ]
+
+                _ ->
+                    []
+
         elements =
             case model.route of
                 Models.SearchRoute ->
                     page model
 
                 _ ->
-                    (navbar model) :: (page model)
+                    List.append shouldRenderNavbar (page model)
     in
-        div
-            [ class [ Main ]
-            , styles backgroundStyle
-            ]
-            elements
+    div
+        [ class [ Main ]
+        , styles backgroundStyle
+        ]
+        elements
