@@ -12,10 +12,18 @@ import Html.CssHelpers
 import Html.Events exposing (onClick)
 import Models exposing (Model)
 import Msgs exposing (Msg)
+import RemoteData
 
 
 render : Model -> List (Html Msg)
 render model =
-    [ savePlaylistButton
-    , visContainer
-    ]
+    let
+        savePlaylistBtn =
+            case model.user of
+                RemoteData.Success user ->
+                    [ savePlaylistButton ]
+
+                _ ->
+                    []
+    in
+    List.append savePlaylistBtn [ visContainer ]

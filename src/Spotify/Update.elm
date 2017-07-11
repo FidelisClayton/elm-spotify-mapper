@@ -2,8 +2,9 @@ module Spotify.Update exposing (..)
 
 import FlashMessage.Models as FlashMessage exposing (MessageType)
 import Http
-import Models exposing (Model)
+import Models exposing (Model, Route(ExploreRoute))
 import Msgs exposing (Msg)
+import Ports
 import RemoteData
 import Spotify.Api exposing (addTracks, createPlaylist)
 import Spotify.Models exposing (NewPlaylist, User)
@@ -16,7 +17,12 @@ updateSpotify msg model =
         Spotify.FetchUserSuccess response ->
             case response of
                 RemoteData.Success user ->
-                    ( { model | user = response }, Cmd.none )
+                    case model.route of
+                        ExploreRoute ->
+                            ( { model | user = response }, Cmd.batch [ Ports.destroyVis "", Ports.initVis model.network ] )
+
+                        _ ->
+                            ( { model | user = response }, Cmd.none )
 
                 _ ->
                     ( { model | user = response }, Cmd.none )
