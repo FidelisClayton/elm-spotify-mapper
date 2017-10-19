@@ -1,5 +1,5 @@
 # Spotify Mapper
-An app built with Elm to explore new artists using the Spotify api. [See online Demo](http://spotify-mapper.fidelisclayton.com/).
+App built with Elm to explore new artists using the Spotify api. [See online Demo](http://spotify-mapper.fidelisclayton.com/).
 
 This app is a new version of my previous Spotify mapper built with Angular 1.x. I used this app to learn more about Elm and see how it works beyond the simplicity of TODO apps.
 
