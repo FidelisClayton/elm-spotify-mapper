@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main exposing (class, init, main, subscriptions, view)
 
 import BottomBar.Msgs as Player exposing (PlayerMsg)
 import BottomBar.View.Player as BottomBar
@@ -38,12 +38,10 @@ init flags location =
                 Just auth ->
                     [ Cmd.map Msgs.MsgForSpotify (Spotify.Api.getMe auth.accessToken)
                     , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret)
-                    , initTutorial initialModel.tutorial.steps
                     ]
 
                 Nothing ->
-                    [ initTutorial initialModel.tutorial.steps
-                    , Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret)
+                    [ Cmd.map Msgs.MsgForSpotify (Spotify.Api.getClientToken flags.spotifyConfig.clientId flags.spotifyConfig.clientSecret)
                     ]
     in
     ( initialModel, Cmd.batch cmds )
