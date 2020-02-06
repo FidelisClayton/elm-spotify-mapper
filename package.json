@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --port=3000",
-    "build:prod": "BUILD_TO=production webpack --progress --colors",
+    "build:prod": "BUILD_TO=production elm package install -y && webpack --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
