@@ -4,7 +4,8 @@
   "description": "An app built with Elm to explore new artists using the Spotify api.",
   "main": "index.js",
   "scripts": {
-    "start": "elm package install -y && webpack-dev-server --port=3000",
+    "dev": "webpack-dev-server --port=3000",
+    "start": "npm install && elm package install -y && webpack-dev-server --port=3000",
     "build:prod": "BUILD_TO=production elm package install -y && webpack --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
