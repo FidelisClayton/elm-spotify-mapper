@@ -73,7 +73,7 @@ tour.on('show', event => {
 })
 
 module.exports = function(app) {
-  app.ports.initTutorial.subscribe(onInitTutorial)
-  app.ports.addSteps.subscribe(onAddSteps)
-  app.ports.nextStep.subscribe(onAddSteps)
+  // app.ports.initTutorial.subscribe(onInitTutorial)
+  // app.ports.addSteps.subscribe(onAddSteps)
+  // app.ports.nextStep.subscribe(onAddSteps)
 }
