@@ -34,6 +34,7 @@ css =
         [ class PlaylistPage
             [ displayFlex
             , padding2 zero (px 30)
+            , height (calc (vh 100) minus (px 160))
             ]
         , class PlaylistInfo
             [ width <| px 200
@@ -44,6 +45,9 @@ css =
             ]
         , class PlaylistCover
             [ width <| px 200
+            , height <| px 200
+            , backgroundSize cover
+            , backgroundPosition center
             ]
         , class PlaylistTitle
             [ color <| hex "fff"

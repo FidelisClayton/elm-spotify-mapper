@@ -17,7 +17,6 @@ import Search.View.Search as Search
     Html.CssHelpers.withNamespace ""
 
 
-styles : List Css.Mixin -> Html.Attribute msg
 styles =
     Css.asPairs >> Html.Attributes.style
 

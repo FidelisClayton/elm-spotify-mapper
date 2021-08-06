@@ -25,7 +25,7 @@ updateSpotify msg model =
                             ( { model | user = response }, Cmd.none )
 
                 _ ->
-                    ( { model | user = response }, Cmd.none )
+                    ( { model | user = response }, Ports.clearToken ())
 
         Spotify.CreatePlaylistSuccess (RemoteData.Success playlist) ->
             onCreatePlaylistSuccess playlist model

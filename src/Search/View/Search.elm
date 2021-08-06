@@ -10,7 +10,7 @@ import Models exposing (Artist, Model, SearchArtistData)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Search.Msgs as Search exposing (SearchMsg)
-import Search.Style exposing (Classes(ArtistResult, BigSearch, ImageWrapper, SearchResults))
+import Search.Style exposing (Classes(ArtistResult, BigSearch, ImageWrapper, SearchResults, Image, Play))
 
 
 { class, id } =
@@ -43,9 +43,9 @@ searchResult artist =
     in
     a [ class [ ArtistResult ], onClick (Msgs.MsgForSearch (Search.SelectArtist artist)), href "#/explore" ]
         [ div [ class [ ImageWrapper ] ]
-            [ div []
+            [ div [ class [ Play ]]
                 [ i [ Html.Attributes.class "fa fa-play" ] [] ]
-            , img [ src image ] []
+            , div [ class [ Image ], Html.Attributes.style [("background-image", "url(" ++ image ++ ")")] ] []
             ]
         , label [] [ text artist.name ]
         ]

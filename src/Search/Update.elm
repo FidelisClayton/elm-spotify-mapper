@@ -17,7 +17,11 @@ updateSearch msg model =
             let
                 cmd =
                     if String.length term > 1 then
-                        Cmd.map Msgs.MsgForSearch (fetchArtist term model.clientAuthData.accessToken)
+                        case model.auth of
+                            Just { accessToken } ->
+                                Cmd.map Msgs.MsgForSearch (fetchArtist term accessToken)
+                            _ ->
+                                Cmd.none
                     else
                         Cmd.none
             in
@@ -49,10 +53,18 @@ updateSearch msg model =
                         | selectedArtist = Maybe.Just artist
                         , route = Models.ExploreRoute
                     }
+
+                token =
+                    case model.auth of
+                        Just auth ->
+                            auth.accessToken
+                        Nothing ->
+                            ""
+
             in
             ( newModel
             , Cmd.batch
-                [ Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
+                [ Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id token)
                 , Ports.nextStep ""
                 ]
             )

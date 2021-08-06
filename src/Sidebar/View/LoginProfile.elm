@@ -20,7 +20,6 @@ import Sidebar.View.Navigation exposing (navItem, navMenu)
     Html.CssHelpers.withNamespace ""
 
 
-styles : List Css.Mixin -> Html.Attribute msg
 styles =
     Css.asPairs >> Html.Attributes.style
 

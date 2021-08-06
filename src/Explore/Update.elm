@@ -73,16 +73,33 @@ updateExplore msg model =
             ( model, Cmd.map Msgs.MsgForSpotify (addTracks userId playlistId uris token) )
 
         Explore.OnVisNodeClick artistId ->
-            ( { model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId model.clientAuthData.accessToken) )
+            let
+                token =
+                    case model.auth of
+                        Just auth ->
+                            auth.accessToken
+
+                        Nothing ->
+                            ""
+            in
+            ( { model | topTracks = RemoteData.Loading }, Cmd.map Msgs.MsgForExplore (fetchArtistById artistId token) )
 
         Explore.ArtistByIdSuccess response ->
             case response of
                 RemoteData.Success artist ->
                     let
+                        token =
+                            case model.auth of
+                                Just auth ->
+                                    auth.accessToken
+
+                                Nothing ->
+                                    ""
+
                         commands =
                             Cmd.batch
-                                [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id model.clientAuthData.accessToken)
-                                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
+                                [ Cmd.map Msgs.MsgForExplore (fetchRelatedArtists artist.id token)
+                                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id token)
                                 ]
 
                         newModel =
@@ -90,7 +107,7 @@ updateExplore msg model =
                                 ( { model
                                     | selectedArtist = Just artist
                                   }
-                                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id model.clientAuthData.accessToken)
+                                , Cmd.map Msgs.MsgForSidebar (fetchTopTracks artist.id token)
                                 )
                             else
                                 let

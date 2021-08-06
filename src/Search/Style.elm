@@ -14,6 +14,8 @@ type Classes
     | SearchResults
     | ArtistResult
     | ImageWrapper
+    | Image
+    | Play
 
 
 css =
@@ -67,7 +69,11 @@ css =
                             , height <| pct 100
                             , borderRadius <| pct 50
                             ]
-                        , div
+                        , class Image
+                            [ backgroundPosition center
+                            , backgroundSize cover
+                            ]
+                        , class Play
                             [ backgroundColor <| rgba 0 0 0 0.5
                             , position absolute
                             , displayFlex

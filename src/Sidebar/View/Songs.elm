@@ -18,7 +18,6 @@ import Sidebar.Style exposing (Classes(NavGroup, SongAlbumTitle, SongCover, Song
     Html.CssHelpers.withNamespace ""
 
 
-styles : List Css.Mixin -> Html.Attribute msg
 styles =
     Css.asPairs >> Html.Attributes.style
 

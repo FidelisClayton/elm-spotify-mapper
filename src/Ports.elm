@@ -16,6 +16,9 @@ port provideTracks : TopTracks -> Cmd msg
 port nextTrack : String -> Cmd msg
 
 
+port clearToken : () -> Cmd ms
+
+
 port previousTrack : String -> Cmd msg
 
 

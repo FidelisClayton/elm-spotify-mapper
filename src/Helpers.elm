@@ -182,6 +182,5 @@ cssId =
         id
 
 
-cssStyles : List Css.Mixin -> Html.Attribute msg
 cssStyles =
     Css.asPairs >> Html.Attributes.style

@@ -13,9 +13,9 @@ import Helpers exposing (cssClass)
 playlistInfo : Model -> Html Msg
 playlistInfo model =
     div [ cssClass [ PlaylistInfo ] ]
-        [ img
-            [ src model.playlist.cover
-            , cssClass [ PlaylistCover ]
+        [ div
+            [ cssClass [ PlaylistCover ]
+            , Html.Attributes.style [("background-image", "url(" ++ model.playlist.cover ++ ")")]
             ]
             []
         , h3
