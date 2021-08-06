@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "webpack-dev-server --port=3000",
-    "start": "npm install && elm package install -y && webpack-dev-server --port=3000",
+    "start": "npm install && elm package install -y && webpack-dev-server --port=$PORT",
     "build:prod": "BUILD_TO=production elm package install -y && webpack --progress --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
